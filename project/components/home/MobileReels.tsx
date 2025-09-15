@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 
 const videos = [
-  "https://res.cloudinary.com/dzfnaks6l/video/upload/v1757577802/mobilereel2_awx6cc.mp4",
-  "https://res.cloudinary.com/dzfnaks6l/video/upload/v1757577801/mobilereel1_wwcp2g.mp4",
-  "https://res.cloudinary.com/dzfnaks6l/video/upload/v1757577802/mobilereel3_g0ntso.mp4",
+  "/videos/mobilereel1.mp4",
+  "/videos/mobilereel2.mp4",
+  "/videos/mobilereel3.mp4",
 ];
 
 export default function MobileReelsFresh(): JSX.Element {
@@ -18,11 +18,14 @@ export default function MobileReelsFresh(): JSX.Element {
   const controlA = useAnimation();
   const controlB = useAnimation();
 
-  const prepareAndPlay = async (videoEl: HTMLVideoElement | null, url: string) => {
+  const prepareAndPlay = async (
+    videoEl: HTMLVideoElement | null,
+    url: string
+  ) => {
     if (!videoEl) return;
 
     videoEl.src = url;
-    videoEl.load(); // ✅ force reload
+    videoEl.load();
     videoEl.currentTime = 0;
     videoEl.muted = true;
     videoEl.playsInline = true;
@@ -33,10 +36,6 @@ export default function MobileReelsFresh(): JSX.Element {
     } catch (err) {
       console.warn("Autoplay blocked, waiting for user interaction:", err);
     }
-  };
-
-  const handleEnded = () => {
-    transitionToNext();
   };
 
   const transitionToNext = async () => {
@@ -51,10 +50,11 @@ export default function MobileReelsFresh(): JSX.Element {
     const nextVideoEl = nextSlot === 0 ? videoARef.current : videoBRef.current;
     const currentVideoEl = activeSlot === 0 ? videoARef.current : videoBRef.current;
 
-    // Load next video
+    // Prepare next video
     await prepareAndPlay(nextVideoEl, videos[nextIndex]);
     await nextWrapperControl.set({ y: "100%" });
 
+    // Animate transition
     await Promise.all([
       currentWrapperControl.start({
         y: "-100%",
@@ -66,30 +66,32 @@ export default function MobileReelsFresh(): JSX.Element {
       }),
     ]);
 
+    // Clean up previous video listener
     if (currentVideoEl) {
       currentVideoEl.pause();
       currentVideoEl.currentTime = 0;
+      currentVideoEl.removeEventListener("ended", transitionToNext);
     }
+
+    // ✅ Attach listener to the new active video
+    nextVideoEl?.addEventListener("ended", transitionToNext);
 
     setActiveSlot(nextSlot);
     setCurrentIndex(nextIndex);
-
-    nextVideoEl?.removeEventListener("ended", handleEnded);
-    nextVideoEl?.addEventListener("ended", handleEnded);
 
     transitioningRef.current = false;
   };
 
   useEffect(() => {
-    const activeVideoEl = videoARef.current;
-    if (activeVideoEl) {
-      prepareAndPlay(activeVideoEl, videos[0]);
-      activeVideoEl.addEventListener("ended", handleEnded);
+    const firstVideo = videoARef.current;
+    if (firstVideo) {
+      prepareAndPlay(firstVideo, videos[0]);
+      firstVideo.addEventListener("ended", transitionToNext);
     }
 
     return () => {
-      videoARef.current?.removeEventListener("ended", handleEnded);
-      videoBRef.current?.removeEventListener("ended", handleEnded);
+      videoARef.current?.removeEventListener("ended", transitionToNext);
+      videoBRef.current?.removeEventListener("ended", transitionToNext);
     };
   }, []);
 

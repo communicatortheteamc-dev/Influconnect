@@ -35,8 +35,8 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       {/* <InfluencerCard influencer={obj} /> */}
-      <InfluencersCarousel />
-      <ReviewsSection />
+      {/* <InfluencersCarousel />
+      <ReviewsSection /> */}
     </>
   );
 }

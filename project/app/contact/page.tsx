@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Clock, CheckCircle, MessageCircle } from 'lucide-react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-
+import emailjs from "emailjs-com";
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -27,21 +27,40 @@ export default function ContactPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      // Simulate API call - replace with actual contact form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setIsSuccess(true);
-    } catch (error) {
-      console.error('Contact form error:', error);
-      alert('Message sending failed. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+   const handleClose = () => {
+  // Example: reset form + hide modal
+  setFormData({ name: "", email: "", phone: "",  subject: '',message: '' });
+  setIsSuccess(true);
+  setIsSubmitting(false);
+
+};
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  try {
+    await emailjs.send(
+      "service_8la2lyx",
+      "template_0pf8kw1",
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      },
+      "RI6ijkt2WR-Mgd9sj"
+    );
+
+    setIsSuccess(true);
+    handleClose(); // close/reset after success
+  } catch (error) {
+    console.error("Contact form error:", error);
+    alert("Message sending failed ❌. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   if (isSuccess) {
     return (
@@ -94,8 +113,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-[#000631]">Email</h4>
-                      <p className="text-gray-600">hello@influeconnect.com</p>
-                      <p className="text-gray-600">support@influeconnect.com</p>
+                      <p className="text-gray-600">influconnectbytheteamc@gmail.com</p>
+                      {/* <p className="text-gray-600">support@influeconnect.com</p> */}
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
@@ -104,8 +123,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-[#000631]">Phone</h4>
-                      <p className="text-gray-600">+91 9876543210</p>
-                      <p className="text-gray-600">+91 9876543211</p>
+                      <p className="text-gray-600">+91 9642426444</p>
+                      {/* <p className="text-gray-600">+91 9876543211</p> */}
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
@@ -115,22 +134,22 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-semibold text-[#000631]">Address</h4>
                       <p className="text-gray-600">
-                        HITEC City, Hyderabad<br />
-                        Telangana 500081<br />
-                        India
+                        5th floor, Monya Exotica, Rd.Number 10,<br />
+                        Kakatiya Hills, Madhapur, Hyderabad,<br />
+                        Telangana - 500033
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-10 h-10 bg-[#EC6546]/10 rounded-lg flex items-center justify-center">
+                    {/* <div className="w-10 h-10 bg-[#EC6546]/10 rounded-lg flex items-center justify-center">
                       <Clock className="w-5 h-5 text-[#EC6546]" />
-                    </div>
-                    <div>
+                    </div> */}
+                    {/* <div>
                       <h4 className="font-semibold text-[#000631]">Business Hours</h4>
                       <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
                       <p className="text-gray-600">Saturday: 10:00 AM - 4:00 PM</p>
                       <p className="text-gray-600">Sunday: Closed</p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </CardContent>
