@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Play, TrendingUp, Users, Zap, Star, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import MobileReels from './MobileReels';
+import MobileFrame from './MobileFrame';
+import ReelsPlayer from './ReelsPlayes';
 
 export function HeroSection() {
   const [playVideo, setPlayVideo] = useState(false);
@@ -17,11 +19,15 @@ export function HeroSection() {
 
   const features = [
     'Verified Influencer Network',
-    'AI-Powered Matching',
+    'Building Strategies',
     'Real-time Analytics',
     '24/7 Support'
   ];
-
+const videos = [
+  "/videos/mobilereel1.mp4",
+  "/videos/mobilereel2.mp4",
+  "/videos/mobilereel3.mp4",
+];
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Dynamic Background */}
@@ -91,7 +97,7 @@ export function HeroSection() {
                 size="lg" 
                 className="bg-[#EC6546] hover:bg-[#EC6546]/90 text-white px-8 py-4 text-lg font-semibold rounded-full group transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#EC6546]/25"
               >
-                <Link href="/influencers" className="flex items-center space-x-2">
+                <Link href="/contact" className="flex items-center space-x-2">
                   <span>Discover Influencers</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -102,7 +108,7 @@ export function HeroSection() {
                 asChild
                 className="border-2 border-white text-white hover:bg-white hover:text-[#000631] px-8 py-4 text-lg font-semibold rounded-full group transition-all duration-300 hover:scale-105"
               >
-                <Link href="/register" className="flex items-center space-x-2">
+                <Link href="/contact" className="flex items-center space-x-2">
                   <span className='text-black'>Join as Creator</span>
                   <Users className="w-5 h-5 text-black group-hover:rotate-12 transition-transform" />
                 </Link>
@@ -124,7 +130,9 @@ export function HeroSection() {
 
           {/* Right Content - Interactive Demo */}
         {/* <MobileReels /> */}
-        
+          <MobileFrame>
+          <ReelsPlayer videos={videos} />
+        </MobileFrame>
         </div>
       </div>
 
