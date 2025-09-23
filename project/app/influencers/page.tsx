@@ -27,7 +27,7 @@ export default function InfluencersPage() {
     minFollowers: 0,
     maxFollowers: 10000000,
     page: 1,
-    limit: 9,
+    limit: 12,
     sort: 'followers_desc'
   });
 
