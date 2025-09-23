@@ -82,6 +82,49 @@ function generateEmail(name) {
   return `${cleanName}${number}@${getRandomElement(domains)}`;
 }
 
+function generateClientData() {
+  const companies = [
+    { name: 'TechStart Solutions', industry: 'Technology', logo: 'https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'BeautyBloom Cosmetics', industry: 'Beauty & Skincare', logo: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'FitLife Nutrition', industry: 'Health & Fitness', logo: 'https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'StyleHub Fashion', industry: 'Fashion & Lifestyle', logo: 'https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'FoodieDelight', industry: 'Food & Beverage', logo: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'TravelWise', industry: 'Travel & Tourism', logo: 'https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'EcoGreen Products', industry: 'Sustainability', logo: 'https://images.pexels.com/photos/1108572/pexels-photo-1108572.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'GameZone Entertainment', industry: 'Gaming', logo: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'HomeDecor Plus', industry: 'Home & Garden', logo: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'EduTech Learning', industry: 'Education', logo: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'FinanceFirst', industry: 'Financial Services', logo: 'https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'AutoDrive Motors', industry: 'Automotive', logo: 'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'PetCare Solutions', industry: 'Pet Care', logo: 'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'SportsPro Equipment', industry: 'Sports', logo: 'https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=100' },
+    { name: 'MusicStream', industry: 'Entertainment', logo: 'https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=100' }
+  ];
+
+  const testimonials = [
+    "InflueConnect helped us find the perfect influencers for our campaign. The results exceeded our expectations!",
+    "Working with InflueConnect was seamless. Their platform made influencer discovery and management effortless.",
+    "The quality of influencers on this platform is outstanding. We saw a 300% increase in engagement.",
+    "Professional service and excellent results. InflueConnect is our go-to platform for influencer marketing.",
+    "Amazing ROI and authentic partnerships. Highly recommend InflueConnect for any brand.",
+    "The platform's filtering system helped us find exactly the right creators for our niche market.",
+    "Transparent pricing and reliable influencers. InflueConnect delivered beyond our expectations.",
+    "Great customer support and smooth campaign execution. Will definitely work with them again.",
+    "The analytics and reporting features helped us track our campaign success effectively.",
+    "Found genuine influencers who truly connected with our brand values and audience."
+  ];
+
+  return companies.map(company => ({
+    ...company,
+    description: `${company.name} is a leading company in the ${company.industry.toLowerCase()} sector, committed to innovation and customer satisfaction.`,
+    campaignsCompleted: getRandomNumber(5, 50),
+    rating: Math.round((Math.random() * 1.5 + 3.5) * 10) / 10, // 3.5 to 5.0 rating
+    testimonial: getRandomElement(testimonials),
+    website: `https://${company.name.toLowerCase().replace(/\s+/g, '')}.com`,
+    createdAt: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString()
+  }));
+}
+
 function generateSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 }
@@ -131,6 +174,10 @@ function generateInfluencer() {
   const category = getRandomElement(categories);
   const location = getRandomElement(indianCities);
   const photoUrl = getRandomElement(samplePhotos);
+  
+  // Generate rate based on followers (₹5-50 per 1000 followers)
+  const baseRate = Math.floor(Math.random() * 45000) + 5000; // ₹5,000 to ₹50,000
+  const rate = Math.round(baseRate / 1000) * 1000; // Round to nearest 1000
   
   // Generate social media data
   const instagramFollowers = getRandomNumber(5000, 500000);
@@ -188,6 +235,7 @@ function generateInfluencer() {
     category,
     photoUrl,
     videoUrl: Math.random() > 0.7 ? `https://res.cloudinary.com/demo/video/upload/v1/${Date.now()}_intro.mp4` : null,
+    rate,
     socials,
     totalFollowers,
     termsAccepted: true,
@@ -207,8 +255,13 @@ async function seedDatabase() {
     const collection = db.collection('influencers');
     
     // Clear existing data
-    console.log('Clearing existing data...');
+    console.log('Clearing existing influencer data...');
     await collection.deleteMany({});
+    
+    // Clear existing client data
+    const clientsCollection = db.collection('clients');
+    console.log('Clearing existing client data...');
+    await clientsCollection.deleteMany({});
     
     // Generate and insert influencers
     console.log('Generating influencer data...');
@@ -225,7 +278,15 @@ async function seedDatabase() {
     console.log('Inserting data into database...');
     const result = await collection.insertMany(influencers);
     
+    // Generate and insert clients
+    console.log('Generating client data...');
+    const clients = generateClientData();
+    
+    console.log('Inserting client data...');
+    const clientResult = await clientsCollection.insertMany(clients);
+    
     console.log(`Successfully inserted ${result.insertedCount} influencers`);
+    console.log(`Successfully inserted ${clientResult.insertedCount} clients`);
     
     // Create indexes for better search performance
     console.log('Creating database indexes...');
@@ -235,6 +296,11 @@ async function seedDatabase() {
     await collection.createIndex({ totalFollowers: -1 });
     await collection.createIndex({ createdAt: -1 });
     await collection.createIndex({ slug: 1 }, { unique: true });
+    
+    // Create indexes for clients
+    await clientsCollection.createIndex({ name: 1 });
+    await clientsCollection.createIndex({ industry: 1 });
+    await clientsCollection.createIndex({ rating: -1 });
     
     console.log('Database seeding completed successfully!');
     

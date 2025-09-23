@@ -11,7 +11,7 @@ const customerReviews = [
     company: 'TechStart Solutions',
     role: 'Marketing Director',
     rating: 5,
-    review: 'InflueConnect transformed our brand visibility completely. We found the perfect tech influencers who understood our product and delivered exceptional results. Our app downloads increased by 300% in just 2 months!',
+    review: 'InfluConnect transformed our brand visibility completely. We found the perfect tech influencers who understood our product and delivered exceptional results. Our app downloads increased by 300% in just 2 months!',
     avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150',
     campaignType: 'Product Launch'
   },
@@ -31,7 +31,7 @@ const customerReviews = [
     company: 'FitLife Nutrition',
     role: 'CEO',
     rating: 5,
-    review: 'Working with InflueConnect was a game-changer for our fitness brand. The platform made it easy to find authentic fitness influencers who genuinely used and loved our products. ROI exceeded expectations!',
+    review: 'Working with InfluConnect was a game-changer for our fitness brand. The platform made it easy to find authentic fitness influencers who genuinely used and loved our products. ROI exceeded expectations!',
     avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=150',
     campaignType: 'Product Reviews'
   }
@@ -44,7 +44,7 @@ const influencerReviews = [
     category: 'Fashion & Lifestyle',
     followers: '125K',
     rating: 5,
-    review: 'InflueConnect has been incredible for my creator journey. The brands I work with through this platform are always professional, pay on time, and give me creative freedom. It\'s my go-to platform for collaborations!',
+    review: 'InfluConnect has been incredible for my creator journey. The brands I work with through this platform are always professional, pay on time, and give me creative freedom. It\'s my go-to platform for collaborations!',
     avatar: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=150',
     platform: 'Instagram'
   },
@@ -54,7 +54,7 @@ const influencerReviews = [
     category: 'Technology',
     followers: '89K',
     rating: 5,
-    review: 'As a tech reviewer, finding the right brands to partner with was always challenging. InflueConnect connects me with innovative companies that value authentic reviews. The support team is also fantastic!',
+    review: 'As a tech reviewer, finding the right brands to partner with was always challenging. InfluConnect connects me with innovative companies that value authentic reviews. The support team is also fantastic!',
     avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150',
     platform: 'YouTube'
   },
@@ -64,7 +64,7 @@ const influencerReviews = [
     category: 'Food & Cooking',
     followers: '156K',
     rating: 5,
-    review: 'The quality of brand partnerships through InflueConnect is unmatched. Every collaboration feels meaningful and aligns perfectly with my content style. It\'s helped me grow both creatively and financially!',
+    review: 'The quality of brand partnerships through InfluConnect is unmatched. Every collaboration feels meaningful and aligns perfectly with my content style. It\'s helped me grow both creatively and financially!',
     avatar: 'https://images.pexels.com/photos/1391498/pexels-photo-1391498.jpeg?auto=compress&cs=tinysrgb&w=150',
     platform: 'Instagram'
   }

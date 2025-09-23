@@ -23,14 +23,22 @@ const ReelsPlayer: React.FC<ReelsPlayerProps> = ({ videos }) => {
   }, [videos.length]);
 
   // Handle video change
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      if (isPlaying) {
-        videoRef.current.play();
-      }
-    }
-  }, [currentVideoIndex]);
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  // Only set src if it changed
+  if (video.src !== videos[currentVideoIndex]) {
+    video.src = videos[currentVideoIndex];
+    // small delay to prevent AbortError in long sessions
+    setTimeout(() => {
+      video.play().catch(err => {
+        if (err.name !== 'AbortError') console.error(err);
+      });
+    }, 100);
+  }
+}, [currentVideoIndex]);
+
 
   // Play/pause toggle
   const togglePlayPause = () => {
@@ -58,7 +66,8 @@ const ReelsPlayer: React.FC<ReelsPlayerProps> = ({ videos }) => {
       className="relative w-full h-full bg-black overflow-hidden"
     >
       {/* Video */}
-      <video
+      {/* <video
+      key={currentVideoIndex}
         ref={videoRef}
         className="w-full h-full object-cover"
         autoPlay
@@ -69,7 +78,16 @@ const ReelsPlayer: React.FC<ReelsPlayerProps> = ({ videos }) => {
         onClick={togglePlayPause}
       >
         <source src={videos[currentVideoIndex]} type="video/mp4" />
-      </video>
+      </video> */}
+<video
+  ref={videoRef}
+  className="w-full h-full object-cover"
+  autoPlay
+  muted
+  playsInline
+  preload="auto"
+  onEnded={handleVideoEnd}
+/>
 
       {/* Play/Pause Overlay */}
       {!isPlaying && (

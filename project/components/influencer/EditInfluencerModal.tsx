@@ -53,67 +53,99 @@ export function EditInfluencerModal({ influencer, onClose, onUpdate }: EditInflu
     }
   });
 
-//   const handleInputChange = (field: string, value: any) => {
-//     if (field.includes('.')) {
-//       const [parent, child, subChild] = field.split('.');
-//       setFormData(prev => ({
-//         ...prev,
-//         [parent]: {
-//           ...prev[parent as keyof typeof prev],
-//           [child]: {
-//             ...(prev[parent as keyof typeof prev] as any)[child],
-//             [subChild]: value
-//           }
-//         }
-//       }));
-//     } else {
-//       setFormData(prev => ({
-//         ...prev,
-//         [field]: value
-//       }));
-//     }
-//   };
-const handleInputChange = (field: string, value: any) => {
-  if (field.includes(".")) {
-    const [parent, child, subChild] = field.split(".");
+  // const handleInputChange = (field: string, value: any) => {
+  //   if (field.includes('.')) {
+  //     const [parent, child, subChild] = field.split('.');
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       [parent]: {
+  //         ...prev[parent as keyof typeof prev],
+  //         [child]: {
+  //           ...(prev[parent as keyof typeof prev] as any)[child],
+  //           [subChild]: value
+  //         }
+  //       }
+  //     }));
+  //   } else {
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       [field]: value
+  //     }));
+  //   }
+  // };
+  const handleInputChange = (field: string, value: any) => {
+    if (field.includes(".")) {
+      const [parent, child, subChild] = field.split(".");
 
-    setFormData(prev => {
-      const parentObj = prev[parent as keyof typeof prev] as Record<string, any>;
+      setFormData(prev => {
+        const parentObj = prev[parent as keyof typeof prev] as Record<string, any>;
 
-      return {
-        ...prev,
-        [parent]: {
-          ...parentObj,
-          [child]: {
-            ...(parentObj?.[child] || {}),
-            [subChild]: value,
+        return {
+          ...prev,
+          [parent]: {
+            ...parentObj,
+            [child]: {
+              ...(parentObj?.[child] || {}),
+              [subChild]: value,
+            },
           },
-        },
-      };
-    });
-  } else {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-  }
-};
-
-  const handleFileUpload = async (file: File, type: 'photo' | 'video') => {
-    // Simulated Cloudinary upload - replace with actual implementation
-    const mockUrl = `https://res.cloudinary.com/demo/${type === 'photo' ? 'image' : 'video'}/upload/v1/${Date.now()}_${file.name}`;
-    
-    if (type === 'photo') {
-      handleInputChange('photoUrl', mockUrl);
+        };
+      });
     } else {
-      handleInputChange('videoUrl', mockUrl);
+      setFormData(prev => ({
+        ...prev,
+        [field]: value,
+      }));
     }
   };
+  const handleFileUpload = async (file: File, type: "photo" | "video") => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "influencer_uploads"); // use your Cloudinary preset name
+
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${type === "photo" ? "image" : "video"
+        }/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        if (type === 'photo') {
+          handleInputChange('photoUrl', data.secure_url);
+        } else {
+          handleInputChange('videoUrl', data.secure_url);
+        }
+      } else {
+        console.error("Cloudinary upload error:", data);
+        alert("Upload failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed. Please try again.");
+    }
+  };
+
+  // const handleFileUpload = async (file: File, type: 'photo' | 'video') => {
+  //   // Simulated Cloudinary upload - replace with actual implementation
+  //   const mockUrl = `https://res.cloudinary.com/demo/${type === 'photo' ? 'image' : 'video'}/upload/v1/${Date.now()}_${file.name}`;
+
+  //   if (type === 'photo') {
+  //     handleInputChange('photoUrl', mockUrl);
+  //   } else {
+  //     handleInputChange('videoUrl', mockUrl);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Calculate total followers
       let totalFollowers = 0;
@@ -128,21 +160,25 @@ const handleInputChange = (field: string, value: any) => {
         totalFollowers
       };
 
-      // In a real app, you'd make an API call here
-      // const response = await fetch(`/api/influencers/${influencer._id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updateData)
-      // });
+      // Update influencer profile via API
+      const response = await fetch(`/api/influencers/${influencer.slug}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData)
+      });
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      onUpdate(updateData);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update profile');
+      }
+
+      const result = await response.json();
+
+      onUpdate(result.data);
       onClose();
     } catch (error) {
       console.error('Update error:', error);
-      alert('Failed to update profile. Please try again.');
+      alert(error instanceof Error ? error.message : 'Failed to update profile. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -162,6 +198,7 @@ const handleInputChange = (field: string, value: any) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="name">Full Name</Label>
+
                 <Input
                   id="name"
                   value={formData.name}
@@ -179,6 +216,7 @@ const handleInputChange = (field: string, value: any) => {
                   required
                 />
               </div>
+
               <div>
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input
@@ -333,6 +371,36 @@ const handleInputChange = (field: string, value: any) => {
                       value={formData.socials.youtube.link}
                       onChange={(e) => handleInputChange('socials.youtube.link', e.target.value)}
                       placeholder="https://youtube.com/channel/..."
+                    />
+                   
+                  </div>
+                </div>
+              </div>
+              {/* Facebook */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-semibold mb-3">Facebook</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <Label>Channel Name</Label>
+                    <Input
+                      value={formData.socials.facebook.id}
+                      onChange={(e) => handleInputChange('socials.facebook.id', e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label>Followers</Label>
+                    <Input
+                      type="number"
+                      value={formData.socials.facebook.followers}
+                      onChange={(e) => handleInputChange('socials.facebook.followers', parseInt(e.target.value) || 0)}
+                    />
+                  </div>
+                  <div>
+                    <Label>Channel Link</Label>
+                    <Input
+                      value={formData.socials.facebook.link}
+                      onChange={(e) => handleInputChange('socials.facebook.link', e.target.value)}
+                      placeholder="https://facebook.com/..."
                     />
                   </div>
                 </div>

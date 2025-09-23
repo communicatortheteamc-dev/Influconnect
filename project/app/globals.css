@@ -80,3 +80,6 @@
     @apply bg-background text-foreground;
   }
 }
+.borderradies {
+  border-radius: 40px 150px 40px 40px;
+}

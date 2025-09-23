@@ -4,13 +4,16 @@ import { Inter } from 'next/font/google';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import SocialSidebar from '@/components/home/SocialLinks';
-
+import Logo from "@/images/influconnectlogo.png"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'InflueConnect - Connect with Top Influencers in India',
+  title: 'InfluConnect - Connect with Top Influencers in India',
   description: 'India\'s leading influencer marketing platform. Connect brands with verified influencers for impactful campaigns across Instagram, YouTube, and more.',
   keywords: 'influencer marketing, social media marketing, brand collaboration, content creators, India',
+  icons: {
+    icon: "/favicon.png"
+  }
 };
 
 export default function RootLayout({
@@ -23,9 +26,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Header />
         <div className='flex justify-end items-end'>
-          <SocialSidebar/>
+          <SocialSidebar />
         </div>
-        
+
         <main className="min-h-screen">
           {children}
         </main>

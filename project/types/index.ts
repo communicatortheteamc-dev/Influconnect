@@ -1,14 +1,16 @@
 export interface Influencer {
+  rate: any;
+  budget: any;
   _id?: string;
   name: string;
   email: string;
   phone: string;
   location: {
-      city: string,
-      town: string,
-      district: string,
-      zipcode: string
-    },
+    city: string,
+    town: string,
+    district: string,
+    zipcode: string
+  },
   bio?: string;
   category: string;
   photoUrl: string;

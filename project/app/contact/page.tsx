@@ -94,7 +94,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <MessageCircle className="w-5 h-5 text-[#EC6546]" />
             <span className="text-[#EC6546] font-semibold">Get in Touch</span>
           </div>
-          <h1 className="text-4xl font-bold text-[#000631] mb-4">Contact InflueConnect</h1>
+          <h1 className="text-4xl font-bold text-[#000631] mb-4">Contact InfluConnect</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Have questions about our platform? Need help with your campaign? We're here to assist you every step of the way.
           </p>

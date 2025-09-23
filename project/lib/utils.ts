@@ -34,6 +34,7 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 export const categories = [
+  
   'Fashion & Lifestyle',
   'Fitness & Health',
   'Food & Cooking',

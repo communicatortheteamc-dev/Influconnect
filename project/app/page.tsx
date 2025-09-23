@@ -3,6 +3,9 @@ import { AboutSection } from '@/components/home/about-section';
 import { InfluencersCarousel } from '@/components/home/influencers-carousel';
 import { ReviewsSection } from '@/components/home/reviews-section';
 import InfluencerCard from '@/components/HomeSectionCard';
+import { ClientsSection } from '@/components/home/ClientsSection';
+import { TopInfluencersSection } from '@/components/home/TopInfluencersSection';
+import { FAQSection } from '@/components/home/FAQSection';
 
 export default function Home() {
   const obj = {
@@ -35,8 +38,11 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       {/* <InfluencerCard influencer={obj} /> */}
-      {/* <InfluencersCarousel />
-      <ReviewsSection /> */}
+      {/* <InfluencersCarousel /> */}
+      {/* <ReviewsSection /> */}
+       <ClientsSection />
+      <TopInfluencersSection />
+      <FAQSection />
     </>
   );
 }
