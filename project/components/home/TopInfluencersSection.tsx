@@ -71,28 +71,29 @@ export function TopInfluencersSection() {
               <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer group relative">
                 {/* Rank Badge */}
                 <div className="absolute top-4 left-4 z-10">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
-                    index === 0 ? 'bg-yellow-500' : 
-                    index === 1 ? 'bg-gray-400' : 
-                    index === 2 ? 'bg-amber-600' : 'bg-[#EC6546]'
-                  }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${index === 0 ? 'bg-yellow-500' :
+                      index === 1 ? 'bg-gray-400' :
+                        index === 2 ? 'bg-amber-600' : 'bg-[#EC6546]'
+                    }`}>
                     #{index + 1}
                   </div>
                 </div>
 
                 <div className="relative">
-                  <img
-                    src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400'}
-                    alt={influencer.name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  
-                  {/* Follower Count Overlay */}
-                  <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-                    <TrendingUp className="w-3 h-3" />
-                    <span>{formatFollowers(influencer.totalFollowers || 0)}</span>
+
+                  <div className="aspect-[3/2] w-full overflow-hidden">
+                    <img
+                      src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400'}
+                      alt={influencer.name}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+
+                    {/* Follower Count Overlay */}
+                    <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
+                      <TrendingUp className="w-3 h-3" />
+                      <span>{formatFollowers(influencer.totalFollowers || 0)}</span>
+                    </div>
                   </div>
-                  
                   {/* Social Media Icons */}
                   <div className="absolute bottom-4 left-4 flex space-x-2">
                     {influencer.socials?.instagram && (
@@ -120,23 +121,22 @@ export function TopInfluencersSection() {
                       </div>
                     </div>
                     {index < 3 && (
-                      <Crown className={`w-5 h-5 ${
-                        index === 0 ? 'text-yellow-500' : 
-                        index === 1 ? 'text-gray-400' : 'text-amber-600'
-                      }`} />
+                      <Crown className={`w-5 h-5 ${index === 0 ? 'text-yellow-500' :
+                          index === 1 ? 'text-gray-400' : 'text-amber-600'
+                        }`} />
                     )}
                   </div>
-                  
+
                   <Badge className="bg-[#EC6546]/10 text-[#EC6546] hover:bg-[#EC6546]/20 mb-3">
                     {influencer.category}
                   </Badge>
-                  
+
                   {influencer.bio && (
                     <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
                       {influencer.bio}
                     </p>
                   )}
-                  
+
                   {/* Engagement Stats */}
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <div className="flex justify-between text-sm">
