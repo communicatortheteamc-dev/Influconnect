@@ -17,7 +17,7 @@ interface PaymentModalProps {
 
 export function PaymentModal({ influencer, onClose }: PaymentModalProps) {
   const [selectedMethod, setSelectedMethod] = useState<'phonepe' | 'googlepay' | 'paytm'>('phonepe');
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(influencer.budget?.toString() || '0');
   const [message, setMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -27,33 +27,38 @@ export function PaymentModal({ influencer, onClose }: PaymentModalProps) {
     { id: 'googlepay', name: 'Google Pay', icon: CreditCard, color: 'bg-blue-500' },
     { id: 'paytm', name: 'Paytm', icon: Wallet, color: 'bg-blue-600' },
   ];
+ const handlePayment = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!amount || parseFloat(amount) <= 0) return alert("Enter a valid amount");
 
-  const handlePayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!amount || parseFloat(amount) <= 0) {
-      alert('Please enter a valid amount');
-      return;
-    }
+  setIsProcessing(true);
 
-    setIsProcessing(true);
-    
-    try {
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // In a real app, you would integrate with actual payment gateways:
-      // - PhonePe: Use PhonePe Payment Gateway SDK
-      // - Google Pay: Use Google Pay API
-      // - Paytm: Use Paytm Payment Gateway
-      
-      setIsSuccess(true);
-    } catch (error) {
-      console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  try {
+    const userId = influencer._id;
+
+    const res = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        amount,
+        // List all instruments here
+        instruments: ['PHONEPE', 'PAYTM', 'GOOGLEPAY'],
+      }),
+    });
+
+    const data = await res.json();
+    // Redirect user to the payment page
+    window.location.href = data.redirectUrl;
+
+  } catch (err) {
+    console.error(err);
+    alert("Payment failed");
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
 
   if (isSuccess) {
     return (
@@ -94,18 +99,15 @@ export function PaymentModal({ influencer, onClose }: PaymentModalProps) {
                   key={method.id}
                   type="button"
                   onClick={() => setSelectedMethod(method.id as any)}
-                  className={`p-3 rounded-lg border-2 transition-all ${
-                    selectedMethod === method.id
-                      ? 'border-[#EC6546] bg-[#EC6546]/10'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                  className={`p-3 rounded-lg border-2 transition-all ${selectedMethod === method.id
+                    ? 'border-[#EC6546] bg-[#EC6546]/10'
+                    : 'border-gray-200 hover:border-gray-300'
+                    }`}
                 >
-                  <method.icon className={`w-6 h-6 mx-auto mb-1 ${
-                    selectedMethod === method.id ? 'text-[#EC6546]' : 'text-gray-500'
-                  }`} />
-                  <div className={`text-xs font-medium ${
-                    selectedMethod === method.id ? 'text-[#EC6546]' : 'text-gray-600'
-                  }`}>
+                  <method.icon className={`w-6 h-6 mx-auto mb-1 ${selectedMethod === method.id ? 'text-[#EC6546]' : 'text-gray-500'
+                    }`} />
+                  <div className={`text-xs font-medium ${selectedMethod === method.id ? 'text-[#EC6546]' : 'text-gray-600'
+                    }`}>
                     {method.name}
                   </div>
                 </button>
@@ -120,12 +122,15 @@ export function PaymentModal({ influencer, onClose }: PaymentModalProps) {
               id="amount"
               type="number"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter amount"
+              readOnly
+              className="bg-gray-50"
               required
               min="1"
               step="0.01"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Amount is set based on influencer's rate (₹{influencer.budget?.toLocaleString() || '15,000'})
+            </p>
           </div>
 
           {/* Message */}

@@ -36,7 +36,7 @@ export function AboutSection() {
     {/* Left Side - Text */}
     <div className="space-y-6 text-center lg:text-left">
       <h2 className="text-4xl sm:text-5xl font-extrabold text-[#000631] leading-tight">
-        About <span className="text-[#EC6546]">InflueConnect</span>
+        About <span className="text-[#EC6546]">InfluConnect</span>
       </h2>
       <p className="text-lg sm:text-xl text-gray-600 leading-relaxed">
         Welcome to <span className="font-semibold">Influ Connect by Team C</span> – 
@@ -55,7 +55,7 @@ export function AboutSection() {
     <div className="flex justify-center">
       <Image
         src={aboutusimage2}
-        alt="About InflueConnect"
+        alt="About InfluConnect"
         width={500}
         height={400}
         className="rounded-2xl  hover:scale-105 transition-transform duration-300"

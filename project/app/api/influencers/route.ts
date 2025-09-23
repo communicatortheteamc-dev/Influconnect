@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       minFollowers: searchParams.get('minFollowers') ? parseInt(searchParams.get('minFollowers')!) : 0,
       maxFollowers: searchParams.get('maxFollowers') ? parseInt(searchParams.get('maxFollowers')!) : 10000000,
       page: parseInt(searchParams.get('page') || '1'),
-      limit: parseInt(searchParams.get('limit') || '20'),
+      limit: parseInt(searchParams.get('limit') || '9'),
       sort: searchParams.get('sort') || 'createdAt_desc',
     };
 
@@ -44,12 +44,15 @@ export async function GET(request: NextRequest) {
       query[`socials.${params.platform.toLowerCase()}`] = { $exists: true };
     }
 
-    // if (params.minFollowers > 0 || params.maxFollowers < 10000000) {
-    //   query.totalFollowers = {
-    //     $gte: params.minFollowers,
-    //     $lte: params.maxFollowers
-    //   };
-    // }
+    const minFollowers = params.minFollowers ?? 0;          // default to 0
+    const maxFollowers = params.maxFollowers ?? 10_000_000; // default to 10M
+
+    if (minFollowers > 0 || maxFollowers < 10_000_000) {
+      query.totalFollowers = {
+        $gte: minFollowers,
+        $lte: maxFollowers,
+      };
+    }
     if (
       (params.minFollowers !== undefined && params.minFollowers > 0) ||
       (params.maxFollowers !== undefined && params.maxFollowers < 10000000)

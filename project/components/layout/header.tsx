@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, Search, Users, MessageSquare } from 'lucide-react';
+import { Menu, X, Search, Users, MessageSquare,Home,RectangleEllipsis,Contact } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Logo from "@/images/influconnectlogo.png"
@@ -20,12 +20,12 @@ export function Header() {
   }, []);
 
   const navigation = [
-    { name: 'Home', href: '/',icon: "" },
-    // { name: 'Influencers', href: '/influencers', icon: Users },
-    // { name: 'Register', href: '/register' },
-    // { name: 'Enquiry', href: '/enquiry', icon: MessageSquare },
-    // { name: 'About Us', href: '#aboutus', icon: 's' },
-    { name: 'Contact', href: '/contact', icon: '' },
+    { name: 'Home', href: '/',icon: Home },
+    { name: 'Influencers', href: '/influencers', icon: Users },
+    { name: 'Register', href: '/register', icon: RectangleEllipsis  },
+    { name: 'Enquiry', href: '/enquiry', icon: MessageSquare },
+    
+    { name: 'Contact', href: '/contact', icon: Contact },
   ];
 
   return (
@@ -49,9 +49,9 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center space-x-1 text-[#EC6546] hover:text-[#EC6546] transition-colors duration-200 font-medium"
+                className="flex items-center space-x-1 text-[#EC6546] hover:text-[#EC6546] transition-colors duration-200 font-medium "
               >
-                {item.icon && <item.icon  />}
+                <span >{item.icon && <item.icon className="w-4 h-4" />}</span>
                 <span>{item.name}</span>
               </Link>
             ))}
@@ -62,18 +62,18 @@ export function Header() {
               >
                 <span>{"About Us"}</span>
               </Link> */}
-            <a href="/#about" className=" text-[#EC6546] block hover:text-[#EC6546]  transition-colors">About Us</a>
+            {/* <a href="/#about" className=" text-[#EC6546] block hover:text-[#EC6546]  transition-colors">About Us</a> */}
           </nav>
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <Button variant="outline" asChild className="border-[#000631] text-[#000631] hover:bg-[#000631] hover:text-white">
-              <Link href="/contact">
+              <Link href="/register">
                 Join as Influencer
               </Link>
             </Button>
             <Button asChild className="bg-[#EC6546] hover:bg-[#EC6546]/90">
-              <Link href="/contact">
+              <Link href="/influencers">
                 Find Influencers
               </Link>
             </Button>
@@ -107,15 +107,15 @@ export function Header() {
                 <span>{item.name}</span>
               </Link>
             ))}
-            <a href="/#about" className=" text-[#EC6546] block hover:text-[#EC6546]  transition-colors">About Us</a>
+            {/* <a href="/#about" className=" text-[#EC6546] block hover:text-[#EC6546]  transition-colors">About Us</a> */}
             <div className="pt-2 pb-1 space-y-2">
               <Button variant="outline" asChild className="w-full border-[#000631] text-[#000631]">
-                <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/register" onClick={() => setIsMenuOpen(false)}>
                   Join as Influencer
                 </Link>
               </Button>
               <Button asChild className="w-full bg-[#EC6546] hover:bg-[#EC6546]/90">
-                <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/influencers" onClick={() => setIsMenuOpen(false)}>
                   Find Influencers
                 </Link>
               </Button>

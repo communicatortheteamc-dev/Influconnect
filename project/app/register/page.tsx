@@ -289,7 +289,7 @@ export default function RegisterPage() {
               </div>
               <h2 className="text-3xl font-bold text-[#000631] mb-4">Registration Successful!</h2>
               <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                Thank you for joining InflueConnect! Your profile has been submitted for review.
+                Thank you for joining InfluConnect! Your profile has been submitted for review.
                 We'll get back to you within 24-48 hours.
               </p>
               <Button asChild className="bg-[#EC6546] hover:bg-[#EC6546]/90">
@@ -313,7 +313,7 @@ export default function RegisterPage() {
           </div>
           <h1 className="text-4xl font-bold text-[#000631] mb-4">Influencer Registration</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Ready to monetize your influence? Join thousands of creators who trust InflueConnect
+            Ready to monetize your influence? Join thousands of creators who trust InfluConnect
             to connect them with leading brands.
           </p>
         </div>

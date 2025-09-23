@@ -3,17 +3,20 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { 
-  MapPin, 
-  Instagram, 
-  Youtube, 
-  Facebook, 
-  Users, 
-  Mail, 
-  Phone, 
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  MapPin,
+  Instagram,
+  Youtube,
+  Facebook,
+  Users,
+  Mail,
+  Phone,
   Edit3,
   CreditCard,
   Smartphone,
@@ -23,17 +26,20 @@ import {
   ExternalLink,
   MessageCircle,
   CheckCircle,
-  ArrowLeft
+  ArrowLeft,
+  LogIn,
+  IndianRupee
 } from 'lucide-react';
 import { formatFollowers } from '@/lib/utils';
 import { Influencer } from '@/types';
 import Link from 'next/link';
-import { EditInfluencerModal } from '@/components/influencer/EditInfluencerModal';
-import { PaymentModal } from '@/components/influencer/PaymentModal';
-import { ContactModal } from '@/components/influencer/ContactModal';
 // import { EditInfluencerModal } from '@/components/influencer/edit-influencer-modal';
 // import { PaymentModal } from '@/components/influencer/payment-modal';
 // import { ContactModal } from '@/components/influencer/contact-modal';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { EditInfluencerModal } from '@/components/influencer/EditInfluencerModal';
+import { ContactModal } from '@/components/influencer/ContactModal';
+import { PaymentModal } from '@/components/influencer/PaymentModal';
 
 export default function InfluencerDetailPage() {
   const params = useParams();
@@ -43,7 +49,11 @@ export default function InfluencerDetailPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
     const fetchInfluencer = async () => {
@@ -54,11 +64,6 @@ export default function InfluencerDetailPage() {
         }
         const data = await response.json();
         setInfluencer(data);
-        
-        // Check if this is the influencer's own profile (simplified check)
-        // In a real app, you'd check against authenticated user
-        const userEmail = localStorage.getItem('userEmail');
-        setIsOwnProfile(userEmail === data.email);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load influencer');
       } finally {
@@ -71,6 +76,43 @@ export default function InfluencerDetailPage() {
     }
   }, [params.slug]);
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail.trim()) {
+      setLoginError('Please enter your email address');
+      return;
+    }
+
+    setIsVerifying(true);
+    setLoginError('');
+
+    try {
+      const response = await fetch('/api/verify-influencer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: loginEmail.trim(),
+          slug: params.slug
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.verified) {
+        setIsAuthenticated(true);
+        setShowLoginModal(false);
+        setLoginEmail('');
+        setLoginError('');
+      } else {
+        setLoginError(data.message || 'Email verification failed. Please check your email address.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginError('Verification failed. Please try again.');
+    } finally {
+      setIsVerifying(false);
+    }
+  };
   const handleUpdateInfluencer = (updatedData: Partial<Influencer>) => {
     if (influencer) {
       setInfluencer({ ...influencer, ...updatedData });
@@ -153,15 +195,22 @@ export default function InfluencerDetailPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="aspect-video relative">
+                  <div className="relative w-full h-84 bg-gray-200 flex items-center justify-center " >
                     <img
-                      src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                      src={
+                        influencer.photoUrl ||
+                        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800'
+                      }
                       alt={influencer.name}
-                      className="w-full h-full object-cover"
+                      className="max-h-full max-w-full object-contain "
                     />
+                    <div className="absolute top-4 left-4 bg-[#EC6546] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
+                      <Star className="w-3 h-3" />
+                      <span>Top Influencer</span>
+                    </div>
                   </div>
                 )}
-                
+
                 {/* Overlay Info */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                   <div className="flex items-end justify-between">
@@ -187,7 +236,16 @@ export default function InfluencerDetailPage() {
                 </div>
 
                 {/* Edit Button - Only for own profile */}
-                {isOwnProfile && (
+                {!isAuthenticated ? (
+                  <Button
+                    onClick={() => setShowLoginModal(true)}
+                    className="absolute top-4 right-4 bg-white/90 text-[#000631] hover:bg-white"
+                    size="sm"
+                  >
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Login to Edit
+                  </Button>
+                ) : (
                   <Button
                     onClick={() => setShowEditModal(true)}
                     className="absolute top-4 right-4 bg-white/90 text-[#000631] hover:bg-white"
@@ -259,6 +317,20 @@ export default function InfluencerDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Rate Card */}
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-green-50 to-green-100">
+              <CardContent className="p-6 text-center">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  {/* <IndianRupee className="w-6 h-6 text-green-600" /> */}
+                  <h3 className="text-xl font-semibold text-green-800">Rate per Post</h3>
+                </div>
+                <div className="text-3xl font-bold text-green-700 mb-2">
+                  <span>₹</span> { formatFollowers(influencer.budget?.toLocaleString() || '15,000')}
+                </div>
+                <p className="text-green-600 text-sm">Starting rate for collaborations</p>
+              </CardContent>
+            </Card>
+
             {/* Contact Card */}
             <Card className="shadow-xl border-0 bg-gradient-to-br from-[#000631] to-[#EC6546] text-white">
               <CardContent className="p-6">
@@ -271,7 +343,7 @@ export default function InfluencerDetailPage() {
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Send Message
                   </Button>
-                  
+
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center space-x-2">
                       <Mail className="w-4 h-4" />
@@ -333,7 +405,7 @@ export default function InfluencerDetailPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Platforms</span>
                     <span className="font-semibold">
-                      {Object.keys(influencer.socials || {}).filter(key => 
+                      {Object.keys(influencer.socials || {}).filter(key =>
                         influencer.socials?.[key as keyof typeof influencer.socials]?.followers
                       ).length}
                     </span>
@@ -342,16 +414,79 @@ export default function InfluencerDetailPage() {
                     <span className="text-gray-600">Category</span>
                     <Badge variant="secondary">{influencer.category}</Badge>
                   </div>
+
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Verified</span>
                     <CheckCircle className="w-5 h-5 text-green-500" />
                   </div>
+                </div>
+                <div>
+
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+      {/* Login Modal */}
+      {showLoginModal && (
+        <Dialog open={true} onOpenChange={() => setShowLoginModal(false)}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold text-[#000631] flex items-center space-x-2">
+                <LogIn className="w-5 h-5" />
+                <span>Verify Your Identity</span>
+              </DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Label htmlFor="loginEmail">Enter your registered email address</Label>
+                <Input
+                  id="loginEmail"
+                  type="email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  required
+                  className="mt-1"
+                />
+                {loginError && (
+                  <p className="text-red-500 text-sm mt-1">{loginError}</p>
+                )}
+                
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-3 text-sm text-blue-700">
+                <p>Enter the email address you used when registering as an influencer to edit your profile.</p>
+              </div>
+              <div className="flex justify-end space-x-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowLoginModal(false)}
+                  disabled={isVerifying}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isVerifying}
+                  className="bg-[#EC6546] hover:bg-[#EC6546]/90"
+                >
+                  {isVerifying ? (
+                    <>
+                      <LoadingSpinner className="w-4 h-4 mr-2" />
+                      Verifying...
+                    </>
+                  ) : (
+                    'Verify & Edit'
+                  )}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Modals */}
       {showEditModal && (

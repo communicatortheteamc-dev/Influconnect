@@ -37,7 +37,7 @@ const InfluencerCard = (props: { influencer?: any }) => {
           <h3 className="text-lg font-bold text-gray-900">
             {props.influencer.name}{" "}
             <span className="font-normal text-gray-600">
-              ({props.influencer.socials.instagram.infollowers})
+              {props.influencer.socials.instagram.infollowers}
             </span>
           </h3>
           <div className="text-sm text-gray-500 text-right">

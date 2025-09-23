@@ -97,7 +97,7 @@ const videos = [
                 size="lg" 
                 className="bg-[#EC6546] hover:bg-[#EC6546]/90 text-white px-8 py-4 text-lg font-semibold rounded-full group transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#EC6546]/25"
               >
-                <Link href="/contact" className="flex items-center space-x-2">
+                <Link href="/influencers" className="flex items-center space-x-2">
                   <span>Discover Influencers</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -108,7 +108,7 @@ const videos = [
                 asChild
                 className="border-2 border-white text-white hover:bg-white hover:text-[#000631] px-8 py-4 text-lg font-semibold rounded-full group transition-all duration-300 hover:scale-105"
               >
-                <Link href="/contact" className="flex items-center space-x-2">
+                <Link href="/register" className="flex items-center space-x-2">
                   <span className='text-black'>Join as Creator</span>
                   <Users className="w-5 h-5 text-black group-hover:rotate-12 transition-transform" />
                 </Link>
