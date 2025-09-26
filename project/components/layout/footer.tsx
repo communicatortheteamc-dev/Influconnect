@@ -131,16 +131,16 @@ export function Footer() {
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <div className='flex justify-center gap-4 mb-4'>
             <a href='/privacypolicy' target="_blank" rel="noopener noreferrer">
-             <p className="text-gray-300 text-xs">Privary & Policy</p>
+              <p className="text-gray-300 text-xs">Privacy & Policy</p>
             </a>
             <a href='/returnsrefunds' target="_blank" rel="noopener noreferrer">
               <p className="text-gray-300 text-xs">Returns & Refunds</p>
             </a>
-          
+
           </div>
 
           <p className="text-gray-300">
-            &copy; {new Date().getFullYear()} InfluConnect. All rights reserved.
+            &copy; {new Date().getFullYear()} InfluConnect By TheTeamC. All rights reserved.
           </p>
         </div>
       </div>

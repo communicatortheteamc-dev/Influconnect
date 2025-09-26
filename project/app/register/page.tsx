@@ -57,13 +57,19 @@ export default function RegisterPage() {
       instagram: { id: '', followers: 0, link: '' },
       youtube: { id: '', followers: 0, link: '' },
       facebook: { id: '', followers: 0, link: '' },
-      tiktok: { id: '', followers: 0, link: '' }
+      Snapchat: { id: '', followers: 0, link: '' }
     },
-    budget: 0,
+    budget: {
+      rate_per_post: "",
+      rate_per_reel: "",
+      rate_per_story: "",
+      rate_per_collaboration: ""
+    },
     influencer_type: {
       youtube: "",
       facebook: "",
-      instagram: ""
+      instagram: "",
+      Snapchat: "",
     },
     termsAccepted: false,
 
@@ -251,7 +257,10 @@ export default function RegisterPage() {
       alert('Please accept the terms and conditions');
       return;
     }
-
+    if (!formData.category || !formData.photoUrl || !formData.budget.rate_per_collaboration || !formData.budget.rate_per_post || !formData.budget.rate_per_reel || !formData.budget.rate_per_story || !formData.location.city) {
+      alert('Please fill all required fields');
+      return;
+    }
     setIsSubmitting(true);
 
     try {
@@ -268,7 +277,7 @@ export default function RegisterPage() {
         alert(error.message || 'Registration failed');
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error ('Registration error:', error);
       alert('Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -299,9 +308,9 @@ export default function RegisterPage() {
           </Card>
         </div>
       </div>
-    );
+    )
   }
-  ""
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-20 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -317,7 +326,7 @@ export default function RegisterPage() {
             to connect them with leading brands.
           </p>
         </div>
-
+<div></div>
         <Card className="shadow-xl border-0">
           <CardHeader className="bg-gradient-to-r from-[#000631] to-[#EC6546] text-white rounded-t-lg">
             <CardTitle className="text-2xl">Create Your Profile</CardTitle>
@@ -361,7 +370,7 @@ export default function RegisterPage() {
                       className="mt-1"
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <Label htmlFor="location">Budget *</Label>
                     <Input
                       id="location"
@@ -371,8 +380,55 @@ export default function RegisterPage() {
                       className="mt-1"
                       placeholder="budget"
                     />
-                  </div>
+                  </div> */}
 
+                </div>
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    {/* <Budget className="w-6 h-6 text-red-500" /> */}
+                    <h4 className="font-semibold">Budget</h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label>Rate Per Post</Label>
+                      <Input
+                       type="number"
+                        value={formData.budget.rate_per_post}
+                        onChange={(e) => handleInputChange('budget.rate_per_post', e.target.value)}
+                        className="mt-1"
+                         placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label>Rate Per Reel</Label>
+                      <Input
+                        type="number"
+                        value={formData.budget.rate_per_reel || 0}
+                        onChange={(e) => handleInputChange('budget.rate_per_reel', (e.target.value))}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Rate Per Story</Label>
+                      <Input
+                       type="number"
+                        value={formData.budget.rate_per_story}
+                        onChange={(e) => handleInputChange('budget.rate_per_story', e.target.value)}
+                        placeholder="0"
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Rate Per Collaboration</Label>
+                      <Input
+                       type="number"
+                        value={formData.budget.rate_per_collaboration}
+                        onChange={(e) => handleInputChange('budget.rate_per_collaboration', e.target.value)}
+                        placeholder="0"
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-6 mt-4">
                   <div className="flex items-center space-x-2 mb-4">
@@ -496,14 +552,14 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Social Media */}
+              {/* Social Media*/}
               <div>
                 <h3 className="text-xl font-semibold text-[#000631] mb-4 border-b pb-2">
                   Social Media Profiles
                 </h3>
                 <div className="space-y-6">
                   {/* Instagram */}
-                  i have this three socials when user type followers then i have show the mega,micro,nano mega means above 100k,micro means above 10k, nano means below 10k
+
                   <div className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center space-x-2 mb-4">
                       <Instagram className="w-6 h-6 text-pink-500" />
@@ -638,6 +694,63 @@ export default function RegisterPage() {
                       </div>
                     </div>
                   </div>
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <div className="flex items-center space-x-2 mb-4">
+                      {/* <Chat className="w-6 h-6 text-red-500" /> */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-6 h-6 text-yellow-400"
+                      >
+                        <path d="M12 2c-1.38 0-2.5 1.12-2.5 2.5S10.62 7 12 7s2.5-1.12 2.5-2.5S13.38 2 12 2z" />
+                        <path d="M8 9c-1.1 0-2 .9-2 2v7a2 2 0 002 2h8a2 2 0 002-2v-7c0-1.1-.9-2-2-2H8z" />
+                      </svg>
+                      <h4 className="font-semibold">Snapchat</h4>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label>Snapchat Id</Label>
+                        <Input
+                          value={formData.socials.facebook.id}
+                          onChange={(e) => handleInputChange('socials.Snapchat.id', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label>Followers</Label>
+
+
+                        <Input
+                          type="number"
+                          value={formData.socials.Snapchat.followers || 0}
+                          onChange={(e) => handleInputChange('socials.Snapchat.followers', parseInt(e.target.value) || 0)}
+                          className="mt-1"
+                        />
+                        {formData.socials.Snapchat.followers > 0 &&
+                          <p className="mt-1 text-sm bg-orange-100 mt-1 rounded-lg p-1">
+                            Type: <span className="font-semibold capitalize">{formData.influencer_type.Snapchat}</span>
+                          </p>
+                        }
+
+                      </div>
+                      <div>
+                        <Label>Snapchat Link</Label>
+                        <Input
+                          value={formData.socials.Snapchat.link}
+                          onChange={(e) => handleInputChange('socials.Snapchat.link', e.target.value)}
+                          placeholder="https://Snapchat.com/..."
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -673,6 +786,9 @@ export default function RegisterPage() {
               </div>
             </form>
           </CardContent>
+
+
+
         </Card>
       </div>
     </div>
