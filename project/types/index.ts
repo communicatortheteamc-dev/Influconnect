@@ -1,6 +1,11 @@
 export interface Influencer {
   rate: any;
-  budget: any;
+  budget: {
+    rate_per_post: string,
+    rate_per_reel: string,
+    rate_per_story: string,
+    rate_per_collaboration: string
+  },
   _id?: string;
   name: string;
   email: string;

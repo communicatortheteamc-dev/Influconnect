@@ -5,7 +5,10 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+const options = {
+  ssl: true,
+  tls: true,
+};
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
@@ -29,5 +32,5 @@ export default clientPromise;
 
 export async function getDatabase(): Promise<Db> {
   const client = await clientPromise;
-  return client.db('influconnect');
+  return client.db('influconnect'); // ✅ make sure this is your actual DB name in Atlas
 }

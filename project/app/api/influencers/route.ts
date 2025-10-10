@@ -23,26 +23,39 @@ export async function GET(request: NextRequest) {
     // Build query
     const query: any = {};
 
-    if (params.q) {
-      query.$or = [
-        { name: { $regex: params.q, $options: 'i' } },
-        { bio: { $regex: params.q, $options: 'i' } },
-        { category: { $regex: params.q, $options: 'i' } },
-        { location: { $regex: params.q, $options: 'i' } }
-      ];
-    }
+   if (params.q) {
+  query.$or = [
+    { name: { $regex: params.q, $options: "i" } },
+    { bio: { $regex: params.q, $options: "i" } },
+    { category: { $regex: params.q, $options: "i" } },
+    { "location.city": { $regex: params.q, $options: "i" } },
+    { "location.town": { $regex: params.q, $options: "i" } },
+    { "location.district": { $regex: params.q, $options: "i" } },
+    { "location.zipcode": { $regex: params.q, $options: "i" } }
+  ];
+}
 
     if (params.category) {
       query.category = params.category;
     }
 
-    if (params.location) {
-      query.location = { $regex: params.location, $options: 'i' };
-    }
+   if (params.location) {
+  query.$or = [
+    { "location.city": { $regex: params.location.trim(), $options: "i" } },
+    { "location.town": { $regex: params.location.trim(), $options: "i" } },
+    { "location.district": { $regex: params.location.trim(), $options: "i" } },
+    { "location.zipcode": { $regex: params.location.trim(), $options: "i" } }
+  ];
+}
 
     if (params.platform) {
-      query[`socials.${params.platform.toLowerCase()}`] = { $exists: true };
-    }
+  const platforms = params.platform.split(',').map(p => p.trim().toLowerCase());
+  if (platforms.length > 0) {
+    query.$and = platforms.map(platform => ({
+      [`socials.${platform}.id`]: { $ne: "" }
+    }));
+  }
+}
 
     const minFollowers = params.minFollowers ?? 0;          // default to 0
     const maxFollowers = params.maxFollowers ?? 10_000_000; // default to 10M

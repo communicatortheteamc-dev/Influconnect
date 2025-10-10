@@ -317,17 +317,46 @@ export default function InfluencerDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Rate Card */}
             <Card className="shadow-xl border-0 bg-gradient-to-br from-green-50 to-green-100">
               <CardContent className="p-6 text-center">
-                <div className="flex items-center justify-center space-x-2 mb-2">
-                  {/* <IndianRupee className="w-6 h-6 text-green-600" /> */}
-                  <h3 className="text-xl font-semibold text-green-800">Rate per Post</h3>
-                </div>
+                <h3 className="text-xl font-semibold text-green-800">Rate per Post</h3>
                 <div className="text-3xl font-bold text-green-700 mb-2">
-                  <span>₹</span> { formatFollowers(influencer.budget?.toLocaleString() || '15,000')}
+                  ₹ {influencer.budget.rate_per_post || "0"}
                 </div>
-                <p className="text-green-600 text-sm">Starting rate for collaborations</p>
+                <p className="text-green-600 text-sm">Starting rate</p>
+              </CardContent>
+            </Card>
+
+            {/* Story Rate */}
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100">
+              <CardContent className="p-6 text-center">
+                <h3 className="text-xl font-semibold text-blue-800">Rate per Story</h3>
+                <div className="text-3xl font-bold text-blue-700 mb-2">
+                  ₹ {influencer.budget.rate_per_story || "0"}
+                </div>
+                <p className="text-blue-600 text-sm">Starting rate</p>
+              </CardContent>
+            </Card>
+
+            {/* Reel Rate */}
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-purple-50 to-purple-100">
+              <CardContent className="p-6 text-center">
+                <h3 className="text-xl font-semibold text-purple-800">Rate per Reel</h3>
+                <div className="text-3xl font-bold text-purple-700 mb-2">
+                  ₹ {influencer.budget.rate_per_reel || "0"}
+                </div>
+                <p className="text-purple-600 text-sm">Starting rate</p>
+              </CardContent>
+            </Card>
+
+            {/* Collab Rate */}
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-pink-50 to-pink-100">
+              <CardContent className="p-6 text-center">
+                <h3 className="text-xl font-semibold text-pink-800">Rate per Collab</h3>
+                <div className="text-3xl font-bold text-pink-700 mb-2">
+                  ₹ {influencer.budget.rate_per_collaboration || "0"}
+                </div>
+                <p className="text-pink-600 text-sm">Starting rate</p>
               </CardContent>
             </Card>
 
@@ -453,7 +482,7 @@ export default function InfluencerDetailPage() {
                 {loginError && (
                   <p className="text-red-500 text-sm mt-1">{loginError}</p>
                 )}
-                
+
               </div>
 
               <div className="bg-blue-50 rounded-lg p-3 text-sm text-blue-700">

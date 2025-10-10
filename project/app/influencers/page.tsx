@@ -66,7 +66,7 @@ export default function InfluencersPage() {
 
   const debouncedSearch = useCallback(
     debounce((searchTerm: string) => {
-      setFilters(prev => ({ ...prev, q: searchTerm, page: 1 }));
+      setFilters(prev => ({ ...prev, q: searchTerm.toLowerCase(), page: 1 }));
     }, 300),
     []
   );
