@@ -1,7 +1,8 @@
 'use client';
 
+import { AuthGuard } from '@/components/auth/auth-guard';
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Grid, List, Users, MapPin, Instagram, Youtube, BookText as TikTok, Facebook } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Users, MapPin, Instagram, Youtube, BookText as TikTok, Facebook } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -14,20 +15,28 @@ import { Influencer, FilterParams } from '@/types';
 import Link from 'next/link';
 
 export default function InfluencersPage() {
+  return (
+    <AuthGuard>
+      <InfluencersPageContent />
+    </AuthGuard>
+  );
+}
+
+function InfluencersPageContent() {
   const [influencers, setInfluencers] = useState<Influencer[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
-
+  
   const [filters, setFilters] = useState<FilterParams>({
     q: '',
     category: '',
     location: '',
     platform: '',
     minFollowers: 0,
-    maxFollowers: 10000000,
+    maxFollowers: 1000000,
     page: 1,
-    limit: 12,
+    limit: 20,
     sort: 'followers_desc'
   });
 
@@ -37,7 +46,7 @@ export default function InfluencersPage() {
   });
 
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
-  const [followersRange, setFollowersRange] = useState([0, 10000000]);
+  const [followersRange, setFollowersRange] = useState([0, 1000000]);
 
   const fetchInfluencers = useCallback(async (params: FilterParams) => {
     setLoading(true);
@@ -51,7 +60,7 @@ export default function InfluencersPage() {
 
       const response = await fetch(`/api/influencers?${searchParams.toString()}`);
       const data = await response.json();
-
+      
       setInfluencers(data.data || []);
       setPagination({
         total: data.total || 0,
@@ -66,7 +75,7 @@ export default function InfluencersPage() {
 
   const debouncedSearch = useCallback(
     debounce((searchTerm: string) => {
-      setFilters(prev => ({ ...prev, q: searchTerm.toLowerCase(), page: 1 }));
+      setFilters(prev => ({ ...prev, q: searchTerm, page: 1 }));
     }, 300),
     []
   );
@@ -84,10 +93,10 @@ export default function InfluencersPage() {
   };
 
   const handlePlatformChange = (platform: string, checked: boolean) => {
-    const newPlatforms = checked
+    const newPlatforms = checked 
       ? [...selectedPlatforms, platform]
       : selectedPlatforms.filter(p => p !== platform);
-
+    
     setSelectedPlatforms(newPlatforms);
     handleFilterChange('platform', newPlatforms.join(','));
   };
@@ -103,13 +112,13 @@ export default function InfluencersPage() {
       location: '',
       platform: '',
       minFollowers: 0,
-      maxFollowers: 10000000,
+      maxFollowers: 1000000,
       page: 1,
       limit: 20,
       sort: 'followers_desc'
     });
     setSelectedPlatforms([]);
-    setFollowersRange([0, 10000000]);
+    setFollowersRange([0, 1000000]);
   };
 
   return (
@@ -123,7 +132,7 @@ export default function InfluencersPage() {
           </div>
           <h1 className="text-4xl font-bold text-[#000631] mb-4">Browse Influencers</h1>
           <p className="text-xl text-gray-600 max-w-2xl">
-            Discover verified content creators across various niches and platforms.
+            Discover verified content creators across various niches and platforms. 
             Find the perfect match for your brand campaigns.
           </p>
         </div>
@@ -148,7 +157,7 @@ export default function InfluencersPage() {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {/* <SelectItem value="All Categories">All Categories</SelectItem> */}
+                  <SelectItem value="All Categories">All Categories</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -221,7 +230,7 @@ export default function InfluencersPage() {
                     Platforms
                   </label>
                   <div className="space-y-2">
-                    {['Instagram', 'YouTube', 'Facebook'].map((platform) => (
+                    {['Instagram', 'YouTube', 'TikTok', 'Facebook'].map((platform) => (
                       <div key={platform} className="flex items-center space-x-2">
                         <Checkbox
                           id={platform}
@@ -252,7 +261,7 @@ export default function InfluencersPage() {
                       handleFilterChange('minFollowers', value[0]);
                       handleFilterChange('maxFollowers', value[1]);
                     }}
-                    max={10000000}
+                    max={1000000}
                     step={1000}
                     className="mt-2"
                   />
@@ -274,7 +283,7 @@ export default function InfluencersPage() {
         {/* Results */}
         <div className="space-y-6">
           {loading ? (
-            <div className={viewMode === 'grid'
+            <div className={viewMode === 'grid' 
               ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
               : 'space-y-4'
             }>
@@ -306,17 +315,11 @@ export default function InfluencersPage() {
                     <Link key={influencer._id} href={`/influencers/${influencer.slug}`}>
                       <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group">
                         <div className="relative">
-                          <div className="aspect-[3/2] w-full overflow-hidden">
-                            <img
-                              src={
-                                influencer.photoUrl ||
-                                'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400'
-                              }
-                              alt={influencer.name}
-                              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                            />
-                          </div>
-
+                          <img
+                            src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400'}
+                            alt={influencer.name}
+                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                           <div className="absolute top-3 right-3 bg-[#EC6546] text-white px-2 py-1 rounded-full text-xs font-semibold">
                             {formatFollowers(influencer.totalFollowers || 0)}
                           </div>
@@ -401,7 +404,7 @@ export default function InfluencersPage() {
                     >
                       Previous
                     </Button>
-
+                    
                     {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
                       const page = i + 1;
                       return (
@@ -415,7 +418,7 @@ export default function InfluencersPage() {
                         </Button>
                       );
                     })}
-
+                    
                     <Button
                       variant="outline"
                       disabled={filters.page === pagination.totalPages}

@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 const faqs = [
   {
     id: 1,
-    question: "How do I register as an influencer on InflueConnect?",
+    question: "How do I register as an influencer on InfluConnect?",
     answer: "Simply visit our registration page, fill out your profile information, upload your photos/videos, connect your social media accounts, and submit your application. Our team will review and approve your profile within 24-48 hours."
   },
   {
@@ -77,7 +77,7 @@ export function FAQSection() {
             Frequently Asked Questions
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Find answers to common questions about InflueConnect, our services, and how to get started.
+            Find answers to common questions about InfluConnect, our services, and how to get started.
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export function FAQSection() {
           <div className="bg-gradient-to-r from-[#000631] to-[#EC6546] rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
             <p className="text-white/90 mb-6">
-              Our support team is here to help you get started and succeed on InflueConnect.
+              Our support team is here to help you get started and succeed on InfluConnect.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a

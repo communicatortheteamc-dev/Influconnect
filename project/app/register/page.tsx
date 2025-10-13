@@ -12,6 +12,7 @@ import { Upload, Instagram, Youtube, Facebook, Users, CheckCircle } from 'lucide
 import { categories, platforms } from '@/lib/utils';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import TermsPopup from '@/components/TermsPopup';
+import emailjs from "emailjs-com";
 type FormData = {
   name: string;
   email: string;
@@ -272,6 +273,16 @@ export default function RegisterPage() {
       console.log(response)
       if (response.ok) {
         setIsSuccess(true);
+         await emailjs.send(
+      "service_8la2lyx",
+      "template_0pf8kw1",
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      },
+      "RI6ijkt2WR-Mgd9sj"
+    );
       } else {
         const error = await response.json();
         alert(error.message || 'Registration failed');
@@ -604,8 +615,8 @@ export default function RegisterPage() {
                       </div>
                     </div>
                   </div>
-
-                  {/* YouTube */}
+ 
+                 {/* YouTube */}
                   <div className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center space-x-2 mb-4">
                       <Youtube className="w-6 h-6 text-red-500" />
@@ -681,7 +692,6 @@ export default function RegisterPage() {
                             Type: <span className="font-semibold capitalize">{formData.influencer_type.facebook}</span>
                           </p>
                         }
-
                       </div>
                       <div>
                         <Label>Facebook Link</Label>
@@ -725,8 +735,6 @@ export default function RegisterPage() {
                       </div>
                       <div>
                         <Label>Followers</Label>
-
-
                         <Input
                           type="number"
                           value={formData.socials.Snapchat.followers || 0}
@@ -738,7 +746,6 @@ export default function RegisterPage() {
                             Type: <span className="font-semibold capitalize">{formData.influencer_type.Snapchat}</span>
                           </p>
                         }
-
                       </div>
                       <div>
                         <Label>Snapchat Link</Label>
@@ -786,9 +793,6 @@ export default function RegisterPage() {
               </div>
             </form>
           </CardContent>
-
-
-
         </Card>
       </div>
     </div>
