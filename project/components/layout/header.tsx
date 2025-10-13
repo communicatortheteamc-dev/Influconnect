@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, Search, Users, MessageSquare, LogOut, User } from 'lucide-react';
+import { Menu, X, Search, Users, MessageSquare, LogOut, User, Home, RectangleEllipsisIcon, ContactIcon, User2Icon, MessageCircleIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -41,11 +41,11 @@ export function Header() {
   };
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Influencers', href: '/influencers', icon: Users },
-    { name: 'Register', href: '/register' },
-    { name: 'Enquiry', href: '/enquiry', icon: MessageSquare },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Home', href: '/', icon : <Home className='w-4 h-4'/> },
+    { name: 'Influencers', href: '/influencers', icon: <User2Icon className='w-4 h-4'/> },
+    { name: 'Register', href: '/register', icon: <RectangleEllipsisIcon className='w-4 h-4'/> },
+    { name: 'Enquiry', href: '/enquiry', icon: <MessageCircleIcon className='w-4 h-4'/> },
+    { name: 'Contact', href: '/contact' , icon: <ContactIcon className='w-4 h-4'/>},
   ];
 
   return (
@@ -71,7 +71,7 @@ export function Header() {
                 href={item.href}
                 className="flex items-center space-x-1 text-white hover:text-[#EC6546] transition-colors duration-200 font-medium"
               >
-                {item.icon && <item.icon className="w-4 h-4" />}
+                {item.icon}
                 <span>{item.name}</span>
               </Link>
             ))}
@@ -132,8 +132,11 @@ export function Header() {
                 className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-[#EC6546] hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {item.icon && <item.icon className="w-4 h-4" />}
+                <div className='flex items-center'>
+                  <span >{item.icon }</span> 
                 <span>{item.name}</span>
+                </div>
+               
               </Link>
             ))}
             <div className="pt-2 pb-1 space-y-2">
