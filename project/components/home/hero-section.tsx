@@ -24,9 +24,9 @@ export function HeroSection() {
     '24/7 Support'
   ];
 const videos = [
-  "/videos/mobilereel1.mp4",
-  "/videos/mobilereel2.mp4",
-  "/videos/mobilereel3.mp4",
+  "/videos/mobilereel4.mp4",
+  "/videos/mobilereel5.mp4",
+  "/videos/mobilereel6.mp4",
 ];
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -100,7 +100,7 @@ const videos = [
                 <Link href="/influencers" className="flex items-center space-x-2">
                   <span>Discover Influencers</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </Link> 
               </Button>
               <Button 
                 variant="outline" 

@@ -1,5 +1,8 @@
 'use client';
 
+'use client';
+
+import { AuthGuard } from '@/components/auth/auth-guard';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -10,38 +13,29 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
-  MapPin,
-  Instagram,
-  Youtube,
-  Facebook,
-  Users,
-  Mail,
-  Phone,
-  Edit3,
-  CreditCard,
-  Smartphone,
-  Wallet,
-  Star,
-  Play,
-  ExternalLink,
-  MessageCircle,
-  CheckCircle,
-  ArrowLeft,
-  LogIn,
-  IndianRupee
+  MapPin, Instagram, Youtube, Facebook, Users, Mail, Phone,
+  CreditCard, Smartphone, Wallet, Star,
+  Play, ExternalLink, MessageCircle, CircleCheck as CheckCircle,
+  ArrowLeft, LogIn, IndianRupee,
+  Edit3
 } from 'lucide-react';
 import { formatFollowers } from '@/lib/utils';
 import { Influencer } from '@/types';
 import Link from 'next/link';
-// import { EditInfluencerModal } from '@/components/influencer/edit-influencer-modal';
-// import { PaymentModal } from '@/components/influencer/payment-modal';
-// import { ContactModal } from '@/components/influencer/contact-modal';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { EditInfluencerModal } from '@/components/influencer/EditInfluencerModal';
-import { ContactModal } from '@/components/influencer/ContactModal';
 import { PaymentModal } from '@/components/influencer/PaymentModal';
+import { ContactModal } from '@/components/influencer/ContactModal';
 
 export default function InfluencerDetailPage() {
+  return (
+    <AuthGuard>
+      <InfluencerDetailPageContent />
+    </AuthGuard>
+  );
+}
+
+function InfluencerDetailPageContent() {
   const params = useParams();
   const [influencer, setInfluencer] = useState<Influencer | null>(null);
   const [loading, setLoading] = useState(true);
@@ -90,9 +84,9 @@ export default function InfluencerDetailPage() {
       const response = await fetch('/api/verify-influencer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({ 
           email: loginEmail.trim(),
-          slug: params.slug
+          slug: params.slug 
         })
       });
 
@@ -195,22 +189,15 @@ export default function InfluencerDetailPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="relative w-full h-84 bg-gray-200 flex items-center justify-center " >
+                  <div className="aspect-video relative">
                     <img
-                      src={
-                        influencer.photoUrl ||
-                        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800'
-                      }
+                      src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800'}
                       alt={influencer.name}
-                      className="max-h-full max-w-full object-contain "
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-4 left-4 bg-[#EC6546] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-                      <Star className="w-3 h-3" />
-                      <span>Top Influencer</span>
-                    </div>
                   </div>
                 )}
-
+                
                 {/* Overlay Info */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                   <div className="flex items-end justify-between">
@@ -317,18 +304,20 @@ export default function InfluencerDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Rate Card */}
             <Card className="shadow-xl border-0 bg-gradient-to-br from-green-50 to-green-100">
               <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-green-800">Rate per Post</h3>
-                <div className="text-3xl font-bold text-green-700 mb-2">
-                  ₹ {influencer.budget.rate_per_post || "0"}
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <IndianRupee className="w-6 h-6 text-green-600" />
+                  <h3 className="text-xl font-semibold text-green-800">Rate per Post</h3>
                 </div>
-                <p className="text-green-600 text-sm">Starting rate</p>
+                <div className="text-3xl font-bold text-green-700 mb-2">
+                  ₹{influencer.budget.rate_per_post?.toLocaleString() || '0'}
+                </div>
+                <p className="text-green-600 text-sm">Starting rate for collaborations</p>
               </CardContent>
             </Card>
-
-            {/* Story Rate */}
-            <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100">
+ <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100">
               <CardContent className="p-6 text-center">
                 <h3 className="text-xl font-semibold text-blue-800">Rate per Story</h3>
                 <div className="text-3xl font-bold text-blue-700 mb-2">
@@ -359,7 +348,6 @@ export default function InfluencerDetailPage() {
                 <p className="text-pink-600 text-sm">Starting rate</p>
               </CardContent>
             </Card>
-
             {/* Contact Card */}
             <Card className="shadow-xl border-0 bg-gradient-to-br from-[#000631] to-[#EC6546] text-white">
               <CardContent className="p-6">
@@ -372,7 +360,7 @@ export default function InfluencerDetailPage() {
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Send Message
                   </Button>
-
+                  
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center space-x-2">
                       <Mail className="w-4 h-4" />
@@ -388,7 +376,7 @@ export default function InfluencerDetailPage() {
             </Card>
 
             {/* Payment Options */}
-            <Card className="shadow-lg border-0">
+            {/* <Card className="shadow-lg border-0">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold text-[#000631] mb-4">Quick Payment</h3>
                 <p className="text-gray-600 text-sm mb-4">
@@ -420,7 +408,7 @@ export default function InfluencerDetailPage() {
                   </Button>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Stats Card */}
             <Card className="shadow-lg border-0">
@@ -434,7 +422,7 @@ export default function InfluencerDetailPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Platforms</span>
                     <span className="font-semibold">
-                      {Object.keys(influencer.socials || {}).filter(key =>
+                      {Object.keys(influencer.socials || {}).filter(key => 
                         influencer.socials?.[key as keyof typeof influencer.socials]?.followers
                       ).length}
                     </span>
@@ -443,20 +431,17 @@ export default function InfluencerDetailPage() {
                     <span className="text-gray-600">Category</span>
                     <Badge variant="secondary">{influencer.category}</Badge>
                   </div>
-
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Verified</span>
                     <CheckCircle className="w-5 h-5 text-green-500" />
                   </div>
-                </div>
-                <div>
-
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+
       {/* Login Modal */}
       {showLoginModal && (
         <Dialog open={true} onOpenChange={() => setShowLoginModal(false)}>
@@ -482,16 +467,14 @@ export default function InfluencerDetailPage() {
                 {loginError && (
                   <p className="text-red-500 text-sm mt-1">{loginError}</p>
                 )}
-
               </div>
-
               <div className="bg-blue-50 rounded-lg p-3 text-sm text-blue-700">
                 <p>Enter the email address you used when registering as an influencer to edit your profile.</p>
               </div>
               <div className="flex justify-end space-x-3">
-                <Button
-                  type="button"
-                  variant="outline"
+                <Button 
+                  type="button" 
+                  variant="outline" 
                   onClick={() => setShowLoginModal(false)}
                   disabled={isVerifying}
                 >
@@ -502,6 +485,7 @@ export default function InfluencerDetailPage() {
                   disabled={isVerifying}
                   className="bg-[#EC6546] hover:bg-[#EC6546]/90"
                 >
+                 
                   {isVerifying ? (
                     <>
                       <LoadingSpinner className="w-4 h-4 mr-2" />
