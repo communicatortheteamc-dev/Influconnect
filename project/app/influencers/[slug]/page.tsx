@@ -364,11 +364,13 @@ function InfluencerDetailPageContent() {
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center space-x-2">
                       <Mail className="w-4 h-4" />
-                      <span>{influencer.email}</span>
+                      {/* <span>{influencer.email}</span> */}
+                      <span>influconnectbytheteamc@gmail.com</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4" />
-                      <span>{influencer.phone}</span>
+                      {/* <span>{influencer.phone}</span> */}
+                      <span>9642426444</span>
                     </div>
                   </div>
                 </div>
