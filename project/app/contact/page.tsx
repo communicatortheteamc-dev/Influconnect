@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Clock, CheckCircle, MessageCircle } from 'lucide-react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import emailjs from "emailjs-com";
+import Link from 'next/link';
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -161,9 +162,13 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <p className="text-white/90 mb-4">
                   Need immediate assistance? Our support team typically responds within 2-4 hours during business hours.
                 </p>
+
+                <Link href="https://wa.me/919642426444" target="_blank">
                 <Button variant="secondary" className="w-full">
                   Chat with Support
                 </Button>
+                </Link>
+                
               </CardContent>
             </Card>
           </div>

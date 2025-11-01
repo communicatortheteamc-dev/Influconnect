@@ -103,3 +103,8 @@ export const indianStates = [
   'Chandigarh',
   'Puducherry',
 ];
+
+export const STAFF_CREDENTIALS = [
+  { email: "baghavanthi@theteamc.in", password: "baghavanthi@123" },
+  { email: "manisha@theteamc.in", password: "manisha@123" },
+];

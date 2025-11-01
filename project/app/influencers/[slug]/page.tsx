@@ -3,7 +3,7 @@
 'use client';
 
 import { AuthGuard } from '@/components/auth/auth-guard';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -69,6 +69,43 @@ function InfluencerDetailPageContent() {
       fetchInfluencer();
     }
   }, [params.slug]);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const fetchCampaigns = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/campaigns?slug=${params.slug}`);
+      const data = await res.json();
+      if (data) setCampaigns(data.data);
+    } catch (err) {
+      console.error('Error fetching campaigns:', err);
+    }
+  }, [params.slug]);
+  useEffect(() => {
+    // fetch(`/api/influencers/${params.slug}`).then(r => r.json()).then(setInfluencer);
+    // fetch(`/api/campaigns?slug=${params.slug}`).then(r => r.json()).then(setCampaigns);
+    fetchCampaigns()
+  }, []);
+
+ const updateStatus = async (campaignId: string, influencerId: string, status: string) => {
+  await fetch("/api/campaigns", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ campaignId, influencerId, status }),
+  });
+
+  // Optionally update local state
+  setCampaigns((prev) =>
+    prev.map((c) =>
+      c._id === campaignId
+        ? {
+            ...c,
+            influencers: c.influencers.map((inf: { influencerId: string; }) =>
+              inf.influencerId === influencerId ? { ...inf, status } : inf
+            ),
+          }
+        : c
+    )
+  );
+};
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,9 +121,9 @@ function InfluencerDetailPageContent() {
       const response = await fetch('/api/verify-influencer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           email: loginEmail.trim(),
-          slug: params.slug 
+          slug: params.slug
         })
       });
 
@@ -155,6 +192,9 @@ function InfluencerDetailPageContent() {
     { key: 'facebook', icon: Facebook, color: 'text-blue-500', bgColor: 'bg-blue-50' },
     { key: 'tiktok', icon: Users, color: 'text-black', bgColor: 'bg-gray-50' },
   ];
+  // const [influencer, setInfluencer] = useState<any>(null);
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -197,7 +237,7 @@ function InfluencerDetailPageContent() {
                     />
                   </div>
                 )}
-                
+
                 {/* Overlay Info */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                   <div className="flex items-end justify-between">
@@ -300,6 +340,96 @@ function InfluencerDetailPageContent() {
                 </div>
               </CardContent>
             </Card>
+            {isAuthenticated ?
+             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {campaigns.map((c: any) => {
+    // Find the status of the current influencer
+    const influencerStatusObj = c.influencers.find(
+      (i: any) => i.influencerId === influencer._id
+    );
+
+    return (
+      <div
+        key={c._id}
+        className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200"
+      >
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-lg font-semibold text-gray-800 truncate">
+            {c.title}
+          </h3>
+          <span
+            className={`text-xs px-3 py-1 rounded-full font-medium ${
+              influencerStatusObj?.status === "Completed"
+                ? "bg-green-100 text-green-700"
+                : influencerStatusObj?.status === "In Progress"
+                ? "bg-blue-100 text-blue-700"
+                : "bg-yellow-100 text-yellow-700"
+            }`}
+          >
+            {influencerStatusObj?.status || "Pending"}
+          </span>
+        </div>
+
+        <div className="space-y-2 text-sm text-gray-600">
+          <p>
+            <span className="font-medium text-gray-800">Client:</span>{" "}
+            {c.client?.name || "N/A"}
+          </p>
+          <p>
+            <span className="font-medium text-gray-800">Influencer:</span>{" "}
+            {influencer?.name || "N/A"}
+          </p>
+          <p>
+            <span className="font-medium text-gray-800">Budget:</span>{" "}
+            {c?.budget || "N/A"}
+          </p>
+          <p>
+            <span className="font-medium text-gray-800">Duration:</span>{" "}
+            {c.startDate
+              ? new Date(c.startDate).toLocaleDateString()
+              : "N/A"}{" "}
+            -{" "}
+            {c.endDate
+              ? new Date(c.endDate).toLocaleDateString()
+              : "N/A"}
+          </p>
+        </div>
+
+        <div className="mt-4">
+          <label className="block text-xs text-gray-500 mb-1">
+            Update Status
+          </label>
+          <select
+            value={influencerStatusObj?.status || "Pending"}
+            onChange={(e) => {
+              if (influencer._id) {
+                updateStatus(c._id, influencer._id, e.target.value);
+              }
+            }}
+            className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+          >
+            <option>Shoot Done</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Drop</option>
+          </select>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+              : <div className="mt-6 text-center">
+                <Button
+                  onClick={() => setShowLoginModal(true)}
+                  className="bg-[#000631] text-white px-6 py-3 rounded-lg hover:bg-[#000631]/90"
+                >
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login to View Campaigns
+                </Button>
+              </div>
+            }
+
           </div>
 
           {/* Sidebar */}
@@ -317,7 +447,7 @@ function InfluencerDetailPageContent() {
                 <p className="text-green-600 text-sm">Starting rate for collaborations</p>
               </CardContent>
             </Card>
- <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100">
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100">
               <CardContent className="p-6 text-center">
                 <h3 className="text-xl font-semibold text-blue-800">Rate per Story</h3>
                 <div className="text-3xl font-bold text-blue-700 mb-2">
@@ -360,15 +490,17 @@ function InfluencerDetailPageContent() {
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Send Message
                   </Button>
-                  
+
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center space-x-2">
                       <Mail className="w-4 h-4" />
-                      <span>{influencer.email}</span>
+                      {/* <span>{influencer.email}</span> */}
+                      <span>influconnectbytheteamc@gmail.com</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4" />
-                      <span>{influencer.phone}</span>
+                      {/* <span>{influencer.phone}</span> */}
+                      <span>9642426444</span>
                     </div>
                   </div>
                 </div>
@@ -422,7 +554,7 @@ function InfluencerDetailPageContent() {
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Platforms</span>
                     <span className="font-semibold">
-                      {Object.keys(influencer.socials || {}).filter(key => 
+                      {Object.keys(influencer.socials || {}).filter(key =>
                         influencer.socials?.[key as keyof typeof influencer.socials]?.followers
                       ).length}
                     </span>
@@ -472,9 +604,9 @@ function InfluencerDetailPageContent() {
                 <p>Enter the email address you used when registering as an influencer to edit your profile.</p>
               </div>
               <div className="flex justify-end space-x-3">
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => setShowLoginModal(false)}
                   disabled={isVerifying}
                 >
@@ -485,7 +617,7 @@ function InfluencerDetailPageContent() {
                   disabled={isVerifying}
                   className="bg-[#EC6546] hover:bg-[#EC6546]/90"
                 >
-                 
+
                   {isVerifying ? (
                     <>
                       <LoadingSpinner className="w-4 h-4 mr-2" />

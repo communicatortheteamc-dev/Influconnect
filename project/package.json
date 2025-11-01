@@ -64,11 +64,14 @@
     "mongoose": "^8.18.1",
     "next": "13.5.1",
     "next-themes": "^0.3.0",
+    "nodemailer": "^7.0.10",
     "postcss": "8.4.30",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.62.0",
+    "react-hot-toast": "^2.6.0",
     "react-insta-stories": "^2.8.0",
     "react-resizable-panels": "^2.1.3",
     "recharts": "^2.12.7",
@@ -77,11 +80,14 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "twilio": "^5.10.4",
     "typescript": "5.2.2",
     "vaul": "^0.9.9",
+    "xlsx": "^0.18.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.11.96"
+    "@types/mongoose": "^5.11.96",
+    "@types/nodemailer": "^7.0.3"
   }
 }
