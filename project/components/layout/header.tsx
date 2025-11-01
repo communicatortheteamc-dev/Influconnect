@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Menu, X, Search, Users, MessageSquare, LogOut, User, Home, RectangleEllipsisIcon, ContactIcon, User2Icon, MessageCircleIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import Logo from "@/images/influconnectlogo.png"
+import Logo from "@/images/influlogo1.png"
 export function Header() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,7 +47,10 @@ export function Header() {
     { name: 'Enquiry', href: '/enquiry', icon: <MessageCircleIcon className='w-4 h-4'/> },
     { name: 'Contact', href: '/contact' , icon: <ContactIcon className='w-4 h-4'/>},
   ];
+  const pathname = usePathname();
 
+  // Hide Navbar on /registerform
+  if (pathname === "/registerform") return null;
   return (
      <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#000631] backdrop-blur-lg shadow-lg
@@ -59,7 +62,7 @@ export function Header() {
           <Link href="/" className="flex-shrink-0 transition-transform hover:scale-105">
             <div className="text-2xl font-bold bg-gradient-to-r from-[#000631] to-[#EC6546] bg-clip-text text-transparent">
               {/* InflueConnect */}
-              <Image src={Logo} alt={'Influ Connect'} height={63} />
+              <Image src={Logo} alt={'Influ Connect'} height={60} />
             </div>
           </Link>
 

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Instagram, Facebook, Twitter, Linkedin } from 'lucide-react';
 import Image from "next/image"
-import Logo from "@/images/influconnectlogo.png"
+import Logo from "@/images/influlogo1.png"
 
 const MailIcon = ({ className = "w-6 h-6 text-[#EC6546]" }) => (
   <svg

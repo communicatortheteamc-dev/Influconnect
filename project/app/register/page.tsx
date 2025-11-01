@@ -270,7 +270,6 @@ export default function RegisterPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-      console.log(response)
       if (response.ok) {
         setIsSuccess(true);
          await emailjs.send(
