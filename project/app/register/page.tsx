@@ -219,15 +219,24 @@ export default function RegisterPage() {
   //     console.error('Upload failed:', error);
   //   }
   // };
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const handleFileUpload = async (file: File, type: "photo" | "video") => {
+    // 👇 Show instant preview before uploading
+    const previewURL = URL.createObjectURL(file);
+    setPhotoPreview(previewURL);
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "influencer_uploads"); // use your Cloudinary preset name
+    formData.append("upload_preset", "influencer_uploads"); // Cloudinary preset
 
     try {
+      setIsUploading(true);
+
       const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/${type === "photo" ? "image" : "video"
-        }/upload`,
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+        }/${type === "photo" ? "image" : "video"}/upload`,
         {
           method: "POST",
           body: formData,
@@ -235,10 +244,12 @@ export default function RegisterPage() {
       );
 
       const data = await res.json();
+      setIsUploading(false);
 
       if (data.secure_url) {
         if (type === "photo") {
           handleInputChange("photoUrl", data.secure_url);
+          setPhotoPreview(data.secure_url); // replace preview with actual Cloudinary image
         } else {
           handleInputChange("videoUrl", data.secure_url);
         }
@@ -249,6 +260,7 @@ export default function RegisterPage() {
     } catch (error) {
       console.error("Upload failed:", error);
       alert("Upload failed. Please try again.");
+      setIsUploading(false);
     }
   };
 
@@ -272,22 +284,22 @@ export default function RegisterPage() {
       });
       if (response.ok) {
         setIsSuccess(true);
-         await emailjs.send(
-      "service_8la2lyx",
-      "template_0pf8kw1",
-      {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-      },
-      "RI6ijkt2WR-Mgd9sj"
-    );
+        await emailjs.send(
+          "service_8la2lyx",
+          "template_0pf8kw1",
+          {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+          },
+          "RI6ijkt2WR-Mgd9sj"
+        );
       } else {
         const error = await response.json();
         alert(error.message || 'Registration failed');
       }
     } catch (error) {
-      console.error ('Registration error:', error);
+      console.error('Registration error:', error);
       alert('Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -330,13 +342,13 @@ export default function RegisterPage() {
             <Users className="w-5 h-5 text-[#EC6546]" />
             <span className="text-[#EC6546] font-semibold">Join Our Network</span>
           </div>
-          <h1 className="text-4xl font-bold text-[#000631] mb-4">Influencer Registration</h1>
+          <h1 className="text-4xl font-bold text-[#000631] mb-4"></h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Ready to monetize your influence? Join thousands of creators who trust InfluConnect
             to connect them with leading brands.
           </p>
         </div>
-<div></div>
+        <div></div>
         <Card className="shadow-xl border-0">
           <CardHeader className="bg-gradient-to-r from-[#000631] to-[#EC6546] text-white rounded-t-lg">
             <CardTitle className="text-2xl">Create Your Profile</CardTitle>
@@ -350,7 +362,7 @@ export default function RegisterPage() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="name">Full Name *</Label>
+                    <Label htmlFor="name">Page Name *</Label>
                     <Input
                       id="name"
                       value={formData.name}
@@ -402,11 +414,11 @@ export default function RegisterPage() {
                     <div>
                       <Label>Rate Per Post</Label>
                       <Input
-                       type="number"
+                        type="number"
                         value={formData.budget.rate_per_post}
                         onChange={(e) => handleInputChange('budget.rate_per_post', e.target.value)}
                         className="mt-1"
-                         placeholder="0"
+                        placeholder="0"
                       />
                     </div>
                     <div>
@@ -421,7 +433,7 @@ export default function RegisterPage() {
                     <div>
                       <Label>Rate Per Story</Label>
                       <Input
-                       type="number"
+                        type="number"
                         value={formData.budget.rate_per_story}
                         onChange={(e) => handleInputChange('budget.rate_per_story', e.target.value)}
                         placeholder="0"
@@ -431,7 +443,7 @@ export default function RegisterPage() {
                     <div>
                       <Label>Rate Per Collaboration</Label>
                       <Input
-                       type="number"
+                        type="number"
                         value={formData.budget.rate_per_collaboration}
                         onChange={(e) => handleInputChange('budget.rate_per_collaboration', e.target.value)}
                         placeholder="0"
@@ -518,28 +530,77 @@ export default function RegisterPage() {
                 <h3 className="text-xl font-semibold text-[#000631] mb-4 border-b pb-2">
                   Profile Media
                 </h3>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label>Profile Photo *</Label>
-                    <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#EC6546] transition-colors">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-600">Upload your best photo</p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'photo')}
-                        className="hidden"
-                        id="photo-upload"
-                      />
-                      <label
-                        htmlFor="photo-upload"
-                        className="inline-block mt-2 px-4 py-2 bg-[#EC6546] text-white rounded-lg cursor-pointer hover:bg-[#EC6546]/90"
-                      >
-                        Choose File
-                      </label>
+
+                    <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#EC6546] transition-colors relative">
+                      {/* 👇 Show preview if selected */}
+                      {photoPreview ? (
+                        <div className="flex flex-col items-center">
+                          <img
+                            src={photoPreview}
+                            alt="Profile Preview"
+                            className=" object-cover  border-2 border-[#EC6546] mb-3"
+                          />
+
+                          {isUploading ? (
+                            <p className="text-sm text-gray-500">Uploading...</p>
+                          ) : (
+                            <>
+                              {/* 👇 Hidden input for changing photo */}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                  e.target.files?.[0] &&
+                                  handleFileUpload(e.target.files[0], "photo")
+                                }
+                                className="hidden"
+                                id="photo-upload"
+                              />
+
+                              <label
+                                htmlFor="photo-upload"
+                                className="inline-block mt-2 px-4 py-2 bg-[#EC6546] text-white rounded-lg cursor-pointer hover:bg-[#EC6546]/90"
+                              >
+                                Change Photo
+                              </label>
+                            </>
+                          )}
+                        </div>
+                      ) : (
+                        <>
+                          <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                          <p className="text-gray-600">Upload your best photo</p>
+
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                              e.target.files?.[0] &&
+                              handleFileUpload(e.target.files[0], "photo")
+                            }
+                            className="hidden"
+                            id="photo-upload"
+                          />
+
+                          <label
+                            htmlFor="photo-upload"
+                            className="inline-block mt-2 px-4 py-2 bg-[#EC6546] text-white rounded-lg cursor-pointer hover:bg-[#EC6546]/90"
+                          >
+                            Choose File
+                          </label>
+                        </>
+                      )}
+
+
                     </div>
                   </div>
-                  {/* <div>
+                </div>
+              </div>
+              {/* <div>
                     <Label>Intro Video (Optional)</Label>
                     <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#EC6546] transition-colors">
                       <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
@@ -559,8 +620,7 @@ export default function RegisterPage() {
                       </label>
                     </div>
                   </div> */}
-                </div>
-              </div>
+
 
               {/* Social Media*/}
               <div>
@@ -614,8 +674,8 @@ export default function RegisterPage() {
                       </div>
                     </div>
                   </div>
- 
-                 {/* YouTube */}
+
+                  {/* YouTube */}
                   <div className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center space-x-2 mb-4">
                       <Youtube className="w-6 h-6 text-red-500" />

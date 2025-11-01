@@ -233,7 +233,7 @@ function InfluencerDetailPageContent() {
                     <img
                       src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800'}
                       alt={influencer.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-90 object-fill"
                     />
                   </div>
                 )}
@@ -293,7 +293,7 @@ function InfluencerDetailPageContent() {
                   <p className="text-gray-700 leading-relaxed">{influencer.bio}</p>
                 </CardContent>
               </Card>
-            )}
+            )} 
 
             {/* Social Media Stats */}
             <Card className="shadow-lg border-0">
