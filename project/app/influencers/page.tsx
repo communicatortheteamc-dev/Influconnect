@@ -27,7 +27,7 @@ function InfluencersPageContent() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
-  
+
   const [filters, setFilters] = useState<FilterParams>({
     q: '',
     category: '',
@@ -60,7 +60,7 @@ function InfluencersPageContent() {
 
       const response = await fetch(`/api/influencers?${searchParams.toString()}`);
       const data = await response.json();
-      
+
       setInfluencers(data.data || []);
       setPagination({
         total: data.total || 0,
@@ -93,10 +93,10 @@ function InfluencersPageContent() {
   };
 
   const handlePlatformChange = (platform: string, checked: boolean) => {
-    const newPlatforms = checked 
+    const newPlatforms = checked
       ? [...selectedPlatforms, platform]
       : selectedPlatforms.filter(p => p !== platform);
-    
+
     setSelectedPlatforms(newPlatforms);
     handleFilterChange('platform', newPlatforms.join(','));
   };
@@ -132,7 +132,7 @@ function InfluencersPageContent() {
           </div>
           <h1 className="text-4xl font-bold text-[#000631] mb-4">Browse Influencers</h1>
           <p className="text-xl text-gray-600 max-w-2xl">
-            Discover verified content creators across various niches and platforms. 
+            Discover verified content creators across various niches and platforms.
             Find the perfect match for your brand campaigns.
           </p>
         </div>
@@ -283,7 +283,7 @@ function InfluencersPageContent() {
         {/* Results */}
         <div className="space-y-6">
           {loading ? (
-            <div className={viewMode === 'grid' 
+            <div className={viewMode === 'grid'
               ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
               : 'space-y-4'
             }>
@@ -318,7 +318,7 @@ function InfluencersPageContent() {
                           <img
                             src={influencer.photoUrl || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400'}
                             alt={influencer.name}
-                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="h-60 w-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
                           />
                           <div className="absolute top-3 right-3 bg-[#EC6546] text-white px-2 py-1 rounded-full text-xs font-semibold">
                             {formatFollowers(influencer.totalFollowers || 0)}
@@ -404,7 +404,7 @@ function InfluencersPageContent() {
                     >
                       Previous
                     </Button>
-                    
+
                     {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
                       const page = i + 1;
                       return (
@@ -418,7 +418,7 @@ function InfluencersPageContent() {
                         </Button>
                       );
                     })}
-                    
+
                     <Button
                       variant="outline"
                       disabled={filters.page === pagination.totalPages}
