@@ -1,43 +1,51 @@
 const PrivacyPolicyPage = () => {
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md my-10">
-            <h1 className="text-3xl font-bold mb-6 text-center text-[#000631]">Returns & Refunds Policy</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center text-[#000631]">Privacy Policy</h1>
             <p className="mb-4 text-gray-700">
-               At InfluConnect, we are committed to providing quality services and a smooth experience for all our clients and influencers. Please read our Returns & Refunds Policy carefully before availing any of our services.
+                At InfluConnect, we are committed to protecting your privacy. This Privacy Policy outlines how we collect, use, and safeguard your personal information when you use our platform.
             </p>
 
-            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">🔒 No Returns or Refunds on Services</h2>
-            <p>Once a service is agreed upon, confirmed, or initiated, InfluConnect does not offer refunds or returns under any circumstances, including but not limited to:</p>
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">Information We Collect</h2>
             <ul className="list-disc list-inside mb-4 text-gray-700">
-                <li>Change of mind.</li>
-               <li>Lack of usage</li>
-               <li>Delayed delivery of required information from the client</li>
-               <li>Expectations beyond the agreed scope of work</li>
-               <li>Partial use of the service</li>
-               <li>Client-side technical or operational issues</li>
+                <li><strong>Personal Information:</strong> We may collect personal information such as your name, email address, phone number, and social media profiles when you register on our platform or contact us.</li>
+                <li><strong>Usage Data:</strong> We automatically collect information about how you interact with our platform, including your IP address, browser type, pages visited, and the time and date of your visit.</li>
+                <li><strong>Cookies:</strong> We use cookies to enhance your experience on our platform. Cookies are small data files stored on your device that help us remember your preferences and improve site functionality.</li>
             </ul>
-            <p>All payments made toward our services are final and non-refundable.</p>
-            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">📝 Service Agreement</h2>
-            <p>Before starting any project, clients receive a clear outline of the service details, including:</p>
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">How We Use Your Information</h2>
             <ul className="list-disc list-inside mb-4 text-gray-700">
-                <li>Scope of work</li>
-                <li>Deliverables</li>
-                <li>Timelines</li>
-                <li>Pricing</li>
-                <li>Terms & conditions</li>
+                <li><strong>To Provide Services:</strong> We use your information to connect brands with influencers, facilitate campaigns, and deliver the services you request.</li>
+                <li><strong>To Improve Our Platform:</strong> We analyze usage data to understand how our platform is used and to enhance its features and performance.</li>
+                <li><strong>To Communicate:</strong> We may use your contact information to send you updates, newsletters, and promotional materials. You can opt-out of these communications at any time.</li>
+
+                <li><strong>To Ensure Security:</strong> We implement security measures to protect your information from unauthorized access, alteration, disclosure, or destruction.</li>
             </ul>
-<p>Once the client approves and agrees to proceed, the service is considered accepted, and the refund/return policy applies.</p>
-            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">⚠️ Exceptions</h2>
+
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">Sharing Your Information</h2>
             <p className="mb-4 text-gray-700">
-               Refunds or adjustments may be considered only in cases where InfluConnect fails to deliver the agreed service due to our own fault—not due to client-side delays or incomplete information.<br></br>
-               Such cases will be evaluated solely at the discretion of InfluConnect.
-            
+                We do not sell, trade, or rent your personal information to third parties. However, we may share your information with trusted partners who assist us in operating our platform and providing services, as long as they agree to keep your information confidential.
             </p>
-            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">📩 Need Support?</h2>
-           
-            <p className="mb-4 text-gray-700">For any issues or assistance related to your service, please contact our support team. We’re always here to help ensure the best experience. take the security of your personal information seriously and implement appropriate technical and organizational measures to protect it. However, no method of transmission over the internet or electronic storage is completely secure, and we cannot guarantee absolute security.
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">Your Choices</h2>
+            <ul className="list-disc list-inside mb-4 text-gray-700">
+                <li><strong>Access and Update:</strong> You have the right to access and update your personal information at any time by logging into your account.</li>
+                <li><strong>Cookie Preferences:</strong> You can manage your cookie preferences through your browser settings. However, disabling cookies may affect the functionality of our platform.</li>
+                <li><strong>Opt-Out:</strong> You can opt-out of receiving promotional communications from us by following the unsubscribe link in our emails.</li>
+            </ul>
+
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">Data Security</h2>
+            <p className="mb-4 text-gray-700">
+                We take the security of your personal information seriously and implement appropriate technical and organizational measures to protect it. However, no method of transmission over the internet or electronic storage is completely secure, and we cannot guarantee absolute security.
             </p>
-            
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">Changes to This Privacy Policy</h2>
+            <p className="mb-4 text-gray-700">
+                We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date. We encourage you to review this policy periodically to stay informed about how we are protecting your information.
+            </p>
+            <h2 className="text-2xl font-semibold mb-4 text-[#000631]">Contact Us</h2>
+            <p className="mb-4 text-gray-700">
+                If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at <a href="mailto:"
+                    className="text-[#EC6546] underline">
+                </a>
+            </p>
         </div>
     )
 }
