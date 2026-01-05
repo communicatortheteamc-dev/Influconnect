@@ -5,8 +5,20 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
 
+    /* ✅ EXISTING VALIDATION */
     if (!data.pageName?.trim()) {
-      return NextResponse.json({ error: "Page Name is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Page Name is required" },
+        { status: 400 }
+      );
+    }
+
+    /* ✅ NEW CATEGORY VALIDATION */
+    if (!data.category?.trim()) {
+      return NextResponse.json(
+        { error: "Category is required" },
+        { status: 400 }
+      );
     }
 
     const db = await getDatabase();
@@ -14,9 +26,10 @@ export async function POST(request: Request) {
     // Always insert into 'registerdata' collection
     const collection = db.collection("registerdata");
 
-    // Create collection if not exists (MongoDB will do this automatically on first insert)
     const result = await collection.insertOne({
-      ...data,
+      ...data,               // ✅ category stored automatically
+      pageName: data.pageName.trim(),
+      category: data.category.trim(),
       createdAt: new Date(),
     });
 
