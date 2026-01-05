@@ -16,9 +16,9 @@ import Link from 'next/link';
 
 export default function InfluencersPage() {
   return (
-    <AuthGuard>
+    // <AuthGuard>
       <InfluencersPageContent />
-    </AuthGuard>
+   
   );
 }
 
