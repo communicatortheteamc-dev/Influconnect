@@ -59,10 +59,10 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 transition-transform hover:scale-105">
+          <Link href="/" className="flex-shrink-0 transition-transform hover:scale-105 p-4">
             <div className="text-2xl font-bold bg-gradient-to-r from-[#000631] to-[#EC6546] bg-clip-text text-transparent">
               {/* InflueConnect */}
-              <Image src={Logo} alt={'Influ Connect'} height={60} />
+              <Image src={Logo} alt={'Influ Connect'} height={35} />
             </div>
           </Link>
 
