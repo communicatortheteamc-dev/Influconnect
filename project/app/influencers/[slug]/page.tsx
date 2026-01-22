@@ -29,9 +29,9 @@ import { ContactModal } from '@/components/influencer/ContactModal';
 
 export default function InfluencerDetailPage() {
   return (
-    <AuthGuard>
+   
       <InfluencerDetailPageContent />
-    </AuthGuard>
+    
   );
 }
 
@@ -439,7 +439,7 @@ function InfluencerDetailPageContent() {
               <CardContent className="p-6 text-center">
                 <div className="flex items-center justify-center space-x-2 mb-2">
                   <IndianRupee className="w-6 h-6 text-green-600" />
-                  <h3 className="text-xl font-semibold text-green-800">Rate per Post</h3>
+                  <h3 className="text-xl font-semibold text-green-800">Cost per Post</h3>
                 </div>
                 <div className="text-3xl font-bold text-green-700 mb-2">
                   ₹{influencer.budget.rate_per_post?.toLocaleString() || '0'}
@@ -449,7 +449,7 @@ function InfluencerDetailPageContent() {
             </Card>
             <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100">
               <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-blue-800">Rate per Story</h3>
+                <h3 className="text-xl font-semibold text-blue-800">Cost per Story</h3>
                 <div className="text-3xl font-bold text-blue-700 mb-2">
                   ₹ {influencer.budget.rate_per_story || "0"}
                 </div>
@@ -460,7 +460,7 @@ function InfluencerDetailPageContent() {
             {/* Reel Rate */}
             <Card className="shadow-xl border-0 bg-gradient-to-br from-purple-50 to-purple-100">
               <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-purple-800">Rate per Reel</h3>
+                <h3 className="text-xl font-semibold text-purple-800">Cost per Reel</h3>
                 <div className="text-3xl font-bold text-purple-700 mb-2">
                   ₹ {influencer.budget.rate_per_reel || "0"}
                 </div>
@@ -471,7 +471,7 @@ function InfluencerDetailPageContent() {
             {/* Collab Rate */}
             <Card className="shadow-xl border-0 bg-gradient-to-br from-pink-50 to-pink-100">
               <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-pink-800">Rate per Collab</h3>
+                <h3 className="text-xl font-semibold text-pink-800">Cost per Collab</h3>
                 <div className="text-3xl font-bold text-pink-700 mb-2">
                   ₹ {influencer.budget.rate_per_collaboration || "0"}
                 </div>

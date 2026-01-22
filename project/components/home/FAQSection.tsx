@@ -61,7 +61,7 @@ export function FAQSection() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   const toggleFAQ = (id: number) => {
-    setOpenFAQ(openFAQ === id ? null : id);
+    setOpenFAQ(openFAQ === id  ? null : id);
   };
 
   return (
