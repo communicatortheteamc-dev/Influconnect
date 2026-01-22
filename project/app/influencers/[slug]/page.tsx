@@ -29,7 +29,7 @@ import { ContactModal } from '@/components/influencer/ContactModal';
 
 export default function InfluencerDetailPage() {
   return (
-   
+    // <AuthGuard>
       <InfluencerDetailPageContent />
     
   );
