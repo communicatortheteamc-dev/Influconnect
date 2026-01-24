@@ -412,7 +412,7 @@ export default function RegisterPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label>Rate Per Post</Label>
+                      <Label>Cost Per Post</Label>
                       <Input
                         type="number"
                         value={formData.budget.rate_per_post}
@@ -422,7 +422,7 @@ export default function RegisterPage() {
                       />
                     </div>
                     <div>
-                      <Label>Rate Per Reel</Label>
+                      <Label>Cost Per Reel</Label>
                       <Input
                         type="number"
                         value={formData.budget.rate_per_reel || 0}
@@ -431,7 +431,7 @@ export default function RegisterPage() {
                       />
                     </div>
                     <div>
-                      <Label>Rate Per Story</Label>
+                      <Label>Cost Per Story</Label>
                       <Input
                         type="number"
                         value={formData.budget.rate_per_story}
@@ -441,7 +441,7 @@ export default function RegisterPage() {
                       />
                     </div>
                     <div>
-                      <Label>Rate Per Collaboration</Label>
+                      <Label>Cost Per Collaboration</Label>
                       <Input
                         type="number"
                         value={formData.budget.rate_per_collaboration}
