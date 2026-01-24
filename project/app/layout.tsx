@@ -9,41 +9,82 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.influconnect.in'),
+
   title: 'InfluConnect - Connect with Top Influencers in India',
-  description: 'India\'s leading influencer marketing platform. Connect brands with verified influencers for impactful campaigns across Instagram, YouTube, and more.',
-  keywords: 'influencer marketing, social media marketing, brand collaboration, content creators, India',
+  description:
+    "India's leading influencer marketing platform. Connect brands with verified influencers for impactful campaigns across Instagram, YouTube, and more.",
+
+  keywords: [
+    'influencer marketing',
+    'brand collaboration',
+    'content creators',
+    'instagram influencers',
+    'youtube influencers',
+    'india',
+  ],
+
+  alternates: {
+    canonical: 'https://www.influconnect.in',
+  },
+
   icons: {
-    icon: "/favicon.png"
-  }
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+
+  openGraph: {
+    title: 'InfluConnect',
+    description: 'Connect Brands with Trusted Creators Across India',
+    url: 'https://www.influconnect.in',
+    siteName: 'InfluConnect',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'InfluConnect Influencer Marketing Platform',
+      },
+    ],
+    type: 'website',
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      {/* Google Analytics */}
-      <Script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-HDGQD78RMN"
-      />
-
-      <Script id="google-analytics">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-HDGQD78RMN');
-        `}
-      </Script>
+      <head>
+        {/* Google Analytics */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-HDGQD78RMN"
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HDGQD78RMN');
+          `}
+        </Script>
+      </head>
 
       <body className={inter.className}>
         <Header />
-        <div className='flex justify-end items-end'>
+
+        <div className="flex justify-end items-end">
           <SocialSidebar />
         </div>
 
-        <main className="min-h-screen">
-          {children}
-        </main>
+        <main className="min-h-screen">{children}</main>
 
         <Footer />
       </body>
