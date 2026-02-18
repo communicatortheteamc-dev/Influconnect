@@ -28,14 +28,11 @@ export const metadata: Metadata = {
     canonical: 'https://www.influconnect.in',
   },
 
-  icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-    ],
-    apple: '/apple-touch-icon.png',
-  },
+ icons: {
+  icon: '/favicon2.svg',
+  shortcut: '/favicon2.svg',
+  apple: '/favicon2.svg',
+},
 
   openGraph: {
     title: 'InfluConnect',
