@@ -6,6 +6,8 @@ import InfluencerCard from '@/components/HomeSectionCard';
 import { ClientsSection } from '@/components/home/ClientsSection';
 import { TopInfluencersSection } from '@/components/home/TopInfluencersSection';
 import { FAQSection } from '@/components/home/FAQSection';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 
 export default function Home() {
   const obj = {
@@ -35,6 +37,7 @@ export default function Home() {
  
   return (
     <>
+    <Header />
       <HeroSection />
       <AboutSection />
       {/* <InfluencerCard influencer={obj} /> */}
@@ -43,6 +46,7 @@ export default function Home() {
        <ClientsSection />
       <TopInfluencersSection />
       <FAQSection />
+      <Footer />
     </>
   );
 }

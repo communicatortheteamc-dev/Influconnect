@@ -18,3 +18,13 @@ const CampaignSchema = new Schema(
 
 const Campaign = models.Campaign || mongoose.model('Campaign', CampaignSchema);
 export default Campaign;
+
+
+
+// Mani : 2400
+// petrol:1500
+// gym:2000
+// rechagres:1500
+// rent: 10000
+// jithu:3000
+// Mani total: 2400 + 2100 + 1500 + 2000 + 1500 + 10000 + 3000 = 22500

@@ -108,3 +108,14 @@ export const STAFF_CREDENTIALS = [
   { email: "baghavanthi@theteamc.in", password: "baghavanthi@123" },
   { email: "manisha@theteamc.in", password: "manisha@123" },
 ];
+
+export const calculateScore = (data: any) => {
+  let score = 0
+  const fields = ["mobile", "email", "instagram_link", "youtube_link", "notes"]
+
+  fields.forEach(field => {
+    if (data[field]) score += 20
+  })
+
+  return score
+}

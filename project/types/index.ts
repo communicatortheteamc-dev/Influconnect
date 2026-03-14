@@ -72,3 +72,13 @@ export interface FilterParams {
   limit?: number;
   sort?: string;
 }
+
+export type FormData = {
+  name: string;
+  phone: string;
+  place: string;
+  eventType: string;
+  eventDate: string;
+  creators: string[];
+  budget: string;
+};
