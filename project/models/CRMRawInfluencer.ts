@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose"
+import mongoose, { Schema } from "mongoose";
 
 const RawSchema = new Schema({
   name: String,
@@ -8,7 +8,11 @@ const RawSchema = new Schema({
   language: String,
   followers: Number,
   source: String,
-  created_at: { type: Date, default: Date.now }
-})
+  created_at: { type: Date, default: Date.now },
+});
 
-export default models.RawInfluencer || model("RawInfluencer", RawSchema)
+const RawInfluencer =
+  (mongoose.models.RawInfluencer as any) ||
+  mongoose.model("RawInfluencer", RawSchema);
+
+export default RawInfluencer;

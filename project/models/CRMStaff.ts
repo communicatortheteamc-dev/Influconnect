@@ -1,11 +1,15 @@
-import mongoose, { Schema, model, models } from "mongoose"
+import mongoose, { Schema } from "mongoose";
 
 const StaffSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["admin", "staff"], default: "staff" },
-  created_at: { type: Date, default: Date.now }
-})
+  name: String,
+  email: String,
+  password: String,
+  role: { type: String, default: "staff" },
+  created_at: { type: Date, default: Date.now },
+});
 
-export default models.Staff || model("Staff", StaffSchema)
+const Staff =
+  (mongoose.models.Staff as any) ||
+  mongoose.model("Staff", StaffSchema);
+
+export default Staff;
