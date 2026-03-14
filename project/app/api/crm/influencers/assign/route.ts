@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
 // import { connectDB } from "@/lib/db"
-import Influencer from "@/models/CRMInfluencer"
+import CRMInfluencer from "@/models/CRMInfluencer"
 import { verifyToken } from "@/lib/auth"
 import { cookies } from "next/headers"
 import { getDatabase } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   await getDatabase()
 
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
   const { influencerIds, staffId } = await req.json()
 
-  await Influencer.updateMany(
+  await CRMInfluencer.updateMany(
     { _id: { $in: influencerIds } },
     { assigned_to: staffId }
   )

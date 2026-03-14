@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs"
 import { verifyToken } from "@/lib/auth"
 import { cookies } from "next/headers"
 import { getDatabase } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   await getDatabase()
 

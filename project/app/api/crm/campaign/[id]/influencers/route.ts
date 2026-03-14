@@ -1,6 +1,6 @@
 import clientPromise, { getDatabase } from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
-
+export const dynamic = 'force-dynamic';
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }

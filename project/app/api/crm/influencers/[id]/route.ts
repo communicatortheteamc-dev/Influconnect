@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { ObjectId } from "mongodb"
 import { getRawDataDB } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 // GET: Fetch single influencer
 export async function GET(
   req: Request,

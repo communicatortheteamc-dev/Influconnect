@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import jwt from "jsonwebtoken"
 import { ObjectId } from "mongodb"
 import { getDatabase } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 export async function GET() {
 
   try {

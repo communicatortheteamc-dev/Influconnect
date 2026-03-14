@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server"
 import { ObjectId } from "mongodb"
 import { getDatabase, getRawDataDB } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 export async function GET(req: Request) {
 
   try {

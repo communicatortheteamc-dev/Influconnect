@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { getDatabase } from "@/lib/mongodb"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   try {
     const body = await req.json()

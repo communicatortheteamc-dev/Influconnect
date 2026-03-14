@@ -1,6 +1,6 @@
 import clientPromise, { getDatabase } from "@/lib/mongodb"
 import { get } from "node:http"
-
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request){
 
   const { name, client_name, staff } = await req.json()

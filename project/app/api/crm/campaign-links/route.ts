@@ -1,6 +1,6 @@
 // /api/crm/campaign-links/route.ts
 import clientPromise, { getDatabase } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 export async function GET() {
   const client = await clientPromise
   const db = await getDatabase()

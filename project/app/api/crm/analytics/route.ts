@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server"
 // import { connectDB } from "@/lib/db"
-import Influencer from "@/models/CRMInfluencer"
+import CRMInfluencer from "@/models/CRMInfluencer"
 import { getDatabase } from "@/lib/mongodb"
-
+export const dynamic = 'force-dynamic';
 // import { Influencer } from "@/models/Influencer"
 
 export async function GET() {
   await getDatabase()
 
-  const staffStats = await Influencer.aggregate([
+  const staffStats = await CRMInfluencer.aggregate([
     {
       $group: {
         _id: "$assigned_to",
