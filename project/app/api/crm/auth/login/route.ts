@@ -2,14 +2,15 @@ import { NextResponse } from "next/server"
 import { getDatabase } from "@/lib/mongodb"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-export const dynamic = 'force-dynamic';
+
+export const dynamic = "force-dynamic"
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const email = body.email?.toLowerCase().trim()
+    const email = body.email?.trim().toLowerCase()
     const password = body.password?.trim()
 
-    // Basic validation
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required" },
@@ -19,7 +20,9 @@ export async function POST(req: Request) {
 
     const db = await getDatabase()
 
-    const user = await db.collection("crm_staff").findOne({ email })
+    const user = await db.collection("crm_staff").findOne({
+      email: { $regex: `^${email}$`, $options: "i" }
+    })
 
     if (!user) {
       return NextResponse.json(
@@ -37,7 +40,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // Create JWT
     const token = jwt.sign(
       {
         id: user._id.toString(),
@@ -58,17 +60,15 @@ export async function POST(req: Request) {
       },
     })
 
-    // Secure HTTP-only cookie
     response.cookies.set("crm_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
       path: "/",
     })
 
     return response
-
   } catch (error) {
     console.error("LOGIN ERROR:", error)
     return NextResponse.json(
