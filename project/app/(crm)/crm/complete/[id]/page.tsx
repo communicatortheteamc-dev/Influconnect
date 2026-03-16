@@ -37,35 +37,40 @@ export default function InfluencerProfile() {
     })
   }
 
-useEffect(() => {
+ useEffect(() => {
+    if (!id) return
 
-  fetch(`/api/crm/influencers/complete/${id}`)
-    .then(res => res.json())
-    .then(res => {
+    fetch(`/api/crm/influencers/complete/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("API Response:", res)
 
-      console.log("API Response:", res)
+        const influencer =
+          res?.influencer ||
+          res?.influencers?.find((item: any) => item._id === id) ||
+          null
 
-      const influencer = res?.influencers?.[0]
+        if (!influencer) {
+          console.error("Influencer not found")
+          return
+        }
 
-      if (!influencer) {
-        console.error("Influencer not found")
-        return
-      }
+        const updatedInfluencer = {
+          ...influencer,
+          platforms: mergePlatforms(influencer?.platforms || []),
+          category: influencer.category || [],
+          languages: influencer.languages || [],
+          phone: influencer.phone || "",
+          email: influencer.email || "",
+        }
 
-      console.log("Fetched influencer for editing:", influencer)
+        setForm(updatedInfluencer)
+      })
+      .catch((err) => {
+        console.error("Error fetching influencer:", err)
+      })
+  }, [id])
 
-      influencer.platforms = mergePlatforms(influencer?.platforms || [])
-      influencer.category = influencer.category || []
-      influencer.languages = influencer.languages || []
-
-      influencer.phone = influencer.phone || ""
-      influencer.email = influencer.email || ""
-
-      setForm(influencer)
-
-    })
-
-}, [id])
 
   const updateField = (field: string, value: any) => {
     setForm({ ...form, [field]: value })
