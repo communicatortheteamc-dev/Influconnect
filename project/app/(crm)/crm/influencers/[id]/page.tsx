@@ -503,103 +503,103 @@ export default function InfluencerProfile() {
             )}
           </div>
           {showHistoryModal && (
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-    
-    <div className="bg-white w-[800px] max-h-[80vh] rounded-xl shadow-xl p-6 overflow-hidden">
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Full Edit History</h2>
+              <div className="bg-white w-[800px] max-h-[80vh] rounded-xl shadow-xl p-6 overflow-hidden">
 
-        <button
-          onClick={() => setShowHistoryModal(false)}
-          className="text-gray-500 hover:text-black"
-        >
-          ✕
-        </button>
-      </div>
+                {/* Header */}
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold">Full Edit History</h2>
 
-      {/* Scrollable History */}
-      <div className="overflow-y-auto max-h-[65vh] space-y-4 pr-2">
+                  <button
+                    onClick={() => setShowHistoryModal(false)}
+                    className="text-gray-500 hover:text-black"
+                  >
+                    ✕
+                  </button>
+                </div>
 
-        {form?.editHistory
-          ?.slice()
-          .reverse()
-          .map((log: any, index: number) => (
+                {/* Scrollable History */}
+                <div className="overflow-y-auto max-h-[65vh] space-y-4 pr-2">
 
-            <div
-              key={index}
-              className="border-l-2 border-blue-500 pl-4 py-3"
-            >
+                  {form?.editHistory
+                    ?.slice()
+                    .reverse()
+                    .map((log: any, index: number) => (
 
-              <p className="font-medium text-sm">
-                {log.editedBy || "Unknown User"}
-              </p>
+                      <div
+                        key={index}
+                        className="border-l-2 border-blue-500 pl-4 py-3"
+                      >
 
-              <p className="text-gray-600 text-sm">
-                {log.action === "verify"
-                  ? "Verified & stored profile"
-                  : "Edited profile"}
-              </p>
+                        <p className="font-medium text-sm">
+                          {log.editedBy || "Unknown User"}
+                        </p>
 
-              {log.changes &&
-                Object.entries(log.changes).map(
-                  ([field, value]: any, i: number) => {
+                        <p className="text-gray-600 text-sm">
+                          {log.action === "verify"
+                            ? "Verified & stored profile"
+                            : "Edited profile"}
+                        </p>
 
-                    const formatValue = (val: any) => {
-                      if (!val) return "None"
+                        {log.changes &&
+                          Object.entries(log.changes).map(
+                            ([field, value]: any, i: number) => {
 
-                      if (Array.isArray(val)) {
-                        if (typeof val[0] === "object") {
-                          return val
-                            .map(
-                              (p: any) =>
-                                `${p.name} (${p.profileName || "no username"})`
-                            )
-                            .join(", ")
-                        }
-                        return val.join(", ")
-                      }
+                              const formatValue = (val: any) => {
+                                if (!val) return "None"
 
-                      if (typeof val === "object") {
-                        return Object.values(val).join(", ")
-                      }
+                                if (Array.isArray(val)) {
+                                  if (typeof val[0] === "object") {
+                                    return val
+                                      .map(
+                                        (p: any) =>
+                                          `${p.name} (${p.profileName || "no username"})`
+                                      )
+                                      .join(", ")
+                                  }
+                                  return val.join(", ")
+                                }
 
-                      return val
-                    }
+                                if (typeof val === "object") {
+                                  return Object.values(val).join(", ")
+                                }
 
-                    return (
-                      <p key={i} className="text-sm mt-1">
-                        <span className="font-medium capitalize">
-                          {field}
-                        </span>
-                        :{" "}
-                        <span className="text-red-500">
-                          {formatValue(value.old)}
-                        </span>{" "}
-                        →{" "}
-                        <span className="text-green-600">
-                          {formatValue(value.new)}
-                        </span>
-                      </p>
-                    )
-                  }
-                )}
+                                return val
+                              }
 
-              <p className="text-xs text-gray-400 mt-2">
-                {new Date(log.date).toLocaleString()}
-              </p>
+                              return (
+                                <p key={i} className="text-sm mt-1">
+                                  <span className="font-medium capitalize">
+                                    {field}
+                                  </span>
+                                  :{" "}
+                                  <span className="text-red-500">
+                                    {formatValue(value.old)}
+                                  </span>{" "}
+                                  →{" "}
+                                  <span className="text-green-600">
+                                    {formatValue(value.new)}
+                                  </span>
+                                </p>
+                              )
+                            }
+                          )}
+
+                        <p className="text-xs text-gray-400 mt-2">
+                          {new Date(log.date).toLocaleString()}
+                        </p>
+
+                      </div>
+
+                    ))}
+
+                </div>
+
+              </div>
 
             </div>
-
-          ))}
-
-      </div>
-
-    </div>
-
-  </div>
-)}
+          )}
         </div>
       </div>
     </div>

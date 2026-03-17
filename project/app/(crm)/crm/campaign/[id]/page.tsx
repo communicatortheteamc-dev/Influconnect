@@ -12,6 +12,7 @@ import {
     Youtube
 } from "lucide-react"
 import * as XLSX from "xlsx"
+import { useRef } from "react"
 const categories = [
     "Fashion & Lifestyle",
     "Beauty",
@@ -108,7 +109,18 @@ export default function CampaignDetails() {
         influencer: "Influencer",
         campaignRow: "Campaign Row"
     }
+    const saveTimeouts = useRef<{ [key: string]: any }>({})
+    const autoSaveRow = (row: any) => {
+        const id = row._id
 
+        if (saveTimeouts.current[id]) {
+            clearTimeout(saveTimeouts.current[id])
+        }
+
+        saveTimeouts.current[id] = setTimeout(() => {
+            saveRow(row)
+        }, 800) // delay (ms)
+    }
     const getActionStyles = (action: string) => {
         switch (action) {
             case "add":
@@ -244,6 +256,21 @@ export default function CampaignDetails() {
             console.error("Failed to load added influencers:", error)
         }
     }
+    const [campaign, setCampaign] = useState<any>(null)
+    useEffect(() => {
+        if (!campaignId) return
+
+        const loadCampaign = async () => {
+            const res = await fetch(`/api/crm/campaign/${campaignId}`)
+            const data = await res.json()
+
+            if (res.ok) {
+                setCampaign(data.campaign)
+            }
+        }
+
+        loadCampaign()
+    }, [campaignId])
     const loadInfluencers = async () => {
         try {
             const query = new URLSearchParams({
@@ -421,17 +448,46 @@ export default function CampaignDetails() {
         if (total >= 1000) return (total / 1000).toFixed(0) + "K"
         return String(total)
     }
+    const getinstaTotalFollowers = (platforms: any) => {
+        // const total = platforms.reduce(
+        //     (sum, p) => sum + (Number(p.followers) || 0),
+        //     0
+        // )
 
+        if (Number(platforms) >= 1000000) return (Number(platforms) / 1000000).toFixed(1) + "M"
+        if (Number(platforms) >= 1000) return (Number(platforms) / 1000).toFixed(0) + "K"
+        return String(Number(platforms) || 0)
+    }
+    // const updateRow = (id: string, field: string, value: any) => {
+    //     setAddedInfluencers((prev: any[]) =>
+    //         prev.map((row) =>
+    //             row._id?.toString() === id?.toString()
+    //                 ? { ...row, [field]: value }
+    //                 : row
+    //         )
+    //     )
+    // }
     const updateRow = (id: string, field: string, value: any) => {
-        setAddedInfluencers((prev: any[]) =>
-            prev.map((row) =>
+        console.log(`Updating row ${id}: setting ${field} to`, value) // Debug log to check the update parameters
+        setAddedInfluencers((prev: any[]) => {
+            const updated = prev.map((row) =>
                 row._id?.toString() === id?.toString()
                     ? { ...row, [field]: value }
                     : row
             )
-        )
-    }
 
+            const updatedRow = updated.find(
+                (row) => row._id?.toString() === id?.toString()
+            )
+            console.log("Updated Row:", updatedRow) // Debug log to check the updated row
+            if (updatedRow) {
+                console.log("Scheduling auto-save for row:", id) // Debug log to confirm auto-save scheduling
+                autoSaveRow(updatedRow)
+            }
+
+            return updated
+        })
+    }
     const toggleRowSelection = (id: string) => {
         setSelectedRows((prev) =>
             prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -455,6 +511,8 @@ export default function CampaignDetails() {
             body: JSON.stringify({
                 id: row._id,
                 staff: user?.email || null,
+                influencerName: row.influencerName ?? profile?.influencerName ?? "",
+                instagram_follwers: row.instagram_followers ?? profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ?? "",
                 city: row.city ?? profile?.location ?? "",
                 contactNumber: row.contactNumber ?? profile?.phone ?? "",
                 status: row.status || "",
@@ -483,7 +541,7 @@ export default function CampaignDetails() {
             return
         }
 
-        alert("Saved successfully")
+        // alert("Saved successfully")
     }
 
     // const removeRow = async (row: any) => {
@@ -692,6 +750,11 @@ export default function CampaignDetails() {
         const rows = addedInfluencers.map((row: any, index: number) => {
             const profile = getProfileFromRow(row)
 
+            const instagramLink =
+                profile?.platforms?.find(
+                    (p: any) => p.name?.toLowerCase() === "instagram"
+                )?.profileLink || ""
+
             const result: any = {}
 
             if (exportFields.includes("sno")) result["Sno"] = index + 1
@@ -707,7 +770,7 @@ export default function CampaignDetails() {
             if (exportFields.includes("doingOrDrop"))
                 result["DOING / DROP"] = row.doingOrDrop || ""
             if (exportFields.includes("pageLink"))
-                result["Page Link"] = row.pageLink || ""
+                result["Page Link"] = row.pageLink || instagramLink || ""
             if (exportFields.includes("rating")) result["Rating"] = row.rating || ""
             if (exportFields.includes("activityLink"))
                 result["Activity Link"] = row.activityLink || ""
@@ -881,86 +944,113 @@ export default function CampaignDetails() {
     }
     let serial = 0
     const [addedFilters, setAddedFilters] = useState({
-  search: "",
-  city: "",
-  status: "",
-  rating: "",
-  paymentStatus: "",
-  doingOrDrop: "",
-  minBudget: "",
-  maxBudget: ""
-})
-const resetAddedFilters = () => {
-  setAddedFilters({
-    search: "",
-    city: "",
-    status: "",
-    rating: "",
-    paymentStatus: "",
-    doingOrDrop: "",
-    minBudget: "",
-    maxBudget: ""
-  })
-}
-const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter(
-  (row: any) => {
-    const profile = getProfileFromRow(row)
+        search: "",
+        city: "",
+        status: "",
+        rating: "",
+        paymentStatus: "",
+        doingOrDrop: "",
+        minBudget: "",
+        maxBudget: ""
+    })
+    const resetAddedFilters = () => {
+        setAddedFilters({
+            search: "",
+            city: "",
+            status: "",
+            rating: "",
+            paymentStatus: "",
+            doingOrDrop: "",
+            minBudget: "",
+            maxBudget: ""
+        })
+    }
+    const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter(
+        (row: any) => {
+            const profile = getProfileFromRow(row)
 
-    const searchText = addedFilters.search.toLowerCase().trim()
-    const influencerName = (profile?.influencerName || "").toLowerCase()
-    const city = String(row.city ?? profile?.location ?? "").toLowerCase()
-    const status = String(row.status || "").toLowerCase()
-    const rating = String(row.rating || "").toLowerCase()
-    const paymentStatus = String(row.paymentStatus || "").toLowerCase()
-    const doingOrDrop = String(row.doingOrDrop || "").toLowerCase()
-    const budget = Number(row.budget || 0)
+            const searchText = addedFilters.search.toLowerCase().trim()
+            const influencerName = (profile?.influencerName || "").toLowerCase()
+            const city = String(row.city ?? profile?.location ?? "").toLowerCase()
+            const status = String(row.status || "").toLowerCase()
+            const rating = String(row.rating || "").toLowerCase()
+            const paymentStatus = String(row.paymentStatus || "").toLowerCase()
+            const doingOrDrop = String(row.doingOrDrop || "").toLowerCase()
+            const budget = Number(row.budget || 0)
 
-    const matchesSearch =
-      !searchText ||
-      influencerName.includes(searchText) ||
-      city.includes(searchText) ||
-      String(row.contactNumber ?? profile?.phone ?? "")
-        .toLowerCase()
-        .includes(searchText)
+            const matchesSearch =
+                !searchText ||
+                influencerName.includes(searchText) ||
+                city.includes(searchText) ||
+                String(row.contactNumber ?? profile?.phone ?? "")
+                    .toLowerCase()
+                    .includes(searchText)
 
-    const matchesCity =
-      !addedFilters.city ||
-      city.includes(addedFilters.city.toLowerCase())
+            const matchesCity =
+                !addedFilters.city ||
+                city.includes(addedFilters.city.toLowerCase())
 
-    const matchesStatus =
-      !addedFilters.status ||
-      status === addedFilters.status.toLowerCase()
+            const matchesStatus =
+                !addedFilters.status ||
+                status === addedFilters.status.toLowerCase()
 
-    const matchesRating =
-      !addedFilters.rating ||
-      rating === addedFilters.rating.toLowerCase()
+            const matchesRating =
+                !addedFilters.rating ||
+                rating === addedFilters.rating.toLowerCase()
 
-    const matchesPaymentStatus =
-      !addedFilters.paymentStatus ||
-      paymentStatus === addedFilters.paymentStatus.toLowerCase()
+            const matchesPaymentStatus =
+                !addedFilters.paymentStatus ||
+                paymentStatus === addedFilters.paymentStatus.toLowerCase()
 
-    const matchesDoingOrDrop =
-      !addedFilters.doingOrDrop ||
-      doingOrDrop.includes(addedFilters.doingOrDrop.toLowerCase())
+            const matchesDoingOrDrop =
+                !addedFilters.doingOrDrop ||
+                doingOrDrop.includes(addedFilters.doingOrDrop.toLowerCase())
 
-    const matchesMinBudget =
-      !addedFilters.minBudget || budget >= Number(addedFilters.minBudget)
+            const matchesMinBudget =
+                !addedFilters.minBudget || budget >= Number(addedFilters.minBudget)
 
-    const matchesMaxBudget =
-      !addedFilters.maxBudget || budget <= Number(addedFilters.maxBudget)
+            const matchesMaxBudget =
+                !addedFilters.maxBudget || budget <= Number(addedFilters.maxBudget)
 
-    return (
-      matchesSearch &&
-      matchesCity &&
-      matchesStatus &&
-      matchesRating &&
-      matchesPaymentStatus &&
-      matchesDoingOrDrop &&
-      matchesMinBudget &&
-      matchesMaxBudget
+            return (
+                matchesSearch &&
+                matchesCity &&
+                matchesStatus &&
+                matchesRating &&
+                matchesPaymentStatus &&
+                matchesDoingOrDrop &&
+                matchesMinBudget &&
+                matchesMaxBudget
+            )
+        }
     )
-  }
-)
+    const addEmptyRow = async () => {
+        try {
+            const res = await fetch("/api/crm/campaign/add-empty-row", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    campaignId,
+                    staff: user?.email || null
+                })
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                alert(data?.message || "Failed to add empty row")
+                return
+            }
+
+            await loadAddedInfluencers()
+            alert("Empty row added successfully")
+        } catch (error) {
+            console.error("Failed to add empty row:", error)
+            alert("Failed to add empty row")
+        }
+    }
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
             <div className="flex items-center justify-between mb-8">
@@ -1209,108 +1299,144 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
 
             {tab === "added" && (
                 <div className="space-y-4">
+                    {campaign && (
+                        <div className="mb-6">
+                            <select
+                                value={campaign.status || ""}
+                                onChange={async (e) => {
+                                    const newStatus = e.target.value
+
+                                    setCampaign((prev: any) => ({
+                                        ...prev,
+                                        status: newStatus,
+                                    }))
+
+                                    const res = await fetch("/api/crm/campaign/update-status", {
+                                        method: "PUT",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            id: campaign._id,
+                                            status: newStatus,
+                                        }),
+                                    })
+
+                                    if (!res.ok) {
+                                        alert("Failed to update campaign status")
+                                    }
+                                }}
+                                className="border rounded px-4 py-2 min-w-[180px]"
+                            >
+                                <option value="running">Running</option>
+                                <option value="completed">Completed</option>
+                                <option value="hold">Hold</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                    )}
                     <div className="bg-white border rounded-xl p-4 grid grid-cols-4 gap-3">
-  <input
-    placeholder="Search influencer / phone / city"
-    value={addedFilters.search}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, search: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  />
+                        <input
+                            placeholder="Search influencer / phone / city"
+                            value={addedFilters.search}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, search: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        />
 
-  <input
-    placeholder="City"
-    value={addedFilters.city}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, city: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  />
+                        <input
+                            placeholder="City"
+                            value={addedFilters.city}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, city: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        />
 
-  <select
-    value={addedFilters.status}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, status: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  >
-    <option value="">All Status</option>
-    {statusOptions.map((opt) => (
-      <option key={opt} value={opt}>
-        {opt}
-      </option>
-    ))}
-  </select>
+                        <select
+                            value={addedFilters.status}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, status: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        >
+                            <option value="">All Status</option>
+                            {statusOptions.map((opt) => (
+                                <option key={opt} value={opt}>
+                                    {opt}
+                                </option>
+                            ))}
+                        </select>
 
-  <select
-    value={addedFilters.rating}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, rating: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  >
-    <option value="">All Rating</option>
-    {ratingOptions.map((opt) => (
-      <option key={opt} value={opt}>
-        {opt}
-      </option>
-    ))}
-  </select>
+                        <select
+                            value={addedFilters.rating}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, rating: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        >
+                            <option value="">All Rating</option>
+                            {ratingOptions.map((opt) => (
+                                <option key={opt} value={opt}>
+                                    {opt}
+                                </option>
+                            ))}
+                        </select>
 
-  <select
-    value={addedFilters.paymentStatus}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, paymentStatus: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  >
-    <option value="">Payment Status</option>
-    {paymentStatusOptions.map((opt) => (
-      <option key={opt} value={opt}>
-        {opt}
-      </option>
-    ))}
-  </select>
+                        <select
+                            value={addedFilters.paymentStatus}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, paymentStatus: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        >
+                            <option value="">Payment Status</option>
+                            {paymentStatusOptions.map((opt) => (
+                                <option key={opt} value={opt}>
+                                    {opt}
+                                </option>
+                            ))}
+                        </select>
 
-  <input
-    placeholder="Doing / Drop"
-    value={addedFilters.doingOrDrop}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, doingOrDrop: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  />
+                        <input
+                            placeholder="Doing / Drop"
+                            value={addedFilters.doingOrDrop}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, doingOrDrop: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        />
 
-  <input
-    type="number"
-    placeholder="Min Budget"
-    value={addedFilters.minBudget}
-    onChange={(e) =>
-      setAddedFilters({ ...addedFilters, minBudget: e.target.value })
-    }
-    className="border rounded-lg px-3 py-2 text-sm"
-  />
+                        <input
+                            type="number"
+                            placeholder="Min Budget"
+                            value={addedFilters.minBudget}
+                            onChange={(e) =>
+                                setAddedFilters({ ...addedFilters, minBudget: e.target.value })
+                            }
+                            className="border rounded-lg px-3 py-2 text-sm"
+                        />
 
-  <div className="flex gap-2">
-    <input
-      type="number"
-      placeholder="Max Budget"
-      value={addedFilters.maxBudget}
-      onChange={(e) =>
-        setAddedFilters({ ...addedFilters, maxBudget: e.target.value })
-      }
-      className="border rounded-lg px-3 py-2 text-sm w-full"
-    />
+                        <div className="flex gap-2">
+                            <input
+                                type="number"
+                                placeholder="Max Budget"
+                                value={addedFilters.maxBudget}
+                                onChange={(e) =>
+                                    setAddedFilters({ ...addedFilters, maxBudget: e.target.value })
+                                }
+                                className="border rounded-lg px-3 py-2 text-sm w-full"
+                            />
 
-    <button
-      onClick={resetAddedFilters}
-      className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
-    >
-      Reset
-    </button>
-  </div>
-</div>
+                            <button
+                                onClick={resetAddedFilters}
+                                className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    </div>
                     <div className="bg-white border rounded-xl p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <input
@@ -1328,6 +1454,12 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                         </div>
 
                         <div className="flex gap-2">
+                            <button
+                                onClick={addEmptyRow}
+                                className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800"
+                            >
+                                + Add Empty Row
+                            </button>
                             <button
                                 onClick={() => setShowColumnModal(true)}
                                 className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
@@ -1458,9 +1590,13 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                             <tbody>
                                 {getOrderedCampaignRows(filteredAddedInfluencers).map((row: any, index: number) => {
                                     const profile = getProfileFromRow(row)
-
+                                    const instagramLink =
+                                        row.profile?.platforms?.find(
+                                            (p: any) => p.name?.toLowerCase() === "instagram"
+                                        )?.profileLink || ""
 
                                     return (
+
                                         <tr
                                             key={row._id}
                                             className={`border-t ${row.isReplacementTopRow
@@ -1488,10 +1624,15 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                                 </td>
                                             )}
 
-                                            {visibleColumns.includes("city") && (
+                                            {visibleColumns.includes("city") && row.profile && (
                                                 <td className="p-2 border">
-                                                    <input
+                                                    {/* <input
                                                         value={row.profile.location ?? profile?.location ?? ""}
+                                                        onChange={(e) => updateRow(row._id, "city", e.target.value)}
+                                                        className="w-full border rounded px-2 py-1"
+                                                    /> */}
+                                                    <input
+                                                        value={(row.city ? row.city : row.profile.location) ?? ""}
                                                         onChange={(e) => updateRow(row._id, "city", e.target.value)}
                                                         className="w-full border rounded px-2 py-1"
                                                     />
@@ -1500,10 +1641,14 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
 
                                             {visibleColumns.includes("influencer") && (
                                                 <td className="p-2 border min-w-[240px]">
-                                                    <div className="font-medium">
-                                                        {profile?.influencerName || "Unknown"}
-                                                    </div>
-
+                                                    <input
+                                                        value={(row.influencerName ? row.influencerName : row.profile?.influencerName) ?? profile?.influencerName ?? ""}
+                                                        onChange={(e) =>
+                                                            updateRow(row._id, "influencerName", e.target.value)
+                                                        }
+                                                        placeholder="Enter influencer name"
+                                                        className="w-full border rounded px-2 py-1"
+                                                    />
                                                     {row.isReplacementTopRow && row.replacedFromProfile?.influencerName && (
                                                         <div className="text-xs text-blue-700 mt-1">
                                                             Replacement of {row.replacedFromProfile.influencerName}
@@ -1528,36 +1673,111 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                             )}
 
                                             {visibleColumns.includes("followers") && (
-                                                <td className="p-2 border min-w-[180px]">
-                                                    <div className="relative group inline-block">
-                                                        <span className="cursor-default underline decoration-dotted">
-                                                            {getTotalFollowers(profile?.platforms || [])}
-                                                        </span>
+                                                <td className="p-2 border min-w-[220px]">
+                                                    {row.influencerId ? (
+                                                        <div className="relative group inline-block">
+                                                            <span className="cursor-default underline decoration-dotted">
+                                                                {getinstaTotalFollowers(profile?.platforms?.find(
+                                                                    (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                )?.followers ?? row.instagram_follwers ?? "0")}
+                                                            </span>
 
-                                                        <div className="absolute left-0 top-7 z-20 hidden group-hover:block bg-black text-white text-xs rounded-lg p-3 min-w-[180px] shadow-lg">
-                                                            {(profile?.platforms || [])
-                                                                .filter((p: any) => Number(p.followers) > 0)
-                                                                .map((p: any) => (
-                                                                    <div
-                                                                        key={p.name}
-                                                                        className="flex justify-between gap-4 py-1"
-                                                                    >
-                                                                        <span className="capitalize">{p.name}</span>
-                                                                        <span>{formatFollowers(p.followers)}</span>
-                                                                    </div>
-                                                                ))}
+                                                            <div className="absolute left-0 top-7 z-20 hidden group-hover:block bg-black text-white text-xs rounded-lg p-3 min-w-[180px] shadow-lg">
+                                                                {(profile?.platforms || [])
+                                                                    .filter((p: any) => Number(p.followers) > 0)
+                                                                    .map((p: any) => (
+                                                                        <div
+                                                                            key={p.name}
+                                                                            className="flex justify-between gap-4 py-1"
+                                                                        >
+                                                                            <span className="capitalize">{p.name}</span>
+                                                                            <span>{formatFollowers(p.followers)}</span>
+                                                                        </div>
+                                                                    ))}
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    ) : (
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Instagram followers"
+                                                            value={
+                                                                (profile?.platforms?.find(
+                                                                    (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                )?.followers ? profile?.platforms?.find(
+                                                                    (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                )?.followers : ((row.instagram_follwers)))
+                                                            }
+                                                            onChange={(e) => {
+                                                                const value = e.target.value
+
+                                                                setAddedInfluencers((prev: any[]) => {
+                                                                    const updated = prev.map((item) => {
+                                                                        if (item._id?.toString() !== row._id?.toString()) {
+                                                                            return item
+                                                                        }
+
+                                                                        const existingPlatforms = Array.isArray(item.profile?.platforms)
+                                                                            ? item.profile.platforms
+                                                                            : []
+
+                                                                        const hasInstagram = existingPlatforms.some(
+                                                                            (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                        )
+
+                                                                        const updatedPlatforms = hasInstagram
+                                                                            ? existingPlatforms.map((p: any) =>
+                                                                                p.name?.toLowerCase() === "instagram"
+                                                                                    ? { ...p, followers: value }
+                                                                                    : p
+                                                                            )
+                                                                            : [
+                                                                                ...existingPlatforms,
+                                                                                {
+                                                                                    name: "instagram",
+                                                                                    profileName: "",
+                                                                                    followers: value,
+                                                                                    profileLink: ""
+                                                                                }
+                                                                            ]
+
+                                                                        return {
+                                                                            ...item,
+                                                                            profile: {
+                                                                                ...(item.profile || {}),
+                                                                                platforms: updatedPlatforms
+                                                                            }
+                                                                        }
+                                                                    })
+
+                                                                    const updatedRow = updated.find(
+                                                                        (item) => item._id?.toString() === row._id?.toString()
+                                                                    )
+
+                                                                    if (updatedRow) {
+                                                                        autoSaveRow(updatedRow)
+                                                                    }
+
+                                                                    return updated
+                                                                })
+                                                            }}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    )}
                                                 </td>
                                             )}
 
                                             {visibleColumns.includes("contactNumber") && (
                                                 <td className="p-2 border">
-                                                    <input
+                                                    {/* <input
                                                         value={row.profile?.phone ?? profile?.phone ?? ""}
                                                         onChange={(e) =>
                                                             updateRow(row._id, "contactNumber", e.target.value)
                                                         }
+                                                        className="w-full border rounded px-2 py-1"
+                                                    /> */}
+                                                    <input
+                                                        value={(row.contactNumber ? row.contactNumber : row.profile.phone) ?? ""}
+                                                        onChange={(e) => updateRow(row._id, "contactNumber", e.target.value)}
                                                         className="w-full border rounded px-2 py-1"
                                                     />
                                                 </td>
@@ -1595,7 +1815,7 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                             {visibleColumns.includes("pageLink") && (
                                                 <td className="p-2 border">
                                                     <input
-                                                        value={row.pageLink || ""}
+                                                        value={row.pageLink || instagramLink}
                                                         onChange={(e) => updateRow(row._id, "pageLink", e.target.value)}
                                                         className="w-full border rounded px-2 py-1"
                                                     />
@@ -1643,8 +1863,8 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                                                     ? Math.round((Number(quotedBudget) * percent) / 100) + Number(quotedBudget)
                                                                     : ""
 
-                                                            setAddedInfluencers((prev: any[]) =>
-                                                                prev.map((item) =>
+                                                            setAddedInfluencers((prev: any[]) => {
+                                                                const updated = prev.map((item) =>
                                                                     item._id?.toString() === row._id?.toString()
                                                                         ? {
                                                                             ...item,
@@ -1653,7 +1873,17 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                                                         }
                                                                         : item
                                                                 )
-                                                            )
+
+                                                                const updatedRow = updated.find(
+                                                                    (item) => item._id?.toString() === row._id?.toString()
+                                                                )
+
+                                                                if (updatedRow) {
+                                                                    autoSaveRow(updatedRow)
+                                                                }
+
+                                                                return updated
+                                                            })
                                                         }}
                                                         className="w-full border rounded px-2 py-1"
                                                     />
@@ -1672,8 +1902,8 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                                                     ? Math.round((quoted * percent) / 100) + quoted
                                                                     : ""
 
-                                                            setAddedInfluencers((prev: any[]) =>
-                                                                prev.map((item) =>
+                                                            setAddedInfluencers((prev: any[]) => {
+                                                                const updated = prev.map((item) =>
                                                                     item._id?.toString() === row._id?.toString()
                                                                         ? {
                                                                             ...item,
@@ -1682,7 +1912,17 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                                                         }
                                                                         : item
                                                                 )
-                                                            )
+
+                                                                const updatedRow = updated.find(
+                                                                    (item) => item._id?.toString() === row._id?.toString()
+                                                                )
+
+                                                                if (updatedRow) {
+                                                                    autoSaveRow(updatedRow)
+                                                                }
+
+                                                                return updated
+                                                            })
                                                         }}
                                                         className="w-full border rounded px-2 py-1"
                                                     >
@@ -1814,15 +2054,8 @@ const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter
                                                             </button>
                                                         )}
 
-                                                        {!row.isReplaced && (
+                                                        {!row.isReplaced && !row.isManualEntry && row.influencerId && (
                                                             <div className="flex items-center gap-2">
-                                                                <button
-                                                                    onClick={() => saveRow(row)}
-                                                                    className="px-3 py-1 rounded bg-black text-white text-xs"
-                                                                >
-                                                                    Save
-                                                                </button>
-
                                                                 <button
                                                                     onClick={() => openReplaceModal(row)}
                                                                     className="px-3 py-1 rounded border text-xs hover:bg-gray-50"

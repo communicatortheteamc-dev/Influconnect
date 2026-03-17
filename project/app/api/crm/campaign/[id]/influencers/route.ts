@@ -1,13 +1,15 @@
 import clientPromise, { getDatabase } from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
-export const dynamic = 'force-dynamic';
+
+export const dynamic = "force-dynamic"
+
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const client = await clientPromise
-    const db = await getDatabase()  
+    const db = await getDatabase()
 
     const campaignId = new ObjectId(params.id)
 
@@ -24,13 +26,85 @@ export async function GET(
             from: "full_profiles",
             localField: "influencerId",
             foreignField: "_id",
-            as: "profile"
+            as: "lookupProfile"
           }
         },
         {
           $unwind: {
-            path: "$profile",
+            path: "$lookupProfile",
             preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $addFields: {
+            profile: {
+              $ifNull: [
+                "$lookupProfile",
+                {
+                  $ifNull: [
+                    "$profile",
+                    {
+                      _id: null,
+                      userId: "",
+                      userName: "",
+                      userUniqueId: "",
+                      influencerName: "",
+                      instagram_follwers: "",
+                      influencerImage: null,
+                      category: [],
+                      languages: [],
+                      location: "",
+                      platforms: [
+                        {
+                          name: "instagram",
+                          profileName: "",
+                          followers: "",
+                          profileLink: ""
+                        },
+                        {
+                          name: "youtube",
+                          profileName: "",
+                          followers: "",
+                          profileLink: ""
+                        },
+                        {
+                          name: "facebook",
+                          profileName: "",
+                          followers: "",
+                          profileLink: ""
+                        },
+                        {
+                          name: "twitter",
+                          profileName: "",
+                          followers: "",
+                          profileLink: ""
+                        },
+                        {
+                          name: "snapchat",
+                          profileName: "",
+                          followers: "",
+                          profileLink: ""
+                        },
+                        {
+                          name: "threads",
+                          profileName: "",
+                          followers: "",
+                          profileLink: ""
+                        }
+                      ],
+                      status: "",
+                      createdAt: null,
+                      phone: "",
+                      email: "",
+                      budget: "",
+                      negotiableBudget: "",
+                      originalId: "",
+                      verifiedAt: null
+                    }
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -64,14 +138,49 @@ export async function GET(
         {
           $lookup: {
             from: "crm_campaign_replacement_logs",
-            localField: "campaignId",
-            foreignField: "campaignId",
+            let: {
+              rowInfluencerId: "$influencerId",
+              rowCampaignId: "$campaignId"
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$campaignId", "$$rowCampaignId"] },
+                      {
+                        $or: [
+                          { $eq: ["$fromInfluencerId", "$$rowInfluencerId"] },
+                          { $eq: ["$toInfluencerId", "$$rowInfluencerId"] }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                $sort: {
+                  replacedAt: 1
+                }
+              }
+            ],
             as: "replacementLogs"
           }
         },
         {
+          $addFields: {
+            replacementLogs: { $ifNull: ["$replacementLogs", []] },
+            sortDate: { $ifNull: ["$addedAt", "$createdAt"] }
+          }
+        },
+        {
+          $project: {
+            lookupProfile: 0
+          }
+        },
+        {
           $sort: {
-            addedAt: 1
+            sortDate: 1
           }
         }
       ])
@@ -79,6 +188,7 @@ export async function GET(
 
     return Response.json(rows)
   } catch (error) {
+    console.error("GET campaign influencers error:", error)
     return Response.json(
       { message: "Failed to load campaign influencers" },
       { status: 500 }

@@ -7,11 +7,11 @@ export default function CampaignPage() {
 
   const router = useRouter()
 
-  const [campaigns,setCampaigns] = useState<any>(null)
-  const [showModal,setShowModal] = useState(false)
+  const [campaigns, setCampaigns] = useState<any>(null)
+  const [showModal, setShowModal] = useState(false)
 
-  const [name,setName] = useState("")
-  const [client,setClient] = useState("")
+  const [name, setName] = useState("")
+  const [client, setClient] = useState("")
 
   const user = { email: "tharun@crm.com" }
 
@@ -21,19 +21,19 @@ export default function CampaignPage() {
     setCampaigns(data)
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     loadCampaigns()
-  },[])
+  }, [])
 
   const createCampaign = async () => {
 
-    await fetch("/api/crm/campaign/create",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({
+    await fetch("/api/crm/campaign/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         name,
-        client_name:client,
-        staff:user.email
+        client_name: client,
+        staff: user.email
       })
     })
 
@@ -43,7 +43,7 @@ export default function CampaignPage() {
     loadCampaigns()
   }
 
-  const openCampaign = (id:any) => {
+  const openCampaign = (id: any) => {
     router.push(`/crm/campaign/${id}`)
   }
 
@@ -60,7 +60,7 @@ export default function CampaignPage() {
         </h1>
 
         <button
-          onClick={()=>setShowModal(true)}
+          onClick={() => setShowModal(true)}
           className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
         >
           + Create Campaign
@@ -105,11 +105,11 @@ export default function CampaignPage() {
 
       <div className="grid grid-cols-3 gap-5 mb-10">
 
-        {campaigns?.running?.map((c:any)=>(
+        {campaigns?.running?.map((c: any) => (
 
           <div
             key={c._id}
-            onClick={()=>openCampaign(c._id)}
+            onClick={() => openCampaign(c._id)}
             className="bg-white shadow rounded-xl p-5 cursor-pointer hover:shadow-lg transition"
           >
 
@@ -138,11 +138,11 @@ export default function CampaignPage() {
 
       <div className="grid grid-cols-3 gap-5">
 
-        {campaigns?.completed?.map((c:any)=>(
+        {campaigns?.completed?.map((c: any) => (
 
           <div
             key={c._id}
-            onClick={()=>openCampaign(c._id)}
+            onClick={() => openCampaign(c._id)}
             className="bg-white shadow rounded-xl p-5 cursor-pointer hover:shadow-lg transition"
           >
 
@@ -161,8 +161,64 @@ export default function CampaignPage() {
         ))}
 
       </div>
+      <h2 className="text-xl font-semibold mb-4">
+        Hold Campaigns
+      </h2>
 
+      <div className="grid grid-cols-3 gap-5">
 
+        {campaigns?.hold?.map((c: any) => (
+
+          <div
+            key={c._id}
+            onClick={() => openCampaign(c._id)}
+            className="bg-white shadow rounded-xl p-5 cursor-pointer hover:shadow-lg transition"
+          >
+
+            <h3 className="font-semibold text-lg">{c.name}</h3>
+
+            <p className="text-gray-500 text-sm mt-1">
+              Client: {c.client_name}
+            </p>
+
+            <p className="text-xs mt-2 text-gray-400">
+              Completed
+            </p>
+
+          </div>
+
+        ))}
+
+      </div>
+      <h2 className="text-xl font-semibold mb-4">
+        Rejected Campaigns
+      </h2>
+
+      <div className="grid grid-cols-3 gap-5">
+
+        {campaigns?.rejected?.map((c: any) => (
+
+          <div
+            key={c._id}
+            onClick={() => openCampaign(c._id)}
+            className="bg-white shadow rounded-xl p-5 cursor-pointer hover:shadow-lg transition"
+          >
+
+            <h3 className="font-semibold text-lg">{c.name}</h3>
+
+            <p className="text-gray-500 text-sm mt-1">
+              Client: {c.client_name}
+            </p>
+
+            <p className="text-xs mt-2 text-gray-400">
+              Completed
+            </p>
+
+          </div>
+
+        ))}
+
+      </div>
       {/* CREATE CAMPAIGN MODAL */}
 
       {showModal && (
@@ -181,7 +237,7 @@ export default function CampaignPage() {
                 type="text"
                 placeholder="Campaign Name"
                 value={name}
-                onChange={(e)=>setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full border p-3 rounded"
               />
 
@@ -189,7 +245,7 @@ export default function CampaignPage() {
                 type="text"
                 placeholder="Client Name"
                 value={client}
-                onChange={(e)=>setClient(e.target.value)}
+                onChange={(e) => setClient(e.target.value)}
                 className="w-full border p-3 rounded"
               />
 
@@ -198,7 +254,7 @@ export default function CampaignPage() {
             <div className="flex justify-end gap-3 mt-6">
 
               <button
-                onClick={()=>setShowModal(false)}
+                onClick={() => setShowModal(false)}
                 className="px-4 py-2 border rounded"
               >
                 Cancel
