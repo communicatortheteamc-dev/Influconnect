@@ -746,62 +746,126 @@ export default function CampaignDetails() {
             setVisibleColumns(JSON.parse(savedColumns))
         }
     }, [])
-    const exportExcel = () => {
-        const rows = addedInfluencers.map((row: any, index: number) => {
-            const profile = getProfileFromRow(row)
+    // const exportExcel = () => {
+    //     const rows = addedInfluencers.map((row: any, index: number) => {
+    //         const profile = getProfileFromRow(row)
 
-            const instagramLink =
-                profile?.platforms?.find(
-                    (p: any) => p.name?.toLowerCase() === "instagram"
-                )?.profileLink || ""
+    //         const instagramLink =
+    //             profile?.platforms?.find(
+    //                 (p: any) => p.name?.toLowerCase() === "instagram"
+    //             )?.profileLink || ""
 
-            const result: any = {}
+    //         const result: any = {}
 
-            if (exportFields.includes("sno")) result["Sno"] = index + 1
-            if (exportFields.includes("city"))
-                result["City"] = row.city ?? profile?.location ?? ""
-            if (exportFields.includes("influencer"))
-                result["Influencer"] = profile?.influencerName || ""
-            if (exportFields.includes("followers"))
-                result["Followers"] = getTotalFollowers(profile?.platforms || [])
-            if (exportFields.includes("contactNumber"))
-                result["Contact Number"] = row.contactNumber ?? profile?.phone ?? ""
-            if (exportFields.includes("status")) result["Status"] = row.status || ""
-            if (exportFields.includes("doingOrDrop"))
-                result["DOING / DROP"] = row.doingOrDrop || ""
-            if (exportFields.includes("pageLink"))
-                result["Page Link"] = row.pageLink || instagramLink || ""
-            if (exportFields.includes("rating")) result["Rating"] = row.rating || ""
-            if (exportFields.includes("activityLink"))
-                result["Activity Link"] = row.activityLink || ""
-            if (exportFields.includes("quotedBudget"))
-                result["Quoted Budget"] = row.quotedBudget || ""
-            if (exportFields.includes("clientPercent"))
-                result["Client %"] = row.clientPercent || ""
-            if (exportFields.includes("influBudget"))
-                result["Influ Budget"] = row.influBudget || ""
-            if (exportFields.includes("budget")) result["Budget"] = row.budget || ""
-            if (exportFields.includes("paymentStatus"))
-                result["Payment Status"] = row.paymentStatus || ""
-            if (exportFields.includes("dateOfPayment"))
-                result["Date of Payment"] = row.dateOfPayment || ""
-            if (exportFields.includes("amountPaid"))
-                result["Amount Paid"] = row.amountPaid || ""
-            if (exportFields.includes("reach")) result["Reach"] = row.reach || ""
-            if (exportFields.includes("likes")) result["Likes"] = row.likes || ""
-            if (exportFields.includes("shares")) result["Shares"] = row.shares || ""
-            if (exportFields.includes("remarks")) result["Remarks"] = row.remarks || ""
+    //         if (exportFields.includes("sno")) result["Sno"] = index + 1
+    //         if (exportFields.includes("city"))
+    //             result["City"] = row.city ?? profile?.location ?? ""
+    //         if (exportFields.includes("influencer"))
+    //             result["Influencer"] = profile?.influencerName || ""
+    //         if (exportFields.includes("followers"))
+    //             result["Followers"] = getTotalFollowers(profile?.platforms || [])
+    //         if (exportFields.includes("contactNumber"))
+    //             result["Contact Number"] = row.contactNumber ?? profile?.phone ?? ""
+    //         if (exportFields.includes("status")) result["Status"] = row.status || ""
+    //         if (exportFields.includes("doingOrDrop"))
+    //             result["DOING / DROP"] = row.doingOrDrop || ""
+    //         if (exportFields.includes("pageLink"))
+    //             result["Page Link"] = row.pageLink || instagramLink || ""
+    //         if (exportFields.includes("rating")) result["Rating"] = row.rating || ""
+    //         if (exportFields.includes("activityLink"))
+    //             result["Activity Link"] = row.activityLink || ""
+    //         if (exportFields.includes("quotedBudget"))
+    //             result["Quoted Budget"] = row.quotedBudget || ""
+    //         if (exportFields.includes("clientPercent"))
+    //             result["Client %"] = row.clientPercent || ""
+    //         if (exportFields.includes("influBudget"))
+    //             result["Influ Budget"] = row.influBudget || ""
+    //         if (exportFields.includes("budget")) result["Budget"] = row.budget || ""
+    //         if (exportFields.includes("paymentStatus"))
+    //             result["Payment Status"] = row.paymentStatus || ""
+    //         if (exportFields.includes("dateOfPayment"))
+    //             result["Date of Payment"] = row.dateOfPayment || ""
+    //         if (exportFields.includes("amountPaid"))
+    //             result["Amount Paid"] = row.amountPaid || ""
+    //         if (exportFields.includes("reach")) result["Reach"] = row.reach || ""
+    //         if (exportFields.includes("likes")) result["Likes"] = row.likes || ""
+    //         if (exportFields.includes("shares")) result["Shares"] = row.shares || ""
+    //         if (exportFields.includes("remarks")) result["Remarks"] = row.remarks || ""
 
-            return result
-        })
+    //         return result
+    //     })
 
-        const worksheet = XLSX.utils.json_to_sheet(rows)
-        const workbook = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Campaign Sheet")
-        XLSX.writeFile(workbook, `campaign-${campaignId}.xlsx`)
-        setShowExportModal(false)
-    }
+    //     const worksheet = XLSX.utils.json_to_sheet(rows)
+    //     const workbook = XLSX.utils.book_new()
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, "Campaign Sheet")
+    //     XLSX.writeFile(workbook, `campaign-${campaignId}.xlsx`)
+    //     setShowExportModal(false)
+    // }
+const exportExcel = () => {
+    const rows = getOrderedCampaignRows(filteredAddedInfluencers).map((row: any, index: number) => {
+        const profile = getProfileFromRow(row)
 
+        const instagramPlatform =
+            profile?.platforms?.find(
+                (p: any) => p.name?.toLowerCase() === "instagram"
+            ) || row.instagram_follwers
+
+        const instagramLink =
+            row.pageLink ||
+            instagramPlatform?.profileLink ||
+            ""
+
+        const cityValue =
+            (row.city ? row.city : row.profile?.location) ?? profile?.location ?? ""
+
+        const contactValue =
+            (row.contactNumber ? row.contactNumber : row.profile?.phone) ?? profile?.phone ?? ""
+
+        const influencerValue =
+            (row.influencerName ? row.influencerName : row.profile?.influencerName) ??
+            profile?.influencerName ??
+            ""
+
+        const instagramFollowersRaw =
+            instagramPlatform?.followers ? instagramPlatform.followers :
+            row.instagram_follwers 
+           
+
+        const followersValue = getinstaTotalFollowers(instagramFollowersRaw)
+console.log("Instagram Followers Raw:", instagramFollowersRaw, "Formatted:", followersValue) // Debug log to check followers formatting
+        const result: any = {}
+
+        if (exportFields.includes("sno")) result["Sno"] = row.isChildRow ? "" : index + 1
+        if (exportFields.includes("city")) result["City"] = cityValue
+        if (exportFields.includes("influencer")) result["Influencer"] = influencerValue
+        if (exportFields.includes("followers")) result["Followers"] = followersValue
+        if (exportFields.includes("contactNumber")) result["Contact Number"] = contactValue
+        if (exportFields.includes("status")) result["Status"] = row.status || ""
+        if (exportFields.includes("doingOrDrop")) result["DOING / DROP"] = row.doingOrDrop || ""
+        if (exportFields.includes("pageLink")) result["Page Link"] = instagramLink
+        if (exportFields.includes("rating")) result["Rating"] = row.rating || ""
+        if (exportFields.includes("activityLink")) result["Activity Link"] = row.activityLink || ""
+        if (exportFields.includes("quotedBudget")) result["Quoted Budget"] = row.quotedBudget || profile?.budget || ""
+        if (exportFields.includes("clientPercent")) result["Client %"] = row.clientPercent || ""
+        if (exportFields.includes("influBudget")) result["Influ Budget"] = row.influBudget || profile?.negotiableBudget || ""
+        if (exportFields.includes("budget")) result["Budget"] = row.budget || ""
+        if (exportFields.includes("paymentStatus")) result["Payment Status"] = row.paymentStatus || ""
+        if (exportFields.includes("dateOfPayment")) result["Date of Payment"] = row.dateOfPayment || ""
+        if (exportFields.includes("amountPaid")) result["Amount Paid"] = row.amountPaid || ""
+        if (exportFields.includes("reach")) result["Reach"] = row.reach || ""
+        if (exportFields.includes("likes")) result["Likes"] = row.likes || ""
+        if (exportFields.includes("shares")) result["Shares"] = row.shares || ""
+        if (exportFields.includes("remarks")) result["Remarks"] = row.remarks || ""
+
+        return result
+    })
+
+    const worksheet = XLSX.utils.json_to_sheet(rows)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Campaign Sheet")
+    XLSX.writeFile(workbook, `campaign-${campaignId}.xlsx`)
+    setShowExportModal(false)
+}
     const openTimelineModal = (row: any) => {
         setTimelineTarget(row)
         setShowTimelineModal(true)
