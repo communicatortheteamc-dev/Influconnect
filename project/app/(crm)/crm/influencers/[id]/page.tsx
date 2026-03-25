@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 
 export default function InfluencerProfile() {
   const { id } = useParams()
@@ -178,6 +178,10 @@ export default function InfluencerProfile() {
 
     return val
   }
+   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const returnTo = searchParams.get("returnTo") || "/crm/influencers";
   const [showHistoryModal, setShowHistoryModal] = useState(false)
   if (!form) return <div className="p-10 text-center">Loading...</div>
 
@@ -185,6 +189,12 @@ export default function InfluencerProfile() {
     <div className="max-w-7xl mx-auto p-6 space-y-6 bg-gray-50 min-h-screen">
 
       {/* HEADER SECTION */}
+      <button
+      onClick={() => router.push(returnTo)}
+      className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
+    >
+      Back
+    </button>
       <div className="flex justify-between items-center bg-white p-6 rounded-xl shadow-sm border">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">{form.influencerName || "New Influencer"}</h1>

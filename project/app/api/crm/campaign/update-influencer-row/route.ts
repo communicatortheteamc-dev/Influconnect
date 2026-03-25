@@ -108,73 +108,87 @@
 //   }
 // }
 
-import clientPromise, { getDatabase } from "@/lib/mongodb"
-import { ObjectId } from "mongodb"
+import clientPromise, { getDatabase } from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
-    const { id, staff, ...updateData } = body
+    const body = await req.json();
+    const { id, staff, ...updateData } = body;
 
     if (!id) {
-      return Response.json({ message: "Row id is required" }, { status: 400 })
+      return Response.json({ message: "Row id is required" }, { status: 400 });
     }
 
-    const client = await clientPromise
-    const db = await getDatabase()
+    const client = await clientPromise;
+    const db = await getDatabase();
 
-    const collection = db.collection("crm_campaign_influencers")
-    const logs = db.collection("crm_campaign_activity_logs")
+    const collection = db.collection("crm_campaign_influencers");
+    const logs = db.collection("crm_campaign_activity_logs");
 
     const oldRow = await collection.findOne({
-      _id: new ObjectId(id)
-    })
+      _id: new ObjectId(id),
+    });
 
     if (!oldRow) {
-      return Response.json({ message: "Row not found" }, { status: 404 })
+      return Response.json({ message: "Row not found" }, { status: 404 });
     }
 
-    let profile: any = null
+    let profile: any = null;
 
     if (oldRow?.influencerId) {
       profile = await db.collection("full_profiles").findOne({
         _id:
           typeof oldRow.influencerId === "string"
             ? new ObjectId(oldRow.influencerId)
-            : oldRow.influencerId
-      })
+            : oldRow.influencerId,
+      });
     }
 
     const cleanedUpdateData: Record<string, any> = {
-      influencerName: updateData.influencerName ?? oldRow.influencerName ?? "",
-      instagram_follwers: updateData.instagram_follwers ?? profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ?? "",
-      city: updateData.city ?? "",
-      contactNumber: updateData.contactNumber ?? "",
-      status: updateData.status ?? "",
-      doingOrDrop: updateData.doingOrDrop ?? "",
-      pageLink: updateData.pageLink ?? "",
-      rating: updateData.rating ?? "",
-      activityLink: updateData.activityLink ?? "",
-      quotedBudget: updateData.quotedBudget ?? "",
-      clientPercent: updateData.clientPercent ?? "",
-      influBudget: updateData.influBudget ?? "",
-      budget: updateData.budget ?? "",
-      paymentStatus: updateData.paymentStatus ?? "",
-      dateOfPayment: updateData.dateOfPayment ?? "",
-      amountPaid: updateData.amountPaid ?? "",
-      reach: updateData.reach ?? "",
-      likes: updateData.likes ?? "",
-      shares: updateData.shares ?? "",
-      remarks: updateData.remarks ?? ""
-    }
+      influencerName:
+        updateData.influencerName ?? oldRow.influencerName ?? "",
 
-    const activityLogs: any[] = []
+      instagram_follwers:
+        updateData.instagram_follwers ??
+        profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ??
+        oldRow.instagram_follwers ??
+        "",
+
+      city: updateData.city ?? oldRow.city ?? "",
+      contactNumber: updateData.contactNumber ?? oldRow.contactNumber ?? "",
+      status: updateData.status ?? oldRow.status ?? "",
+      doingOrDrop: updateData.doingOrDrop ?? oldRow.doingOrDrop ?? "",
+      pageLink: updateData.pageLink ?? oldRow.pageLink ?? "",
+      rating: updateData.rating ?? oldRow.rating ?? "",
+      activityLink: updateData.activityLink ?? oldRow.activityLink ?? "",
+      quotedBudget: updateData.quotedBudget ?? oldRow.quotedBudget ?? "",
+      clientPercent: updateData.clientPercent ?? oldRow.clientPercent ?? "",
+      influBudget: updateData.influBudget ?? oldRow.influBudget ?? "",
+      budget: updateData.budget ?? oldRow.budget ?? "",
+
+      paymentStatus: updateData.paymentStatus ?? oldRow.paymentStatus ?? "",
+      paymentType: updateData.paymentType ?? oldRow.paymentType ?? "",
+      paymentNumber: updateData.paymentNumber ?? oldRow.paymentNumber ?? "",
+      uploadedDate: updateData.uploadedDate ?? oldRow.uploadedDate ?? "",
+      bankDetails: updateData.bankDetails ?? oldRow.bankDetails ?? "",
+      upiId: updateData.upiId ?? oldRow.upiId ?? "",
+
+      dateOfPayment: updateData.dateOfPayment ?? oldRow.dateOfPayment ?? "",
+      amountPaid: updateData.amountPaid ?? oldRow.amountPaid ?? "",
+      reach: updateData.reach ?? oldRow.reach ?? "",
+      likes: updateData.likes ?? oldRow.likes ?? "",
+      shares: updateData.shares ?? oldRow.shares ?? "",
+      remarks: updateData.remarks ?? oldRow.remarks ?? "",
+    };
+
+    const activityLogs: any[] = [];
 
     Object.keys(cleanedUpdateData).forEach((field) => {
-      const oldValue = oldRow[field] ?? ""
-      const newValue = cleanedUpdateData[field] ?? ""
+      const oldValue = oldRow[field] ?? "";
+      const newValue = cleanedUpdateData[field] ?? "";
 
       if (String(oldValue) !== String(newValue)) {
         activityLogs.push({
@@ -191,34 +205,34 @@ export async function POST(req: Request) {
             cleanedUpdateData.influencerName ||
             "Manual Entry",
           staff: staff || null,
-          createdAt: new Date()
-        })
+          createdAt: new Date(),
+        });
       }
-    })
+    });
 
     await collection.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: {
           ...cleanedUpdateData,
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       }
-    )
+    );
 
     if (activityLogs.length > 0) {
-      await logs.insertMany(activityLogs)
+      await logs.insertMany(activityLogs);
     }
 
     return Response.json({
       success: true,
-      message: "Row updated successfully"
-    })
+      message: "Row updated successfully",
+    });
   } catch (error) {
-    console.error("update-influencer-row error:", error)
+    console.error("update-influencer-row error:", error);
     return Response.json(
       { message: "Failed to update row" },
       { status: 500 }
-    )
+    );
   }
 }

@@ -62,13 +62,13 @@ export default function DashboardPage() {
         />
         <StatCard
           title="Complete Influencers"
-          value={completeData?.influencers?.length || 0}
+          value={data.stats?.completedProfiles || 0}
         />
 
-        <StatCard
+        {/* <StatCard
           title="CRM Influencers"
           value={data.stats?.crmInfluencerCount}
-        />
+        /> */}
 
         <StatCard
           title="Pending Reminders"
@@ -155,7 +155,7 @@ export default function DashboardPage() {
             <span>Completed Profiles</span>
 
             <span className="font-semibold text-green-600">
-              {completeData.influencers?.length || 0}
+              {data.stats.completedProfiles || 0}
             </span>
 
           </div>
