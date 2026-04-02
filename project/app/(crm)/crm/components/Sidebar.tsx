@@ -22,8 +22,9 @@ export default function Sidebar(){
 
       <div>
 
-        <div className="p-6 text-xl font-bold border-b border-slate-700">
-          InfluConnect CRM
+        <div className="p-6 text-xl  flex justify-center font-bold border-b border-slate-700">
+          <img src="/favicon.png" alt="InfluConnect Logo" className="h-12 inline-block mr-" />
+          
         </div>
 
         <nav className="p-4 space-y-2">
