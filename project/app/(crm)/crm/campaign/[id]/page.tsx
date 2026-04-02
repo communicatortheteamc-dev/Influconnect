@@ -115,35 +115,35 @@ export default function CampaignDetails() {
         campaignRow: "Campaign Row"
     }
     const columnWidths: Record<string, string> = {
-  checkbox: "50px",
-  sno: "70px",
-  city: "140px",
-  influencer: "240px",
-  followers: "180px",
-  contactNumber: "160px",
-  status: "140px",
-  doingOrDrop: "150px",
-  pageLink: "220px",
-  rating: "120px",
-  activityLink: "220px",
-  quotedBudget: "150px",
-  clientPercent: "120px",
-  influBudget: "150px",
-  budget: "150px",
-  paymentStatus: "160px",
-  dateOfPayment: "160px",
-  amountPaid: "140px",
-  paymentType: "140px",
-  paymentNumber: "180px",
-  uploadedDate: "160px",
-  bankDetails: "260px",
-  upiId: "180px",
-  reach: "120px",
-  likes: "120px",
-  shares: "120px",
-  remarks: "240px",
-  actions: "220px"
-}
+        checkbox: "50px",
+        sno: "70px",
+        city: "140px",
+        influencer: "240px",
+        followers: "180px",
+        contactNumber: "160px",
+        status: "140px",
+        doingOrDrop: "150px",
+        pageLink: "220px",
+        rating: "120px",
+        activityLink: "220px",
+        quotedBudget: "150px",
+        clientPercent: "120px",
+        influBudget: "150px",
+        budget: "150px",
+        paymentStatus: "160px",
+        dateOfPayment: "160px",
+        amountPaid: "140px",
+        paymentType: "140px",
+        paymentNumber: "180px",
+        uploadedDate: "160px",
+        bankDetails: "260px",
+        upiId: "180px",
+        reach: "120px",
+        likes: "120px",
+        shares: "120px",
+        remarks: "240px",
+        actions: "220px"
+    }
     const saveTimeouts = useRef<{ [key: string]: any }>({})
     const autoSaveRow = (row: any) => {
         const id = row._id
@@ -1614,920 +1614,919 @@ export default function CampaignDetails() {
                     </div>
 
                     <div className="bg-white border rounded-xl overflow-auto">
-                      <div className="overflow-x-auto">
-  <table className="w-full table-fixed text-sm border-collapse min-w-max">
-    <thead className="bg-green-100">
-      <tr>
-        <th
-          className="p-3 border text-left"
-          style={{ width: columnWidths.checkbox }}
-        ></th>
-
-        {visibleColumns.includes("sno") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.sno }}
-          >
-            Sno
-          </th>
-        )}
-
-        {visibleColumns.includes("city") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.city }}
-          >
-            City
-          </th>
-        )}
-
-        {visibleColumns.includes("influencer") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.influencer }}
-          >
-            Influencer
-          </th>
-        )}
-
-        {visibleColumns.includes("followers") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.followers }}
-          >
-            Followers
-          </th>
-        )}
-
-        {visibleColumns.includes("contactNumber") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.contactNumber }}
-          >
-            Contact Number
-          </th>
-        )}
-
-        {visibleColumns.includes("status") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.status }}
-          >
-            Status
-          </th>
-        )}
-
-        {visibleColumns.includes("doingOrDrop") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.doingOrDrop }}
-          >
-            DOING / DROP
-          </th>
-        )}
-
-        {visibleColumns.includes("pageLink") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.pageLink }}
-          >
-            Page Link
-          </th>
-        )}
-
-        {visibleColumns.includes("rating") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.rating }}
-          >
-            Rating
-          </th>
-        )}
-
-        {visibleColumns.includes("activityLink") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.activityLink }}
-          >
-            Activity Link
-          </th>
-        )}
-
-        {visibleColumns.includes("quotedBudget") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.quotedBudget }}
-          >
-            Quoted Budget
-          </th>
-        )}
-
-        {visibleColumns.includes("clientPercent") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.clientPercent }}
-          >
-            Client %
-          </th>
-        )}
-
-        {visibleColumns.includes("influBudget") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.influBudget }}
-          >
-            Influ Budget
-          </th>
-        )}
-
-        {visibleColumns.includes("budget") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.budget }}
-          >
-            Budget
-          </th>
-        )}
-
-        {visibleColumns.includes("paymentStatus") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.paymentStatus }}
-          >
-            Payment Status
-          </th>
-        )}
-
-        {visibleColumns.includes("dateOfPayment") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.dateOfPayment }}
-          >
-            Date Of Payment
-          </th>
-        )}
-
-        {visibleColumns.includes("amountPaid") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.amountPaid }}
-          >
-            Amount Paid
-          </th>
-        )}
-
-        {visibleColumns.includes("paymentType") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.paymentType }}
-          >
-            Payment Type
-          </th>
-        )}
-
-        {visibleColumns.includes("paymentNumber") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.paymentNumber }}
-          >
-            Payment Number
-          </th>
-        )}
-
-        {visibleColumns.includes("uploadedDate") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.uploadedDate }}
-          >
-            Uploaded Date
-          </th>
-        )}
-
-        {visibleColumns.includes("bankDetails") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.bankDetails }}
-          >
-            Bank Details
-          </th>
-        )}
-
-        {visibleColumns.includes("upiId") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.upiId }}
-          >
-            UPI ID
-          </th>
-        )}
-
-        {visibleColumns.includes("reach") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.reach }}
-          >
-            Reach
-          </th>
-        )}
-
-        {visibleColumns.includes("likes") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.likes }}
-          >
-            Likes
-          </th>
-        )}
-
-        {visibleColumns.includes("shares") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.shares }}
-          >
-            Shares
-          </th>
-        )}
-
-        {visibleColumns.includes("remarks") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.remarks }}
-          >
-            Remarks
-          </th>
-        )}
-
-        {visibleColumns.includes("actions") && (
-          <th
-            className="p-3 border text-left"
-            style={{ width: columnWidths.actions }}
-          >
-            Actions
-          </th>
-        )}
-      </tr>
-    </thead>
-
-    <tbody>
-      {getOrderedCampaignRows(filteredAddedInfluencers).map((row: any) => {
-        const profile = getProfileFromRow(row)
-
-        const instagramLink =
-          row.profile?.platforms?.find(
-            (p: any) => p.name?.toLowerCase() === "instagram"
-          )?.profileLink || ""
-
-        return (
-          <tr
-            key={row._id}
-            className={`border-t ${
-              row.isReplacementTopRow
-                ? "bg-blue-50 border-l-4 border-l-blue-400"
-                : row.isChildRow
-                ? "bg-red-50"
-                : "hover:bg-gray-50"
-            }`}
-          >
-            <td
-              className="p-2 border align-top"
-              style={{ width: columnWidths.checkbox }}
-            >
-              <input
-                type="checkbox"
-                checked={selectedRows.includes(row._id?.toString())}
-                onChange={() => toggleRowSelection(row._id?.toString())}
-              />
-            </td>
-
-            {visibleColumns.includes("sno") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.sno }}
-              >
-                {row.isChildRow ? "" : ++serial}
-              </td>
-            )}
-
-            {visibleColumns.includes("city") && row.profile && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.city }}
-              >
-                <input
-                  value={(row.city ? row.city : row.profile.location) ?? ""}
-                  onChange={(e) => updateRow(row._id, "city", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("influencer") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.influencer }}
-              >
-                <input
-                  value={
-                    (row.influencerName
-                      ? row.influencerName
-                      : row.profile?.influencerName) ??
-                    profile?.influencerName ??
-                    ""
-                  }
-                  onChange={(e) =>
-                    updateRow(row._id, "influencerName", e.target.value)
-                  }
-                  placeholder="Enter influencer name"
-                  className="w-full border rounded px-2 py-1"
-                />
-
-                {row.isReplacementTopRow &&
-                  row.replacedFromProfile?.influencerName && (
-                    <div className="text-xs text-blue-700 mt-1 break-words">
-                      Replacement of {row.replacedFromProfile.influencerName}
-                    </div>
-                  )}
-
-                {row.isChildRow && row.replacedByProfile?.influencerName && (
-                  <div className="text-xs text-red-600 mt-1 break-words">
-                    Replaced by {row.replacedByProfile.influencerName}
-                  </div>
-                )}
-
-                {Array.isArray(row.replacementLogs) &&
-                  row.replacementLogs.length > 0 && (
-                    <button
-                      onClick={() => openTimelineModal(row)}
-                      className="mt-2 text-xs text-blue-600 underline"
-                    >
-                      View Timeline
-                    </button>
-                  )}
-              </td>
-            )}
-
-            {visibleColumns.includes("followers") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.followers }}
-              >
-                {row.influencerId ? (
-                  <div className="relative group inline-block">
-                    <span className="cursor-default underline decoration-dotted">
-                      {getinstaTotalFollowers(
-                        profile?.platforms?.find(
-                          (p: any) => p.name?.toLowerCase() === "instagram"
-                        )?.followers ??
-                          row.instagram_follwers ??
-                          "0"
-                      )}
-                    </span>
-
-                    <div className="absolute left-0 top-7 z-20 hidden group-hover:block bg-black text-white text-xs rounded-lg p-3 min-w-[180px] shadow-lg">
-                      {(profile?.platforms || [])
-                        .filter((p: any) => Number(p.followers) > 0)
-                        .map((p: any) => (
-                          <div
-                            key={p.name}
-                            className="flex justify-between gap-4 py-1"
-                          >
-                            <span className="capitalize">{p.name}</span>
-                            <span>{formatFollowers(p.followers)}</span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ) : (
-                  <input
-                    type="number"
-                    placeholder="Instagram followers"
-                    value={
-                      profile?.platforms?.find(
-                        (p: any) => p.name?.toLowerCase() === "instagram"
-                      )?.followers
-                        ? profile?.platforms?.find(
-                            (p: any) => p.name?.toLowerCase() === "instagram"
-                          )?.followers
-                        : row.instagram_follwers
-                    }
-                    onChange={(e) => {
-                      const value = e.target.value
-
-                      setAddedInfluencers((prev: any[]) => {
-                        const updated = prev.map((item) => {
-                          if (item._id?.toString() !== row._id?.toString()) {
-                            return item
-                          }
-
-                          const existingPlatforms = Array.isArray(
-                            item.profile?.platforms
-                          )
-                            ? item.profile.platforms
-                            : []
-
-                          const hasInstagram = existingPlatforms.some(
-                            (p: any) =>
-                              p.name?.toLowerCase() === "instagram"
-                          )
-
-                          const updatedPlatforms = hasInstagram
-                            ? existingPlatforms.map((p: any) =>
-                                p.name?.toLowerCase() === "instagram"
-                                  ? { ...p, followers: value }
-                                  : p
-                              )
-                            : [
-                                ...existingPlatforms,
-                                {
-                                  name: "instagram",
-                                  profileName: "",
-                                  followers: value,
-                                  profileLink: "",
-                                },
-                              ]
-
-                          return {
-                            ...item,
-                            profile: {
-                              ...(item.profile || {}),
-                              platforms: updatedPlatforms,
-                            },
-                          }
-                        })
-
-                        const updatedRow = updated.find(
-                          (item) =>
-                            item._id?.toString() === row._id?.toString()
-                        )
-
-                        if (updatedRow) {
-                          autoSaveRow(updatedRow)
-                        }
-
-                        return updated
-                      })
-                    }}
-                    className="w-full border rounded px-2 py-1"
-                  />
-                )}
-              </td>
-            )}
-
-            {visibleColumns.includes("contactNumber") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.contactNumber }}
-              >
-                <input
-                  value={
-                    (row.contactNumber
-                      ? row.contactNumber
-                      : row.profile.phone) ?? ""
-                  }
-                  onChange={(e) =>
-                    updateRow(row._id, "contactNumber", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("status") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.status }}
-              >
-                <select
-                  value={row.status || ""}
-                  onChange={(e) => updateRow(row._id, "status", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {statusOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            )}
-
-            {visibleColumns.includes("doingOrDrop") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.doingOrDrop }}
-              >
-                <input
-                  value={row.doingOrDrop || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "doingOrDrop", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("pageLink") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.pageLink }}
-              >
-                <input
-                  value={row.pageLink || instagramLink}
-                  onChange={(e) => updateRow(row._id, "pageLink", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("rating") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.rating }}
-              >
-                <select
-                  value={row.rating || ""}
-                  onChange={(e) => updateRow(row._id, "rating", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {ratingOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            )}
-
-            {visibleColumns.includes("activityLink") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.activityLink }}
-              >
-                <input
-                  value={row.activityLink || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "activityLink", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("quotedBudget") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.quotedBudget }}
-              >
-                <input
-                  value={row.quotedBudget || profile?.budget || ""}
-                  onChange={(e) => {
-                    const quotedBudget = e.target.value
-                    const percent = Number(row.clientPercent || 0)
-                    const calculatedBudget =
-                      quotedBudget && percent
-                        ? Math.round((Number(quotedBudget) * percent) / 100) +
-                          Number(quotedBudget)
-                        : ""
-
-                    setAddedInfluencers((prev: any[]) => {
-                      const updated = prev.map((item) =>
-                        item._id?.toString() === row._id?.toString()
-                          ? {
-                              ...item,
-                              quotedBudget,
-                              budget: calculatedBudget,
-                            }
-                          : item
-                      )
-
-                      const updatedRow = updated.find(
-                        (item) =>
-                          item._id?.toString() === row._id?.toString()
-                      )
-
-                      if (updatedRow) {
-                        autoSaveRow(updatedRow)
-                      }
-
-                      return updated
-                    })
-                  }}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("clientPercent") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.clientPercent }}
-              >
-                <select
-                  value={row.clientPercent || ""}
-                  onChange={(e) => {
-                    const percent = Number(e.target.value)
-                    const quoted = Number(row.quotedBudget || profile?.budget || 0)
-                    const calculatedBudget =
-                      quoted && percent
-                        ? Math.round((quoted * percent) / 100) + quoted
-                        : ""
-
-                    setAddedInfluencers((prev: any[]) => {
-                      const updated = prev.map((item) =>
-                        item._id?.toString() === row._id?.toString()
-                          ? {
-                              ...item,
-                              clientPercent: e.target.value,
-                              budget: calculatedBudget,
-                            }
-                          : item
-                      )
-
-                      const updatedRow = updated.find(
-                        (item) =>
-                          item._id?.toString() === row._id?.toString()
-                      )
-
-                      if (updatedRow) {
-                        autoSaveRow(updatedRow)
-                      }
-
-                      return updated
-                    })
-                  }}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {Array.from({ length: 100 }, (_, i) => i + 1).map((num) => (
-                    <option key={num} value={num}>
-                      {num}%
-                    </option>
-                  ))}
-                </select>
-              </td>
-            )}
-
-            {visibleColumns.includes("influBudget") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.influBudget }}
-              >
-                <input
-                  value={row.influBudget || profile?.negotiableBudget || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "influBudget", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("budget") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.budget }}
-              >
-                <input
-                  value={row.budget || ""}
-                  readOnly
-                  className="w-full border rounded px-2 py-1 bg-gray-50"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("paymentStatus") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.paymentStatus }}
-              >
-                <select
-                  value={row.paymentStatus || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "paymentStatus", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {paymentStatusOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            )}
-
-            {visibleColumns.includes("dateOfPayment") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.dateOfPayment }}
-              >
-                <input
-                  type="date"
-                  value={row.dateOfPayment || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "dateOfPayment", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("amountPaid") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.amountPaid }}
-              >
-                <input
-                  value={row.amountPaid || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "amountPaid", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("paymentType") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.paymentType }}
-              >
-                <select
-                  value={row.paymentType || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "paymentType", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {paymentTypeOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt.toUpperCase()}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            )}
-
-            {visibleColumns.includes("paymentNumber") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.paymentNumber }}
-              >
-                <input
-                  value={row.paymentNumber || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "paymentNumber", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="Txn / Ref No"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("uploadedDate") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.uploadedDate }}
-              >
-                <input
-                  type="date"
-                  value={row.uploadedDate || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "uploadedDate", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("bankDetails") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.bankDetails }}
-              >
-                <textarea
-                  value={row.bankDetails || ""}
-                  onChange={(e) =>
-                    updateRow(row._id, "bankDetails", e.target.value)
-                  }
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="Account Name / A/C No / IFSC / Bank"
-                  rows={2}
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("upiId") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.upiId }}
-              >
-                <input
-                  value={row.upiId || ""}
-                  onChange={(e) => updateRow(row._id, "upiId", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="example@upi"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("reach") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.reach }}
-              >
-                <input
-                  value={row.reach || ""}
-                  onChange={(e) => updateRow(row._id, "reach", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("likes") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.likes }}
-              >
-                <input
-                  value={row.likes || ""}
-                  onChange={(e) => updateRow(row._id, "likes", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("shares") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.shares }}
-              >
-                <input
-                  value={row.shares || ""}
-                  onChange={(e) => updateRow(row._id, "shares", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("remarks") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.remarks }}
-              >
-                <input
-                  value={row.remarks || ""}
-                  onChange={(e) => updateRow(row._id, "remarks", e.target.value)}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-            )}
-
-            {visibleColumns.includes("actions") && (
-              <td
-                className="p-2 border align-top"
-                style={{ width: columnWidths.actions }}
-              >
-                <div className="flex gap-2 flex-wrap">
-                  {row.isReplaced && (
-                    <button
-                      onClick={() => restoreInfluencer(row)}
-                      className="px-3 py-1 rounded border text-blue-600 text-xs hover:bg-blue-50"
-                    >
-                      Restore
-                    </button>
-                  )}
-
-                  {!row.isReplaced && !row.isManualEntry && row.influencerId && (
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openReplaceModal(row)}
-                        className="px-3 py-1 rounded border text-xs hover:bg-gray-50"
-                      >
-                        Replace
-                      </button>
-                    </div>
-                  )}
-
-                  <button
-                    onClick={() => removeRow(row)}
-                    className="px-3 py-1 rounded border text-red-600 text-xs hover:bg-red-50"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </td>
-            )}
-          </tr>
-        )
-      })}
-    </tbody>
-  </table>
-</div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full table-fixed text-sm border-collapse min-w-max">
+                                <thead className="bg-green-100">
+                                    <tr>
+                                        <th
+                                            className="p-3 border text-left"
+                                            style={{ width: columnWidths.checkbox }}
+                                        ></th>
+
+                                        {visibleColumns.includes("sno") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.sno }}
+                                            >
+                                                Sno
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("city") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.city }}
+                                            >
+                                                City
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("influencer") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.influencer }}
+                                            >
+                                                Influencer
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("followers") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.followers }}
+                                            >
+                                                Followers
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("contactNumber") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.contactNumber }}
+                                            >
+                                                Contact Number
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("status") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.status }}
+                                            >
+                                                Status
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("doingOrDrop") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.doingOrDrop }}
+                                            >
+                                                DOING / DROP
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("pageLink") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.pageLink }}
+                                            >
+                                                Page Link
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("rating") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.rating }}
+                                            >
+                                                Rating
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("activityLink") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.activityLink }}
+                                            >
+                                                Activity Link
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("quotedBudget") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.quotedBudget }}
+                                            >
+                                                Quoted Budget
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("clientPercent") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.clientPercent }}
+                                            >
+                                                Client %
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("influBudget") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.influBudget }}
+                                            >
+                                                Influ Budget
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("budget") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.budget }}
+                                            >
+                                                Budget
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("paymentStatus") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.paymentStatus }}
+                                            >
+                                                Payment Status
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("dateOfPayment") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.dateOfPayment }}
+                                            >
+                                                Date Of Payment
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("amountPaid") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.amountPaid }}
+                                            >
+                                                Amount Paid
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("paymentType") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.paymentType }}
+                                            >
+                                                Payment Type
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("paymentNumber") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.paymentNumber }}
+                                            >
+                                                Payment Number
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("uploadedDate") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.uploadedDate }}
+                                            >
+                                                Uploaded Date
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("bankDetails") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.bankDetails }}
+                                            >
+                                                Bank Details
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("upiId") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.upiId }}
+                                            >
+                                                UPI ID
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("reach") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.reach }}
+                                            >
+                                                Reach
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("likes") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.likes }}
+                                            >
+                                                Likes
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("shares") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.shares }}
+                                            >
+                                                Shares
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("remarks") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.remarks }}
+                                            >
+                                                Remarks
+                                            </th>
+                                        )}
+
+                                        {visibleColumns.includes("actions") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.actions }}
+                                            >
+                                                Actions
+                                            </th>
+                                        )}
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {getOrderedCampaignRows(filteredAddedInfluencers).map((row: any) => {
+                                        const profile = getProfileFromRow(row)
+
+                                        const instagramLink =
+                                            row.profile?.platforms?.find(
+                                                (p: any) => p.name?.toLowerCase() === "instagram"
+                                            )?.profileLink || ""
+
+                                        return (
+                                            <tr
+                                                key={row._id}
+                                                className={`border-t ${row.isReplacementTopRow
+                                                        ? "bg-blue-50 border-l-4 border-l-blue-400"
+                                                        : row.isChildRow
+                                                            ? "bg-red-50"
+                                                            : "hover:bg-gray-50"
+                                                    }`}
+                                            >
+                                                <td
+                                                    className="p-2 border align-top"
+                                                    style={{ width: columnWidths.checkbox }}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedRows.includes(row._id?.toString())}
+                                                        onChange={() => toggleRowSelection(row._id?.toString())}
+                                                    />
+                                                </td>
+
+                                                {visibleColumns.includes("sno") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.sno }}
+                                                    >
+                                                        {row.isChildRow ? "" : ++serial}
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("city") && row.profile && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.city }}
+                                                    >
+                                                        <input
+                                                            value={(row.city ? row.city : row.profile.location) ?? ""}
+                                                            onChange={(e) => updateRow(row._id, "city", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("influencer") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.influencer }}
+                                                    >
+                                                        <input
+                                                            value={
+                                                                (row.influencerName
+                                                                    ? row.influencerName
+                                                                    : row.profile?.influencerName) ??
+                                                                profile?.influencerName ??
+                                                                ""
+                                                            }
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "influencerName", e.target.value)
+                                                            }
+                                                            placeholder="Enter influencer name"
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+
+                                                        {row.isReplacementTopRow &&
+                                                            row.replacedFromProfile?.influencerName && (
+                                                                <div className="text-xs text-blue-700 mt-1 break-words">
+                                                                    Replacement of {row.replacedFromProfile.influencerName}
+                                                                </div>
+                                                            )}
+
+                                                        {row.isChildRow && row.replacedByProfile?.influencerName && (
+                                                            <div className="text-xs text-red-600 mt-1 break-words">
+                                                                Replaced by {row.replacedByProfile.influencerName}
+                                                            </div>
+                                                        )}
+
+                                                        {Array.isArray(row.replacementLogs) &&
+                                                            row.replacementLogs.length > 0 && (
+                                                                <button
+                                                                    onClick={() => openTimelineModal(row)}
+                                                                    className="mt-2 text-xs text-blue-600 underline"
+                                                                >
+                                                                    View Timeline
+                                                                </button>
+                                                            )}
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("followers") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.followers }}
+                                                    >
+                                                        {row.influencerId ? (
+                                                            <div className="relative group inline-block">
+                                                                <span className="cursor-default underline decoration-dotted">
+                                                                    {getinstaTotalFollowers(
+                                                                        profile?.platforms?.find(
+                                                                            (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                        )?.followers ??
+                                                                        row.instagram_follwers ??
+                                                                        "0"
+                                                                    )}
+                                                                </span>
+
+                                                                <div className="absolute left-0 top-7 z-20 hidden group-hover:block bg-black text-white text-xs rounded-lg p-3 min-w-[180px] shadow-lg">
+                                                                    {(profile?.platforms || [])
+                                                                        .filter((p: any) => Number(p.followers) > 0)
+                                                                        .map((p: any) => (
+                                                                            <div
+                                                                                key={p.name}
+                                                                                className="flex justify-between gap-4 py-1"
+                                                                            >
+                                                                                <span className="capitalize">{p.name}</span>
+                                                                                <span>{formatFollowers(p.followers)}</span>
+                                                                            </div>
+                                                                        ))}
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <input
+                                                                type="number"
+                                                                placeholder="Instagram followers"
+                                                                value={
+                                                                    profile?.platforms?.find(
+                                                                        (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                    )?.followers
+                                                                        ? profile?.platforms?.find(
+                                                                            (p: any) => p.name?.toLowerCase() === "instagram"
+                                                                        )?.followers
+                                                                        : row.instagram_follwers
+                                                                }
+                                                                onChange={(e) => {
+                                                                    const value = e.target.value
+
+                                                                    setAddedInfluencers((prev: any[]) => {
+                                                                        const updated = prev.map((item) => {
+                                                                            if (item._id?.toString() !== row._id?.toString()) {
+                                                                                return item
+                                                                            }
+
+                                                                            const existingPlatforms = Array.isArray(
+                                                                                item.profile?.platforms
+                                                                            )
+                                                                                ? item.profile.platforms
+                                                                                : []
+
+                                                                            const hasInstagram = existingPlatforms.some(
+                                                                                (p: any) =>
+                                                                                    p.name?.toLowerCase() === "instagram"
+                                                                            )
+
+                                                                            const updatedPlatforms = hasInstagram
+                                                                                ? existingPlatforms.map((p: any) =>
+                                                                                    p.name?.toLowerCase() === "instagram"
+                                                                                        ? { ...p, followers: value }
+                                                                                        : p
+                                                                                )
+                                                                                : [
+                                                                                    ...existingPlatforms,
+                                                                                    {
+                                                                                        name: "instagram",
+                                                                                        profileName: "",
+                                                                                        followers: value,
+                                                                                        profileLink: "",
+                                                                                    },
+                                                                                ]
+
+                                                                            return {
+                                                                                ...item,
+                                                                                profile: {
+                                                                                    ...(item.profile || {}),
+                                                                                    platforms: updatedPlatforms,
+                                                                                },
+                                                                            }
+                                                                        })
+
+                                                                        const updatedRow = updated.find(
+                                                                            (item) =>
+                                                                                item._id?.toString() === row._id?.toString()
+                                                                        )
+
+                                                                        if (updatedRow) {
+                                                                            autoSaveRow(updatedRow)
+                                                                        }
+
+                                                                        return updated
+                                                                    })
+                                                                }}
+                                                                className="w-full border rounded px-2 py-1"
+                                                            />
+                                                        )}
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("contactNumber") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.contactNumber }}
+                                                    >
+                                                        <input
+                                                            value={
+                                                                (row.contactNumber
+                                                                    ? row.contactNumber
+                                                                    : row.profile.phone) ?? ""
+                                                            }
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "contactNumber", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("status") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.status }}
+                                                    >
+                                                        <select
+                                                            value={row.status || ""}
+                                                            onChange={(e) => updateRow(row._id, "status", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {statusOptions.map((opt) => (
+                                                                <option key={opt} value={opt}>
+                                                                    {opt}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("doingOrDrop") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.doingOrDrop }}
+                                                    >
+                                                        <input
+                                                            value={row.doingOrDrop || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "doingOrDrop", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("pageLink") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.pageLink }}
+                                                    >
+                                                        <input
+                                                            value={row.pageLink || instagramLink}
+                                                            onChange={(e) => updateRow(row._id, "pageLink", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("rating") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.rating }}
+                                                    >
+                                                        <select
+                                                            value={row.rating || ""}
+                                                            onChange={(e) => updateRow(row._id, "rating", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {ratingOptions.map((opt) => (
+                                                                <option key={opt} value={opt}>
+                                                                    {opt}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("activityLink") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.activityLink }}
+                                                    >
+                                                        <input
+                                                            value={row.activityLink || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "activityLink", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("quotedBudget") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.quotedBudget }}
+                                                    >
+                                                        <input
+                                                            value={row.quotedBudget || profile?.budget || ""}
+                                                            onChange={(e) => {
+                                                                const quotedBudget = e.target.value
+                                                                const percent = Number(row.clientPercent || 0)
+                                                                const calculatedBudget =
+                                                                    quotedBudget && percent
+                                                                        ? Math.round((Number(quotedBudget) * percent) / 100) +
+                                                                        Number(quotedBudget)
+                                                                        : ""
+
+                                                                setAddedInfluencers((prev: any[]) => {
+                                                                    const updated = prev.map((item) =>
+                                                                        item._id?.toString() === row._id?.toString()
+                                                                            ? {
+                                                                                ...item,
+                                                                                quotedBudget,
+                                                                                budget: calculatedBudget,
+                                                                            }
+                                                                            : item
+                                                                    )
+
+                                                                    const updatedRow = updated.find(
+                                                                        (item) =>
+                                                                            item._id?.toString() === row._id?.toString()
+                                                                    )
+
+                                                                    if (updatedRow) {
+                                                                        autoSaveRow(updatedRow)
+                                                                    }
+
+                                                                    return updated
+                                                                })
+                                                            }}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("clientPercent") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.clientPercent }}
+                                                    >
+                                                        <select
+                                                            value={row.clientPercent || ""}
+                                                            onChange={(e) => {
+                                                                const percent = Number(e.target.value)
+                                                                const quoted = Number(row.quotedBudget || profile?.budget || 0)
+                                                                const calculatedBudget =
+                                                                    quoted && percent
+                                                                        ? Math.round((quoted * percent) / 100) + quoted
+                                                                        : ""
+
+                                                                setAddedInfluencers((prev: any[]) => {
+                                                                    const updated = prev.map((item) =>
+                                                                        item._id?.toString() === row._id?.toString()
+                                                                            ? {
+                                                                                ...item,
+                                                                                clientPercent: e.target.value,
+                                                                                budget: calculatedBudget,
+                                                                            }
+                                                                            : item
+                                                                    )
+
+                                                                    const updatedRow = updated.find(
+                                                                        (item) =>
+                                                                            item._id?.toString() === row._id?.toString()
+                                                                    )
+
+                                                                    if (updatedRow) {
+                                                                        autoSaveRow(updatedRow)
+                                                                    }
+
+                                                                    return updated
+                                                                })
+                                                            }}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {Array.from({ length: 100 }, (_, i) => i + 1).map((num) => (
+                                                                <option key={num} value={num}>
+                                                                    {num}%
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("influBudget") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.influBudget }}
+                                                    >
+                                                        <input
+                                                            value={row.influBudget || profile?.negotiableBudget || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "influBudget", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("budget") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.budget }}
+                                                    >
+                                                        <input
+                                                            value={row.budget || ""}
+                                                            onChange={(e) => updateRow(row._id, "budget", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1 bg-gray-50"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("paymentStatus") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.paymentStatus }}
+                                                    >
+                                                        <select
+                                                            value={row.paymentStatus || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "paymentStatus", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {paymentStatusOptions.map((opt) => (
+                                                                <option key={opt} value={opt}>
+                                                                    {opt}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("dateOfPayment") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.dateOfPayment }}
+                                                    >
+                                                        <input
+                                                            type="date"
+                                                            value={row.dateOfPayment || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "dateOfPayment", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("amountPaid") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.amountPaid }}
+                                                    >
+                                                        <input
+                                                            value={row.amountPaid || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "amountPaid", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("paymentType") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.paymentType }}
+                                                    >
+                                                        <select
+                                                            value={row.paymentType || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "paymentType", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {paymentTypeOptions.map((opt) => (
+                                                                <option key={opt} value={opt}>
+                                                                    {opt.toUpperCase()}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("paymentNumber") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.paymentNumber }}
+                                                    >
+                                                        <input
+                                                            value={row.paymentNumber || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "paymentNumber", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                            placeholder="Txn / Ref No"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("uploadedDate") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.uploadedDate }}
+                                                    >
+                                                        <input
+                                                            type="date"
+                                                            value={row.uploadedDate || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "uploadedDate", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("bankDetails") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.bankDetails }}
+                                                    >
+                                                        <textarea
+                                                            value={row.bankDetails || ""}
+                                                            onChange={(e) =>
+                                                                updateRow(row._id, "bankDetails", e.target.value)
+                                                            }
+                                                            className="w-full border rounded px-2 py-1"
+                                                            placeholder="Account Name / A/C No / IFSC / Bank"
+                                                            rows={2}
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("upiId") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.upiId }}
+                                                    >
+                                                        <input
+                                                            value={row.upiId || ""}
+                                                            onChange={(e) => updateRow(row._id, "upiId", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                            placeholder="example@upi"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("reach") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.reach }}
+                                                    >
+                                                        <input
+                                                            value={row.reach || ""}
+                                                            onChange={(e) => updateRow(row._id, "reach", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("likes") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.likes }}
+                                                    >
+                                                        <input
+                                                            value={row.likes || ""}
+                                                            onChange={(e) => updateRow(row._id, "likes", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("shares") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.shares }}
+                                                    >
+                                                        <input
+                                                            value={row.shares || ""}
+                                                            onChange={(e) => updateRow(row._id, "shares", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("remarks") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.remarks }}
+                                                    >
+                                                        <input
+                                                            value={row.remarks || ""}
+                                                            onChange={(e) => updateRow(row._id, "remarks", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        />
+                                                    </td>
+                                                )}
+
+                                                {visibleColumns.includes("actions") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.actions }}
+                                                    >
+                                                        <div className="flex gap-2 flex-wrap">
+                                                            {row.isReplaced && (
+                                                                <button
+                                                                    onClick={() => restoreInfluencer(row)}
+                                                                    className="px-3 py-1 rounded border text-blue-600 text-xs hover:bg-blue-50"
+                                                                >
+                                                                    Restore
+                                                                </button>
+                                                            )}
+
+                                                            {!row.isReplaced && !row.isManualEntry && row.influencerId && (
+                                                                <div className="flex items-center gap-2">
+                                                                    <button
+                                                                        onClick={() => openReplaceModal(row)}
+                                                                        className="px-3 py-1 rounded border text-xs hover:bg-gray-50"
+                                                                    >
+                                                                        Replace
+                                                                    </button>
+                                                                </div>
+                                                            )}
+
+                                                            <button
+                                                                onClick={() => removeRow(row)}
+                                                                className="px-3 py-1 rounded border text-red-600 text-xs hover:bg-red-50"
+                                                            >
+                                                                Remove
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             )}

@@ -44,7 +44,7 @@ export default function DashboardPage() {
 
       <div>
         <h1 className="text-3xl font-bold">
-          InfluConnect CRM Dashboard
+          InfluConnect Dashboard
         </h1>
         <p className="text-gray-500">
           Overview of influencer database & CRM activity
