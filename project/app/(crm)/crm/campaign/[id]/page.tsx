@@ -1173,6 +1173,40 @@ export default function CampaignDetails() {
             alert("Failed to add empty row")
         }
     }
+   const updateCampaignField = async (field: string, value: any) => {
+    if (!campaign?._id) return
+
+    const previousCampaign = campaign
+
+    setCampaign((prev: any) => ({
+        ...prev,
+        [field]: value,
+    }))
+
+    try {
+        const res = await fetch("/api/crm/campaign/update-status", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: campaign._id,
+                [field]: value,
+            }),
+        })
+
+        const data = await res.json()
+
+        if (!res.ok) {
+            setCampaign(previousCampaign)
+            alert(data?.error || "Failed to update campaign")
+        }
+    } catch (error) {
+        console.error(error)
+        setCampaign(previousCampaign)
+        alert("Something went wrong while updating campaign")
+    }
+}
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
             <div className="flex items-center justify-between mb-8">
@@ -1422,41 +1456,126 @@ export default function CampaignDetails() {
             {tab === "added" && (
                 <div className="space-y-4">
                     {campaign && (
-                        <div className="mb-6">
-                            <select
-                                value={campaign.status || ""}
-                                onChange={async (e) => {
-                                    const newStatus = e.target.value
+    <div className="mb-6 bg-white border rounded-xl p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Campaign Status */}
+            <div className="border rounded-xl p-4 bg-gray-50">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Campaign Status
+                </label>
 
-                                    setCampaign((prev: any) => ({
-                                        ...prev,
-                                        status: newStatus,
-                                    }))
+                <select
+                    value={campaign.status || ""}
+                    onChange={(e) =>
+                        updateCampaignField("status", e.target.value)
+                    }
+                    className="border rounded px-4 py-2 w-full"
+                >
+                    <option value="running">Running</option>
+                    <option value="completed">Completed</option>
+                    <option value="hold">Hold</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
 
-                                    const res = await fetch("/api/crm/campaign/update-status", {
-                                        method: "PUT",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: JSON.stringify({
-                                            id: campaign._id,
-                                            status: newStatus,
-                                        }),
-                                    })
+            {/* Quotation Raised */}
+            <div className="border rounded-xl p-4 bg-gray-50">
+                <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                    Quotation Raised
+                </h3>
 
-                                    if (!res.ok) {
-                                        alert("Failed to update campaign status")
-                                    }
-                                }}
-                                className="border rounded px-4 py-2 min-w-[180px]"
-                            >
-                                <option value="running">Running</option>
-                                <option value="completed">Completed</option>
-                                <option value="hold">Hold</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                        </div>
-                    )}
+                <div className="space-y-3">
+                    <select
+                        value={campaign.quotationRaised || ""}
+                        onChange={(e) => {
+                            const value = e.target.value
+                            updateCampaignField("quotationRaised", value)
+
+                            if (value !== "yes") {
+                                updateCampaignField("quotationAmount", "")
+                                updateCampaignField("quotationDate", "")
+                            }
+                        }}
+                        className="border rounded px-3 py-2 w-full"
+                    >
+                        <option value="">Select</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+
+                    <input
+                        type="number"
+                        placeholder="Quotation Amount"
+                        value={campaign.quotationAmount || ""}
+                        onChange={(e) =>
+                            updateCampaignField("quotationAmount", e.target.value)
+                        }
+                        disabled={campaign.quotationRaised !== "yes"}
+                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    />
+
+                    <input
+                        type="date"
+                        value={campaign.quotationDate || ""}
+                        onChange={(e) =>
+                            updateCampaignField("quotationDate", e.target.value)
+                        }
+                        disabled={campaign.quotationRaised !== "yes"}
+                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    />
+                </div>
+            </div>
+
+            {/* Invoice Generated */}
+            <div className="border rounded-xl p-4 bg-gray-50">
+                <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                    Invoice Generated
+                </h3>
+
+                <div className="space-y-3">
+                    <select
+                        value={campaign.invoiceGenerated || ""}
+                        onChange={(e) => {
+                            const value = e.target.value
+                            updateCampaignField("invoiceGenerated", value)
+
+                            if (value !== "yes") {
+                                updateCampaignField("invoiceAmount", "")
+                                updateCampaignField("invoiceDate", "")
+                            }
+                        }}
+                        className="border rounded px-3 py-2 w-full"
+                    >
+                        <option value="">Select</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+
+                    <input
+                        type="number"
+                        placeholder="Invoice Amount"
+                        value={campaign.invoiceAmount || ""}
+                        onChange={(e) =>
+                            updateCampaignField("invoiceAmount", e.target.value)
+                        }
+                        disabled={campaign.invoiceGenerated !== "yes"}
+                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    />
+
+                    <input
+                        type="date"
+                        value={campaign.invoiceDate || ""}
+                        onChange={(e) =>
+                            updateCampaignField("invoiceDate", e.target.value)
+                        }
+                        disabled={campaign.invoiceGenerated !== "yes"}
+                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+)}
                     <div className="bg-white border rounded-xl p-4 grid grid-cols-4 gap-3">
                         <input
                             placeholder="Search influencer / phone / city"
@@ -1881,10 +2000,10 @@ export default function CampaignDetails() {
                                             <tr
                                                 key={row._id}
                                                 className={`border-t ${row.isReplacementTopRow
-                                                        ? "bg-blue-50 border-l-4 border-l-blue-400"
-                                                        : row.isChildRow
-                                                            ? "bg-red-50"
-                                                            : "hover:bg-gray-50"
+                                                    ? "bg-blue-50 border-l-4 border-l-blue-400"
+                                                    : row.isChildRow
+                                                        ? "bg-red-50"
+                                                        : "hover:bg-gray-50"
                                                     }`}
                                             >
                                                 <td
