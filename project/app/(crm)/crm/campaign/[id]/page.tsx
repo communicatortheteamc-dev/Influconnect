@@ -114,48 +114,51 @@ export default function CampaignDetails() {
         influencer: "Influencer",
         campaignRow: "Campaign Row"
     }
+    const stateOptions = ["AP", "TG"]
     const columnWidths: Record<string, string> = {
-        checkbox: "50px",
-        sno: "70px",
-        city: "140px",
-        influencer: "240px",
-        followers: "180px",
-        contactNumber: "160px",
-        status: "140px",
-        doingOrDrop: "150px",
-        pageLink: "220px",
-        rating: "120px",
-        activityLink: "220px",
-        quotedBudget: "150px",
-        clientPercent: "120px",
-        influBudget: "150px",
-        budget: "150px",
-        paymentStatus: "160px",
-        dateOfPayment: "160px",
-        amountPaid: "140px",
-        paymentType: "140px",
-        paymentNumber: "180px",
-        uploadedDate: "160px",
-        bankDetails: "260px",
-        upiId: "180px",
-        reach: "120px",
-        likes: "120px",
-        shares: "120px",
-        remarks: "240px",
-        actions: "220px"
-    }
+    checkbox: "50px",
+    sno: "70px",
+    state: "100px",
+    city: "140px",
+    influencer: "220px",
+    followers: "120px",
+    contactNumber: "150px",
+    status: "140px",
+    doingOrDrop: "130px",
+    pageLink: "220px",
+    rating: "120px",
+    activityLink: "220px",
+    quotedBudget: "130px",
+    clientPercent: "110px",
+    influBudget: "130px",
+    budget: "130px",
+    paymentStatus: "140px",
+    dateOfPayment: "150px",
+    amountPaid: "130px",
+    paymentType: "120px",
+    paymentNumber: "150px",
+    uploadedDate: "150px",
+    bankDetails: "220px",
+    upiId: "160px",
+    reach: "120px",
+    likes: "120px",
+    shares: "120px",
+    remarks: "180px",
+    actions: "180px"
+}
     const saveTimeouts = useRef<{ [key: string]: any }>({})
+   
     const autoSaveRow = (row: any) => {
-        const id = row._id
+    const id = row._id
 
-        if (saveTimeouts.current[id]) {
-            clearTimeout(saveTimeouts.current[id])
-        }
-
-        saveTimeouts.current[id] = setTimeout(() => {
-            saveRow(row)
-        }, 800) // delay (ms)
+    if (saveTimeouts.current[id]) {
+        clearTimeout(saveTimeouts.current[id])
     }
+
+    saveTimeouts.current[id] = setTimeout(() => {
+        saveRow(row)
+    }, 800)
+}
     const getActionStyles = (action: string) => {
         switch (action) {
             case "add":
@@ -428,6 +431,7 @@ export default function CampaignDetails() {
 
     const exportFieldOptions = [
         { key: "sno", label: "Sno" },
+        { key: "state", label: "State" },
         { key: "city", label: "City" },
         { key: "influencer", label: "Influencer" },
         { key: "followers", label: "Followers" },
@@ -508,88 +512,93 @@ export default function CampaignDetails() {
     //         )
     //     )
     // }
-    const updateRow = (id: string, field: string, value: any) => {
-        console.log(`Updating row ${id}: setting ${field} to`, value) // Debug log to check the update parameters
-        setAddedInfluencers((prev: any[]) => {
-            const updated = prev.map((row) =>
-                row._id?.toString() === id?.toString()
-                    ? { ...row, [field]: value }
-                    : row
-            )
+ const updateRow = (id: string, field: string, value: any) => {
+    console.log(`Updating row ${id}: setting ${field} to`, value)
 
-            const updatedRow = updated.find(
-                (row) => row._id?.toString() === id?.toString()
-            )
-            console.log("Updated Row:", updatedRow) // Debug log to check the updated row
-            if (updatedRow) {
-                console.log("Scheduling auto-save for row:", id) // Debug log to confirm auto-save scheduling
-                autoSaveRow(updatedRow)
-            }
-
-            return updated
-        })
-    }
-    const toggleRowSelection = (id: string) => {
-        setSelectedRows((prev) =>
-            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    setAddedInfluencers((prev: any[]) => {
+        const updated = prev.map((row) =>
+            row._id?.toString() === id?.toString()
+                ? { ...row, [field]: value }
+                : row
         )
-    }
 
-    const toggleSelectAll = () => {
-        const allIds = addedInfluencers.map((row: any) => row._id?.toString())
-        const allSelected = allIds.every((id: string) => selectedRows.includes(id))
-        setSelectedRows(allSelected ? [] : allIds)
-    }
+        const updatedRow = updated.find(
+            (row) => row._id?.toString() === id?.toString()
+        )
 
-    const saveRow = async (row: any) => {
-        const profile = row.profile || {}
+        console.log("Updated Row:", updatedRow)
 
-        const res = await fetch("/api/crm/campaign/update-influencer-row", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id: row._id,
-                staff: user?.email || null,
-                influencerName: row.influencerName ?? profile?.influencerName ?? "",
-                instagram_follwers:
-                    row.instagram_followers ??
-                    profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ??
-                    "",
-                city: row.city ?? profile?.location ?? "",
-                contactNumber: row.contactNumber ?? profile?.phone ?? "",
-                status: row.status || "",
-                doingOrDrop: row.doingOrDrop || "",
-                pageLink: row.pageLink || "",
-                rating: row.rating || "",
-                activityLink: row.activityLink || "",
-                quotedBudget: row.quotedBudget || profile?.budget || "",
-                influBudget: row.influBudget || profile?.negotiableBudget || "",
-                clientPercent: row.clientPercent || "",
-                budget: row.budget || "",
-                paymentStatus: row.paymentStatus || "",
-                paymentType: row.paymentType || "",
-                paymentNumber: row.paymentNumber || "",
-                uploadedDate: row.uploadedDate || "",
-                bankDetails: row.bankDetails || "",
-                upiId: row.upiId || "",
-                dateOfPayment: row.dateOfPayment || "",
-                amountPaid: row.amountPaid || "",
-                reach: row.reach || "",
-                likes: row.likes || "",
-                shares: row.shares || "",
-                remarks: row.remarks || ""
-            })
-        })
-
-        const data = await res.json()
-
-        if (!res.ok) {
-            alert(data.message || "Failed to save")
-            return
+        if (updatedRow) {
+            console.log("Scheduling auto-save for row:", id)
+            autoSaveRow(updatedRow)
         }
+
+        return updated
+    })
+}
+
+const toggleRowSelection = (id: string) => {
+    setSelectedRows((prev) =>
+        prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    )
+}
+
+const toggleSelectAll = () => {
+    const allIds = addedInfluencers.map((row: any) => row._id?.toString())
+    const allSelected = allIds.every((id: string) => selectedRows.includes(id))
+    setSelectedRows(allSelected ? [] : allIds)
+}
+
+const saveRow = async (row: any) => {
+    const profile = row.profile || {}
+
+    const res = await fetch("/api/crm/campaign/update-influencer-row", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: row._id,
+            staff: user?.email || null,
+            influencerName: row.influencerName ?? profile?.influencerName ?? "",
+            instagram_follwers:
+                row.instagram_followers ??
+                profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ??
+                "",
+            state: row.state || "",
+            city: row.city ?? profile?.location ?? "",
+            contactNumber: row.contactNumber ?? profile?.phone ?? "",
+            status: row.status || "",
+            doingOrDrop: row.doingOrDrop || "",
+            pageLink: row.pageLink || "",
+            rating: row.rating || "",
+            activityLink: row.activityLink || "",
+            quotedBudget: row.quotedBudget || profile?.budget || "",
+            influBudget: row.influBudget || profile?.negotiableBudget || "",
+            clientPercent: row.clientPercent || "",
+            budget: row.budget || "",
+            paymentStatus: row.paymentStatus || "",
+            paymentType: row.paymentType || "",
+            paymentNumber: row.paymentNumber || "",
+            uploadedDate: row.uploadedDate || "",
+            bankDetails: row.bankDetails || "",
+            upiId: row.upiId || "",
+            dateOfPayment: row.dateOfPayment || "",
+            amountPaid: row.amountPaid || "",
+            reach: row.reach || "",
+            likes: row.likes || "",
+            shares: row.shares || "",
+            remarks: row.remarks || ""
+        })
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+        alert(data.message || "Failed to save")
+        return
     }
+}
 
     // const removeRow = async (row: any) => {
     //     const ok = confirm("Remove this influencer from campaign?")
@@ -704,6 +713,7 @@ export default function CampaignDetails() {
     }
     const columnOptions = [
         { key: "sno", label: "Sno" },
+        { key: "state", label: "State" },
         { key: "city", label: "City" },
         { key: "influencer", label: "Influencer" },
         { key: "followers", label: "Followers" },
@@ -733,23 +743,24 @@ export default function CampaignDetails() {
     ]
     const [showColumnModal, setShowColumnModal] = useState(false)
 
-    const [visibleColumns, setVisibleColumns] = useState<string[]>([
-        "sno",
-        "city",
-        "influencer",
-        "followers",
-        "contactNumber",
-        "status",
-        "quotedBudget",
-        "clientPercent",
-        "influBudget",
-        "budget",
-        "paymentStatus",
-        "paymentType",
-        "paymentNumber",
-        "uploadedDate",
-        "actions"
-    ])
+   const [visibleColumns, setVisibleColumns] = useState<string[]>([
+    "sno",
+    "state",
+    "city",
+    "influencer",
+    "followers",
+    "contactNumber",
+    "status",
+    "quotedBudget",
+    "clientPercent",
+    "influBudget",
+    "budget",
+    "paymentStatus",
+    "paymentType",
+    "paymentNumber",
+    "uploadedDate",
+    "actions"
+])
     const toggleColumn = (key: string) => {
         setVisibleColumns((prev) =>
             prev.includes(key)
@@ -889,6 +900,7 @@ export default function CampaignDetails() {
             const result: any = {}
 
             if (exportFields.includes("sno")) result["Sno"] = row.isChildRow ? "" : index + 1
+            if (exportFields.includes("state")) result["State"] = row.state || ""
             if (exportFields.includes("city")) result["City"] = cityValue
             if (exportFields.includes("influencer")) result["Influencer"] = influencerValue
             if (exportFields.includes("followers")) result["Followers"] = instagramFollowersRaw
@@ -1173,40 +1185,40 @@ export default function CampaignDetails() {
             alert("Failed to add empty row")
         }
     }
-   const updateCampaignField = async (field: string, value: any) => {
-    if (!campaign?._id) return
+    const updateCampaignField = async (field: string, value: any) => {
+        if (!campaign?._id) return
 
-    const previousCampaign = campaign
+        const previousCampaign = campaign
 
-    setCampaign((prev: any) => ({
-        ...prev,
-        [field]: value,
-    }))
+        setCampaign((prev: any) => ({
+            ...prev,
+            [field]: value,
+        }))
 
-    try {
-        const res = await fetch("/api/crm/campaign/update-status", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                id: campaign._id,
-                [field]: value,
-            }),
-        })
+        try {
+            const res = await fetch("/api/crm/campaign/update-status", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: campaign._id,
+                    [field]: value,
+                }),
+            })
 
-        const data = await res.json()
+            const data = await res.json()
 
-        if (!res.ok) {
+            if (!res.ok) {
+                setCampaign(previousCampaign)
+                alert(data?.error || "Failed to update campaign")
+            }
+        } catch (error) {
+            console.error(error)
             setCampaign(previousCampaign)
-            alert(data?.error || "Failed to update campaign")
+            alert("Something went wrong while updating campaign")
         }
-    } catch (error) {
-        console.error(error)
-        setCampaign(previousCampaign)
-        alert("Something went wrong while updating campaign")
     }
-}
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
             <div className="flex items-center justify-between mb-8">
@@ -1456,126 +1468,126 @@ export default function CampaignDetails() {
             {tab === "added" && (
                 <div className="space-y-4">
                     {campaign && (
-    <div className="mb-6 bg-white border rounded-xl p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Campaign Status */}
-            <div className="border rounded-xl p-4 bg-gray-50">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Campaign Status
-                </label>
+                        <div className="mb-6 bg-white border rounded-xl p-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {/* Campaign Status */}
+                                <div className="border rounded-xl p-4 bg-gray-50">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Campaign Status
+                                    </label>
 
-                <select
-                    value={campaign.status || ""}
-                    onChange={(e) =>
-                        updateCampaignField("status", e.target.value)
-                    }
-                    className="border rounded px-4 py-2 w-full"
-                >
-                    <option value="running">Running</option>
-                    <option value="completed">Completed</option>
-                    <option value="hold">Hold</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-            </div>
+                                    <select
+                                        value={campaign.status || ""}
+                                        onChange={(e) =>
+                                            updateCampaignField("status", e.target.value)
+                                        }
+                                        className="border rounded px-4 py-2 w-full"
+                                    >
+                                        <option value="running">Running</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="hold">Hold</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </div>
 
-            {/* Quotation Raised */}
-            <div className="border rounded-xl p-4 bg-gray-50">
-                <h3 className="text-sm font-semibold text-gray-800 mb-3">
-                    Quotation Raised
-                </h3>
+                                {/* Quotation Raised */}
+                                <div className="border rounded-xl p-4 bg-gray-50">
+                                    <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                                        Quotation Raised
+                                    </h3>
 
-                <div className="space-y-3">
-                    <select
-                        value={campaign.quotationRaised || ""}
-                        onChange={(e) => {
-                            const value = e.target.value
-                            updateCampaignField("quotationRaised", value)
+                                    <div className="space-y-3">
+                                        <select
+                                            value={campaign.quotationRaised || ""}
+                                            onChange={(e) => {
+                                                const value = e.target.value
+                                                updateCampaignField("quotationRaised", value)
 
-                            if (value !== "yes") {
-                                updateCampaignField("quotationAmount", "")
-                                updateCampaignField("quotationDate", "")
-                            }
-                        }}
-                        className="border rounded px-3 py-2 w-full"
-                    >
-                        <option value="">Select</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
+                                                if (value !== "yes") {
+                                                    updateCampaignField("quotationAmount", "")
+                                                    updateCampaignField("quotationDate", "")
+                                                }
+                                            }}
+                                            className="border rounded px-3 py-2 w-full"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
 
-                    <input
-                        type="number"
-                        placeholder="Quotation Amount"
-                        value={campaign.quotationAmount || ""}
-                        onChange={(e) =>
-                            updateCampaignField("quotationAmount", e.target.value)
-                        }
-                        disabled={campaign.quotationRaised !== "yes"}
-                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    />
+                                        <input
+                                            type="number"
+                                            placeholder="Quotation Amount"
+                                            value={campaign.quotationAmount || ""}
+                                            onChange={(e) =>
+                                                updateCampaignField("quotationAmount", e.target.value)
+                                            }
+                                            disabled={campaign.quotationRaised !== "yes"}
+                                            className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        />
 
-                    <input
-                        type="date"
-                        value={campaign.quotationDate || ""}
-                        onChange={(e) =>
-                            updateCampaignField("quotationDate", e.target.value)
-                        }
-                        disabled={campaign.quotationRaised !== "yes"}
-                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    />
-                </div>
-            </div>
+                                        <input
+                                            type="date"
+                                            value={campaign.quotationDate || ""}
+                                            onChange={(e) =>
+                                                updateCampaignField("quotationDate", e.target.value)
+                                            }
+                                            disabled={campaign.quotationRaised !== "yes"}
+                                            className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        />
+                                    </div>
+                                </div>
 
-            {/* Invoice Generated */}
-            <div className="border rounded-xl p-4 bg-gray-50">
-                <h3 className="text-sm font-semibold text-gray-800 mb-3">
-                    Invoice Generated
-                </h3>
+                                {/* Invoice Generated */}
+                                <div className="border rounded-xl p-4 bg-gray-50">
+                                    <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                                        Invoice Generated
+                                    </h3>
 
-                <div className="space-y-3">
-                    <select
-                        value={campaign.invoiceGenerated || ""}
-                        onChange={(e) => {
-                            const value = e.target.value
-                            updateCampaignField("invoiceGenerated", value)
+                                    <div className="space-y-3">
+                                        <select
+                                            value={campaign.invoiceGenerated || ""}
+                                            onChange={(e) => {
+                                                const value = e.target.value
+                                                updateCampaignField("invoiceGenerated", value)
 
-                            if (value !== "yes") {
-                                updateCampaignField("invoiceAmount", "")
-                                updateCampaignField("invoiceDate", "")
-                            }
-                        }}
-                        className="border rounded px-3 py-2 w-full"
-                    >
-                        <option value="">Select</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
+                                                if (value !== "yes") {
+                                                    updateCampaignField("invoiceAmount", "")
+                                                    updateCampaignField("invoiceDate", "")
+                                                }
+                                            }}
+                                            className="border rounded px-3 py-2 w-full"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
 
-                    <input
-                        type="number"
-                        placeholder="Invoice Amount"
-                        value={campaign.invoiceAmount || ""}
-                        onChange={(e) =>
-                            updateCampaignField("invoiceAmount", e.target.value)
-                        }
-                        disabled={campaign.invoiceGenerated !== "yes"}
-                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    />
+                                        <input
+                                            type="number"
+                                            placeholder="Invoice Amount"
+                                            value={campaign.invoiceAmount || ""}
+                                            onChange={(e) =>
+                                                updateCampaignField("invoiceAmount", e.target.value)
+                                            }
+                                            disabled={campaign.invoiceGenerated !== "yes"}
+                                            className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        />
 
-                    <input
-                        type="date"
-                        value={campaign.invoiceDate || ""}
-                        onChange={(e) =>
-                            updateCampaignField("invoiceDate", e.target.value)
-                        }
-                        disabled={campaign.invoiceGenerated !== "yes"}
-                        className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
-)}
+                                        <input
+                                            type="date"
+                                            value={campaign.invoiceDate || ""}
+                                            onChange={(e) =>
+                                                updateCampaignField("invoiceDate", e.target.value)
+                                            }
+                                            disabled={campaign.invoiceGenerated !== "yes"}
+                                            className="border rounded px-3 py-2 w-full disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <div className="bg-white border rounded-xl p-4 grid grid-cols-4 gap-3">
                         <input
                             placeholder="Search influencer / phone / city"
@@ -1750,7 +1762,14 @@ export default function CampaignDetails() {
                                                 Sno
                                             </th>
                                         )}
-
+{visibleColumns.includes("state") && (
+    <th
+        className="p-3 border text-left"
+        style={{ width: columnWidths.state }}
+    >
+        State
+    </th>
+)}
                                         {visibleColumns.includes("city") && (
                                             <th
                                                 className="p-3 border text-left"
@@ -2025,7 +2044,25 @@ export default function CampaignDetails() {
                                                         {row.isChildRow ? "" : ++serial}
                                                     </td>
                                                 )}
-
+{visibleColumns.includes("state") && (
+    <td
+        className="p-2 border align-top"
+        style={{ width: columnWidths.state }}
+    >
+        <select
+            value={row.state || ""}
+            onChange={(e) => updateRow(row._id, "state", e.target.value)}
+            className="w-full border rounded px-2 py-1"
+        >
+            <option value="">Select</option>
+            {stateOptions.map((opt: any) => (
+                <option key={opt} value={opt}>
+                    {opt}
+                </option>
+            ))}
+        </select>
+    </td>
+)}
                                                 {visibleColumns.includes("city") && row.profile && (
                                                     <td
                                                         className="p-2 border align-top"

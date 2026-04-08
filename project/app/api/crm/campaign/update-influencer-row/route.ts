@@ -153,10 +153,12 @@ export async function POST(req: Request) {
 
       instagram_follwers:
         updateData.instagram_follwers ??
-        profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ??
+        profile?.platforms?.find((p: any) => p.name?.toLowerCase() === "instagram")
+          ?.followers ??
         oldRow.instagram_follwers ??
         "",
 
+      state: updateData.state ?? oldRow.state ?? "",
       city: updateData.city ?? oldRow.city ?? "",
       contactNumber: updateData.contactNumber ?? oldRow.contactNumber ?? "",
       status: updateData.status ?? oldRow.status ?? "",
