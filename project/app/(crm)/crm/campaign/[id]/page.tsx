@@ -116,49 +116,49 @@ export default function CampaignDetails() {
     }
     const stateOptions = ["AP", "TG"]
     const columnWidths: Record<string, string> = {
-    checkbox: "50px",
-    sno: "70px",
-    state: "100px",
-    city: "140px",
-    influencer: "220px",
-    followers: "120px",
-    contactNumber: "150px",
-    status: "140px",
-    doingOrDrop: "130px",
-    pageLink: "220px",
-    rating: "120px",
-    activityLink: "220px",
-    quotedBudget: "130px",
-    clientPercent: "110px",
-    influBudget: "130px",
-    budget: "130px",
-    paymentStatus: "140px",
-    dateOfPayment: "150px",
-    amountPaid: "130px",
-    paymentType: "120px",
-    paymentNumber: "150px",
-    uploadedDate: "150px",
-    bankDetails: "220px",
-    upiId: "160px",
-    reach: "120px",
-    likes: "120px",
-    shares: "120px",
-    remarks: "180px",
-    actions: "180px"
-}
-    const saveTimeouts = useRef<{ [key: string]: any }>({})
-   
-    const autoSaveRow = (row: any) => {
-    const id = row._id
-
-    if (saveTimeouts.current[id]) {
-        clearTimeout(saveTimeouts.current[id])
+        checkbox: "50px",
+        sno: "70px",
+        state: "100px",
+        city: "140px",
+        influencer: "220px",
+        followers: "120px",
+        contactNumber: "150px",
+        status: "140px",
+        doingOrDrop: "130px",
+        pageLink: "220px",
+        rating: "120px",
+        activityLink: "220px",
+        quotedBudget: "130px",
+        clientPercent: "110px",
+        influBudget: "130px",
+        budget: "130px",
+        paymentStatus: "140px",
+        dateOfPayment: "150px",
+        amountPaid: "130px",
+        paymentType: "120px",
+        paymentNumber: "150px",
+        uploadedDate: "150px",
+        bankDetails: "220px",
+        upiId: "160px",
+        reach: "120px",
+        likes: "120px",
+        shares: "120px",
+        remarks: "180px",
+        actions: "180px"
     }
+    const saveTimeouts = useRef<{ [key: string]: any }>({})
 
-    saveTimeouts.current[id] = setTimeout(() => {
-        saveRow(row)
-    }, 800)
-}
+    const autoSaveRow = (row: any) => {
+        const id = row._id
+
+        if (saveTimeouts.current[id]) {
+            clearTimeout(saveTimeouts.current[id])
+        }
+
+        saveTimeouts.current[id] = setTimeout(() => {
+            saveRow(row)
+        }, 800)
+    }
     const getActionStyles = (action: string) => {
         switch (action) {
             case "add":
@@ -512,93 +512,93 @@ export default function CampaignDetails() {
     //         )
     //     )
     // }
- const updateRow = (id: string, field: string, value: any) => {
-    console.log(`Updating row ${id}: setting ${field} to`, value)
+    const updateRow = (id: string, field: string, value: any) => {
+        console.log(`Updating row ${id}: setting ${field} to`, value)
 
-    setAddedInfluencers((prev: any[]) => {
-        const updated = prev.map((row) =>
-            row._id?.toString() === id?.toString()
-                ? { ...row, [field]: value }
-                : row
-        )
+        setAddedInfluencers((prev: any[]) => {
+            const updated = prev.map((row) =>
+                row._id?.toString() === id?.toString()
+                    ? { ...row, [field]: value }
+                    : row
+            )
 
-        const updatedRow = updated.find(
-            (row) => row._id?.toString() === id?.toString()
-        )
+            const updatedRow = updated.find(
+                (row) => row._id?.toString() === id?.toString()
+            )
 
-        console.log("Updated Row:", updatedRow)
+            console.log("Updated Row:", updatedRow)
 
-        if (updatedRow) {
-            console.log("Scheduling auto-save for row:", id)
-            autoSaveRow(updatedRow)
-        }
+            if (updatedRow) {
+                console.log("Scheduling auto-save for row:", id)
+                autoSaveRow(updatedRow)
+            }
 
-        return updated
-    })
-}
-
-const toggleRowSelection = (id: string) => {
-    setSelectedRows((prev) =>
-        prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    )
-}
-
-const toggleSelectAll = () => {
-    const allIds = addedInfluencers.map((row: any) => row._id?.toString())
-    const allSelected = allIds.every((id: string) => selectedRows.includes(id))
-    setSelectedRows(allSelected ? [] : allIds)
-}
-
-const saveRow = async (row: any) => {
-    const profile = row.profile || {}
-
-    const res = await fetch("/api/crm/campaign/update-influencer-row", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id: row._id,
-            staff: user?.email || null,
-            influencerName: row.influencerName ?? profile?.influencerName ?? "",
-            instagram_follwers:
-                row.instagram_followers ??
-                profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ??
-                "",
-            state: row.state || "",
-            city: row.city ?? profile?.location ?? "",
-            contactNumber: row.contactNumber ?? profile?.phone ?? "",
-            status: row.status || "",
-            doingOrDrop: row.doingOrDrop || "",
-            pageLink: row.pageLink || "",
-            rating: row.rating || "",
-            activityLink: row.activityLink || "",
-            quotedBudget: row.quotedBudget || profile?.budget || "",
-            influBudget: row.influBudget || profile?.negotiableBudget || "",
-            clientPercent: row.clientPercent || "",
-            budget: row.budget || "",
-            paymentStatus: row.paymentStatus || "",
-            paymentType: row.paymentType || "",
-            paymentNumber: row.paymentNumber || "",
-            uploadedDate: row.uploadedDate || "",
-            bankDetails: row.bankDetails || "",
-            upiId: row.upiId || "",
-            dateOfPayment: row.dateOfPayment || "",
-            amountPaid: row.amountPaid || "",
-            reach: row.reach || "",
-            likes: row.likes || "",
-            shares: row.shares || "",
-            remarks: row.remarks || ""
+            return updated
         })
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-        alert(data.message || "Failed to save")
-        return
     }
-}
+
+    const toggleRowSelection = (id: string) => {
+        setSelectedRows((prev) =>
+            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+        )
+    }
+
+    const toggleSelectAll = () => {
+        const allIds = addedInfluencers.map((row: any) => row._id?.toString())
+        const allSelected = allIds.every((id: string) => selectedRows.includes(id))
+        setSelectedRows(allSelected ? [] : allIds)
+    }
+
+    const saveRow = async (row: any) => {
+        const profile = row.profile || {}
+
+        const res = await fetch("/api/crm/campaign/update-influencer-row", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: row._id,
+                staff: user?.email || null,
+                influencerName: row.influencerName ?? profile?.influencerName ?? "",
+                instagram_follwers:
+                    row.instagram_followers ??
+                    profile?.platforms?.find((p: any) => p.name === "instagram")?.followers ??
+                    "",
+                state: row.state || "",
+                city: row.city ?? profile?.location ?? "",
+                contactNumber: row.contactNumber ?? profile?.phone ?? "",
+                status: row.status || "",
+                doingOrDrop: row.doingOrDrop || "",
+                pageLink: row.pageLink || "",
+                rating: row.rating || "",
+                activityLink: row.activityLink || "",
+                quotedBudget: row.quotedBudget || profile?.budget || "",
+                influBudget: row.influBudget || profile?.negotiableBudget || "",
+                clientPercent: row.clientPercent || "",
+                budget: row.budget || "",
+                paymentStatus: row.paymentStatus || "",
+                paymentType: row.paymentType || "",
+                paymentNumber: row.paymentNumber || "",
+                uploadedDate: row.uploadedDate || "",
+                bankDetails: row.bankDetails || "",
+                upiId: row.upiId || "",
+                dateOfPayment: row.dateOfPayment || "",
+                amountPaid: row.amountPaid || "",
+                reach: row.reach || "",
+                likes: row.likes || "",
+                shares: row.shares || "",
+                remarks: row.remarks || ""
+            })
+        })
+
+        const data = await res.json()
+
+        if (!res.ok) {
+            alert(data.message || "Failed to save")
+            return
+        }
+    }
 
     // const removeRow = async (row: any) => {
     //     const ok = confirm("Remove this influencer from campaign?")
@@ -743,24 +743,24 @@ const saveRow = async (row: any) => {
     ]
     const [showColumnModal, setShowColumnModal] = useState(false)
 
-   const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    "sno",
-    "state",
-    "city",
-    "influencer",
-    "followers",
-    "contactNumber",
-    "status",
-    "quotedBudget",
-    "clientPercent",
-    "influBudget",
-    "budget",
-    "paymentStatus",
-    "paymentType",
-    "paymentNumber",
-    "uploadedDate",
-    "actions"
-])
+    const [visibleColumns, setVisibleColumns] = useState<string[]>([
+        "sno",
+        "state",
+        "city",
+        "influencer",
+        "followers",
+        "contactNumber",
+        "status",
+        "quotedBudget",
+        "clientPercent",
+        "influBudget",
+        "budget",
+        "paymentStatus",
+        "paymentType",
+        "paymentNumber",
+        "uploadedDate",
+        "actions"
+    ])
     const toggleColumn = (key: string) => {
         setVisibleColumns((prev) =>
             prev.includes(key)
@@ -1099,10 +1099,11 @@ const saveRow = async (row: any) => {
             maxBudget: ""
         })
     }
+    const [stateFilter, setStateFilter] = useState("")
     const filteredAddedInfluencers = getOrderedCampaignRows(addedInfluencers).filter(
         (row: any) => {
             const profile = getProfileFromRow(row)
-
+            const matchState = stateFilter ? row.state === stateFilter : true
             const searchText = addedFilters.search.toLowerCase().trim()
             const influencerName = (profile?.influencerName || "").toLowerCase()
             const city = String(row.city ?? profile?.location ?? "").toLowerCase()
@@ -1154,7 +1155,8 @@ const saveRow = async (row: any) => {
                 matchesPaymentStatus &&
                 matchesDoingOrDrop &&
                 matchesMinBudget &&
-                matchesMaxBudget
+                matchesMaxBudget &&
+                matchState
             )
         }
     )
@@ -1762,14 +1764,26 @@ const saveRow = async (row: any) => {
                                                 Sno
                                             </th>
                                         )}
-{visibleColumns.includes("state") && (
-    <th
-        className="p-3 border text-left"
-        style={{ width: columnWidths.state }}
-    >
-        State
-    </th>
-)}
+                                        {visibleColumns.includes("state") && (
+                                            <th
+                                                className="p-3 border text-left"
+                                                style={{ width: columnWidths.state }}
+                                            >
+                                                <div className="flex flex-col gap-1">
+                                                    <span>State</span>
+
+                                                    <select
+                                                        value={stateFilter}
+                                                        onChange={(e) => setStateFilter(e.target.value)}
+                                                        className="border rounded px-2 py-1 text-xs"
+                                                    >
+                                                        <option value="">All</option>
+                                                        <option value="AP">AP</option>
+                                                        <option value="TG">TG</option>
+                                                    </select>
+                                                </div>
+                                            </th>
+                                        )}
                                         {visibleColumns.includes("city") && (
                                             <th
                                                 className="p-3 border text-left"
@@ -2044,25 +2058,25 @@ const saveRow = async (row: any) => {
                                                         {row.isChildRow ? "" : ++serial}
                                                     </td>
                                                 )}
-{visibleColumns.includes("state") && (
-    <td
-        className="p-2 border align-top"
-        style={{ width: columnWidths.state }}
-    >
-        <select
-            value={row.state || ""}
-            onChange={(e) => updateRow(row._id, "state", e.target.value)}
-            className="w-full border rounded px-2 py-1"
-        >
-            <option value="">Select</option>
-            {stateOptions.map((opt: any) => (
-                <option key={opt} value={opt}>
-                    {opt}
-                </option>
-            ))}
-        </select>
-    </td>
-)}
+                                                {visibleColumns.includes("state") && (
+                                                    <td
+                                                        className="p-2 border align-top"
+                                                        style={{ width: columnWidths.state }}
+                                                    >
+                                                        <select
+                                                            value={row.state || ""}
+                                                            onChange={(e) => updateRow(row._id, "state", e.target.value)}
+                                                            className="w-full border rounded px-2 py-1"
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {stateOptions.map((opt: any) => (
+                                                                <option key={opt} value={opt}>
+                                                                    {opt}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                )}
                                                 {visibleColumns.includes("city") && row.profile && (
                                                     <td
                                                         className="p-2 border align-top"
